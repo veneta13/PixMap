@@ -1,0 +1,6 @@
+TESTS:
+g++ catch2.o testCommand.cpp ../src/command.cpp
+.\a.exe
+
+MAIN:
+g++ main.cpp src/command.cpp src/main_functions.cpp    
