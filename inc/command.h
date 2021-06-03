@@ -12,11 +12,16 @@ class Command
     void validateName();
     void validateArgs();
     void validateOpenSaveAs();
+    void validateResize();
     void validateNew();
+    void validateCrop();
+    void setName(std::string name);
 
     public:
         
     Command(std::string name);
+
+    Command(const Command &c);
 
     std::string getName() const;
 

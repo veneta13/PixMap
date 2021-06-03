@@ -5,6 +5,12 @@ Command::Command(std::string name) : name(name)
     validateName();
 }
 
+Command::Command(const Command &c)
+{
+    this->setName(c.getName());
+    this->addArguments(c.getArgs());
+}
+
 std::string Command::getName() const
 {
     return name;
@@ -26,6 +32,11 @@ void Command::addArguments(std::vector<std::string> args)
     validateArgs();
 }
 
+void Command::setName(std::string name)
+{
+    this->name = name;
+}
+
 void Command::nameToUpper()
 {
     for (int i = 0; i < this->name.length(); i++)
@@ -38,12 +49,13 @@ void Command::nameToUpper()
 
 void Command::validateName()
 {
-    std::string validCommandNames[] = {"EXIT", "CLOSE", "SAVE", "OPEN", "SAVEAS" , "NEW" };
+    std::string validCommandNames[] = {"EXIT", "CLOSE", "SAVE", "OPEN", "SAVEAS",
+                                       "NEW", "DITHER", "CROP", "RESIZE" };
     bool commandNameNotValid = false;
 
     nameToUpper();
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 9; i++)
     {
         if (validCommandNames[i] == this->name) {
         return;
@@ -55,7 +67,7 @@ void Command::validateName()
 
 void Command::validateArgs()
 {
-    if (name == "EXIT"  || name == "CLOSE" || name == "SAVE") {
+    if (name == "EXIT"  || name == "CLOSE" || name == "SAVE" || name == "DITHER") {
         if (args.size() != 0) {
             throw std::invalid_argument("Error: This command requires no arguments.");
         }
@@ -73,6 +85,16 @@ void Command::validateArgs()
             return;
         }
     }
+
+    if (name == "RESIZE") {
+        if (args.size() != 1 || args.size() != 2) {
+            throw std::invalid_argument("Error: This command requires 1 (%) or 2 (size) arguments.");
+        }
+        else {
+            validateResize();
+            return;
+        }
+    }
     
     if (name == "NEW") {
         if (args.size() != 3) {
@@ -80,6 +102,16 @@ void Command::validateArgs()
         }
         else {
             validateNew();
+            return;
+        }
+    }
+
+    if (name == "CROP") {
+        if (args.size() != 4){
+            throw std::invalid_argument("Error: This command requires 4 arguments.");
+        }
+        else {
+            validateCrop();
             return;
         }
     }
@@ -95,19 +127,48 @@ void Command::validateOpenSaveAs()
     }
 }
 
+void Command::validateResize()
+{
+    if (args.size() == 1) {
+        for (int i = 0; i < args[0].length(); i++)
+        {
+            if (!isdigit(args[0][i])){
+                throw std::invalid_argument("Error: Resize % must be an integer.");
+            }
+        }
+    }
+    else 
+    {
+        for (int i = 0; i < args[0].length(); i++)
+        {
+            if (!isdigit(args[0][i])){
+                throw std::invalid_argument("Error: New image size must be in integers.");
+            }
+        }
+
+        for (int i = 0; i < args[1].length(); i++)
+        {
+            if (!isdigit(args[1][i])){
+                throw std::invalid_argument("Error: New image size must be in integers.");
+            }
+        }
+    }
+    
+}
+
 void Command::validateNew()
 {
     for (int i = 0; i < args[0].length(); i++)
     {
         if (!isdigit(args[0][i])){
-            throw std::invalid_argument("Error: First argument must be a number.");
+            throw std::invalid_argument("Error: First argument must be an integer.");
         }
     }
 
     for (int i = 0; i < args[1].length(); i++)
     {
         if (!isdigit(args[1][i])){
-            throw std::invalid_argument("Error: Second argument must be a number.");
+            throw std::invalid_argument("Error: Second argument must be an integer.");
         }
     }
 
@@ -125,6 +186,19 @@ void Command::validateNew()
             }
         else{
             throw std::invalid_argument("Error: Third argument must be a color.\nHint: Choose a valid hexadecimal color.");
+        }
+    }
+}
+
+void Command::validateCrop()
+{
+    for (int j = 0; j < 4; i++)
+    {
+        for (int i = 0; i < args[j].length(); i++)
+        {
+            if (!isdigit(args[j][i])){
+                throw std::invalid_argument("Error: The "<< j << "-th argument must be an integer.");
+            }
         }
     }
 }
