@@ -1,5 +1,6 @@
 #include "inc/inc.h"
 #include "inc/command.h"
+#include "inc/executor.h"
 #include "inc/main_functions.h"
 
 using std::cin;
@@ -36,7 +37,6 @@ int main()
     catch (std::exception &e) {
         cout << e.what();
     }
-        
-    }
+    
     return 0;
 }

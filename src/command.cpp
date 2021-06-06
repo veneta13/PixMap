@@ -192,12 +192,12 @@ void Command::validateNew()
 
 void Command::validateCrop()
 {
-    for (int j = 0; j < 4; i++)
+    for (int j = 0; j < 4; j++)
     {
         for (int i = 0; i < args[j].length(); i++)
         {
             if (!isdigit(args[j][i])){
-                throw std::invalid_argument("Error: The "<< j << "-th argument must be an integer.");
+                throw std::invalid_argument("Error: The arguments must be integers.");
             }
         }
     }

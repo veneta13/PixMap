@@ -1,73 +1,136 @@
 #include "../inc/executor.h"
 
+// ............................................................
+//    make Singleton??????????????????????
+// ............................................................
+
 Executor::Executor (Command command)
 {
-    this->command = command;
-    getCommandIndex();
+    this->commandName = command.getName();
+    this->commandArguments = command.getArgs();
+    execute();
 }
 
-Executor::Executor (const Executor &e)
+void Executor::newCommand(Command command)
 {
-    this->command = e.returnCommand();
-    this->commandIndex = e.returnCommandIndex();
+    this->commandName = command.getName();
+    this->commandArguments = command.getArgs();
+    execute();
 }
 
 int Executor::execute() {
-    if (commandIndex == 0) {
-        closeCurrentFile();
-        return 0;
+    if (commandName.compare("EXIT") == 0){
+        cExit();
+        return 1;
     }
     
-    if (commandIndex == 1) {
-
+    if (commandName.compare("CLOSE") == 0){
+        cClose();
+        return -1;
     }
-}
 
-int Executor::returnCommandIndex () const
-{
-    return commandIndex;
-}
-
-Command Executor::returnCommand () const 
-{
-    return command;
-}
-
-void Executor::getCommandIndex()
-{
-     std::string validCommandNames[] = {"EXIT", "CLOSE", "SAVE", "OPEN", "SAVEAS",
-                                       "NEW", "DITHER", "CROP", "RESIZE" };
-    for (int i = 0; i < validCommandNames.size(); i++) 
-    {
-        if (command.getName().compare(validCommandNames[i]) == 0){
-            commandIndex = i;
-            return;
-        }
+    if (commandName.compare("SAVE") == 0){
+        cSave();
+        return -1;
     }
+
+    if (commandName.compare("OPEN") == 0){
+        cOpen();
+        return -1;
+    }
+
+    if (commandName.compare("SAVEAS") == 0){ 
+        cSaveAs();
+        return -1;
+    }
+
+    if (commandName.compare("NEW") == 0){
+        cNew();
+        return -1;
+    }
+
+    if (commandName.compare("DITHER") == 0){
+        cDither();
+        return -1;
+    }
+
+    if (commandName.compare("CROP") == 0){
+        cCrop();
+        return -1;
+    }
+
+    if (commandName.compare("RESIZE") == 0){
+        cResize();
+        return -1;
+    }
+    throw std::runtime_error("Error: Could not execute the command.");
+}
+
+// void Executor::printSuccessMessage () const
+// {
+//     if (commandIndex == 0){
+//         std::cout << "Exiting the program...\n" << endl;
+//     }
+//     else if (commandIndex == 1){
+//         std::cout << "Successfully closed " << command.getArgs().at(0) << "\n";
+//     }
+//     else if (commandIndex == 2){
+//         std::cout << "Successfully saved" << command.getArgs().at(0) << "\n";
+//     }
+//     else if (commandIndex == 3){
+//         std::cout << "Successfully opened " << command.getArgs.at(0) << "\n";
+//     }
+//     else if (commandIndex == 4){
+//         std::cout << "Successfully saved another " << command.getArgs.at(0) << "\n"; 
+//     }
+//     else if (commandIndex == 5){
+//         std::cout << "Created new document with size " 
+//                   << command.getArgs[0] << "x" << command.getArgs[1] 
+//                   << " and filled with " << command.getArgs[2] << "\n"; 
+//     }
+// }
+
+void Executor::cExit()
+{
+
+}
+
+void Executor::cClose()
+{
     
-    throw std::runtime_error("Unsuccessful command indexing");
 }
 
-void Executor::printSuccessMessage () const
+void Executor::cSave()
 {
-    if (commandIndex == 0){
-        std::cout << "Exiting the program...\n" << endl;
-    }
-    else if (commandIndex == 1){
-        std::cout << "Successfully closed " << command.getArgs().at(0) << "\n";
-    }
-    else if (commandIndex == 2){
-        std::cout << "Successfully saved" << command.getArgs().at(0) << "\n";
-    }
-    else if (commandIndex == 3){
-        std::cout << "Successfully opened " << command.getArgs.at(0) << "\n";
-    }
-    else if (commandIndex == 4){
-        std::cout << "Successfully saved another " << command.getArgs.at(0) << "\n"; 
-    }
-    else if (commandIndex == 5){
-        std::cout << "Created new document with size " 
-                  << command.getArgs[0] << "x" << command.getArgs[1] 
-                  << " and filled with " << command.getArgs[2] << "\n"; 
-    }
+
+}
+
+void Executor::cOpen()
+{
+
+}
+
+void Executor::cSaveAs()
+{
+
+}
+
+void Executor::cNew()
+{
+    
+}
+
+void Executor::cDither()
+{
+
+}
+
+void Executor::cCrop()
+{
+
+}
+
+void Executor::cResize()
+{
+
 }
