@@ -9,6 +9,8 @@ class Executor {
     std::string commandName;
     std::vector<std::string> commandArguments;
     std::string filePath;
+    std::fstream fileStream;
+    bool unsavedChanges = false;
 
     int execute();
 

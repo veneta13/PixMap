@@ -1,8 +1,5 @@
 #include "../inc/executor.h"
-
-// ............................................................
-//    make Singleton??????????????????????
-// ............................................................
+#include "../inc/executor_functions.h"
 
 Executor::Executor (Command command)
 {
@@ -19,13 +16,13 @@ void Executor::newCommand(Command command)
 }
 
 int Executor::execute() {
+
     if (commandName.compare("EXIT") == 0){
-        cExit();
         return 1;
     }
     
     if (commandName.compare("CLOSE") == 0){
-        cClose();
+        executorClose();
         return -1;
     }
 
@@ -66,30 +63,6 @@ int Executor::execute() {
     throw std::runtime_error("Error: Could not execute the command.");
 }
 
-// void Executor::printSuccessMessage () const
-// {
-//     if (commandIndex == 0){
-//         std::cout << "Exiting the program...\n" << endl;
-//     }
-//     else if (commandIndex == 1){
-//         std::cout << "Successfully closed " << command.getArgs().at(0) << "\n";
-//     }
-//     else if (commandIndex == 2){
-//         std::cout << "Successfully saved" << command.getArgs().at(0) << "\n";
-//     }
-//     else if (commandIndex == 3){
-//         std::cout << "Successfully opened " << command.getArgs.at(0) << "\n";
-//     }
-//     else if (commandIndex == 4){
-//         std::cout << "Successfully saved another " << command.getArgs.at(0) << "\n"; 
-//     }
-//     else if (commandIndex == 5){
-//         std::cout << "Created new document with size " 
-//                   << command.getArgs[0] << "x" << command.getArgs[1] 
-//                   << " and filled with " << command.getArgs[2] << "\n"; 
-//     }
-// }
-
 void Executor::cExit()
 {
 
@@ -97,7 +70,15 @@ void Executor::cExit()
 
 void Executor::cClose()
 {
-    
+    if (unsavedChanges == true){
+        std::cout << "Would you like to save changes?\ny - yes\nother - no\n"
+        char temp;
+        std::cin >> temp;
+        if (temp == 'y') {
+            saveFile();
+        }
+    }
+    unsavedChanges = false;
 }
 
 void Executor::cSave()
@@ -107,7 +88,7 @@ void Executor::cSave()
 
 void Executor::cOpen()
 {
-
+    
 }
 
 void Executor::cSaveAs()
@@ -117,20 +98,20 @@ void Executor::cSaveAs()
 
 void Executor::cNew()
 {
-    
+    fileStream (filePath, ios::out)
 }
 
 void Executor::cDither()
 {
-
+    unsavedChanges = true;
 }
 
 void Executor::cCrop()
 {
-
+    unsavedChanges = true;
 }
 
 void Executor::cResize()
 {
-
+    unsavedChanges = true;
 }
