@@ -30,6 +30,8 @@ class Command
     int getArgCount() const;
 
     void addArguments(std::vector<std::string> args);
+
+    void printCommand() const;
 };
 
 #endif

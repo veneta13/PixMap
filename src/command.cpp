@@ -26,6 +26,15 @@ int Command::getArgCount() const
     return this->args.size();
 }
 
+void Command::printCommand() const
+{
+    std::cout << name << "\n";
+    for (int i = 0; i < this->args.size(); i++)
+    {
+        std::cout << args[i] << "\n";
+    }
+}
+
 void Command::addArguments(std::vector<std::string> args)
 {
     this->args = args;

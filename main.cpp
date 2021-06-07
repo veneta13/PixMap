@@ -31,8 +31,10 @@ int main()
         if (args.size() != 0) {
             command.addArguments(args);
         }
-        
+        // ======================= DEBUG =====================
         Executor executor (command);
+        
+        // ===================================================
     }
     catch (std::exception &e) {
         cout << e.what();

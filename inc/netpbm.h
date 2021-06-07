@@ -18,37 +18,45 @@ class NetPBM {
 
     NetPBM(std::vector<std::string>* file, std::string magicNumber,int height,int width, std::string backgroundColor);
     NetPBM(std::vector<std::string>* file);
+    virtual ~NetPBM();
 
     std::vector<std::string> getImage();
-    
-    virtual void createFile();
-    virtual void validateFile();
-    virtual void ditherImage();
-    virtual void cropImage();
-    virtual void resizeImage();
+    int ditheringMessage();
+
+    virtual void createFile() = 0;
+    virtual void validateFile() = 0;
+    virtual void ditherImage()  = 0;
+    virtual void cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) = 0;
+    virtual void resizeImage() = 0;
 };
 
 class Pbm : public NetPBM {
+    Pbm(std::vector<std::string>* file, std::string magicNumber,int height,int width, std::string backgroundColor);
+    Pbm(std::vector<std::string>* file);
     void createFile();
     void validateFile();
     void ditherImage();
-    void cropImage();
+    void cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY);
     void resizeImage();
 };
 
 class Pgm : public NetPBM {
+    Pgm(std::vector<std::string>* file, std::string magicNumber,int height,int width, std::string backgroundColor);
+    Pgm(std::vector<std::string>* file);
     void createFile();
     void validateFile();
     void ditherImage();
-    void cropImage();
+    void cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY);
     void resizeImage();
 };
 
 class Ppm : public NetPBM {
+    Ppm(std::vector<std::string>* file, std::string magicNumber,int height,int width, std::string backgroundColor);
+    Ppm(std::vector<std::string>* file);
     void createFile();
     void validateFile();
     void ditherImage();
-    void cropImage();
+    void cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY);
     void resizeImage();
 };
 
