@@ -18,7 +18,7 @@ class NetPBM {
 
     NetPBM(std::vector<std::string>* file, std::string magicNumber,int height,int width, std::string backgroundColor);
     NetPBM(std::vector<std::string>* file);
-    virtual ~NetPBM();
+    virtual ~NetPBM() = default;
 
     std::vector<std::string> getImage();
     int ditheringMessage();
@@ -31,8 +31,9 @@ class NetPBM {
 };
 
 class Pbm : public NetPBM {
-    Pbm(std::vector<std::string>* file, std::string magicNumber,int height,int width, std::string backgroundColor);
-    Pbm(std::vector<std::string>* file);
+    
+    public:
+    Pbm();
     void createFile();
     void validateFile();
     void ditherImage();
@@ -41,8 +42,7 @@ class Pbm : public NetPBM {
 };
 
 class Pgm : public NetPBM {
-    Pgm(std::vector<std::string>* file, std::string magicNumber,int height,int width, std::string backgroundColor);
-    Pgm(std::vector<std::string>* file);
+    public:
     void createFile();
     void validateFile();
     void ditherImage();
@@ -51,8 +51,7 @@ class Pgm : public NetPBM {
 };
 
 class Ppm : public NetPBM {
-    Ppm(std::vector<std::string>* file, std::string magicNumber,int height,int width, std::string backgroundColor);
-    Ppm(std::vector<std::string>* file);
+    public:
     void createFile();
     void validateFile();
     void ditherImage();

@@ -1,26 +1,5 @@
 #include "../inc/netpbm.h"
 
-NetPBM::NetPBM(std::vector<std::string>* file, std::string magicNumber,int height,int width, std::string backgroundColor)
-    : file(file), 
-      magicNumber(magicNumber), 
-      height(height), 
-      width(width), 
-      backgroundColor(backgroundColor)
-{
-    std::string size;
-    size = std::to_string(height) + " " + std::to_string(width);
-    (*file).push_back(magicNumber);
-    (*file).push_back(size);
-}
-
-NetPBM::NetPBM(std::vector<std::string>* file)
-{
-    this->file = file;
-    commentHandler();
-}
-
-NetPBM::~NetPBM () {} 
-
 std::vector<std::string> NetPBM::getImage()
 {
     return (*file);
@@ -57,6 +36,21 @@ void NetPBM::commentHandler()
         }
     }
 }
+
+// Pbm::Pbm()
+// {
+
+// }
+
+// Pgm::Pgm()
+// {
+
+// }
+
+// Ppm::Ppm()
+// {
+
+// }
 
 void Pbm::createFile()
 {
@@ -188,22 +182,4 @@ void Ppm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
 void Ppm::resizeImage()
 {
 
-}
-NetPBM::NetPBM(std::vector<std::string>* file, std::string magicNumber,int height,int width, std::string backgroundColor)
-    : file(file), 
-      magicNumber(magicNumber), 
-      height(height), 
-      width(width), 
-      backgroundColor(backgroundColor)
-{
-    std::string size;
-    size = std::to_string(height) + " " + std::to_string(width);
-    (*file).push_back(magicNumber);
-    (*file).push_back(size);
-}
-
-NetPBM::NetPBM(std::vector<std::string>* file)
-{
-    this->file = file;
-    commentHandler();
 }

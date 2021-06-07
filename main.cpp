@@ -8,33 +8,14 @@ using std::cout;
 
 int main()
 {
-    std::string inputLine;
-    std::string commandName;
-
-    std::string argument;
-    std::vector<std::string> args;
-    bool validCommand = true;
-
     try {
-        std::getline(std::cin, inputLine);
-        inputLineHandler(inputLine);
-        std::stringstream commandStream(inputLine);
-                
-        commandStream >> commandName;
-        Command command (commandName);
-
-        while (commandStream >> argument)
-        {
-            args.push_back(argument);    
-        }
-
-        if (args.size() != 0) {
-            command.addArguments(args);
-        }
-        // ======================= DEBUG =====================
+        Command command = createCommand();
         Executor executor (command);
-        
-        // ===================================================
+        while (executor.code != 0)
+        {
+            command = createCommand();
+            executor.newCommand(command);
+        }
     }
     catch (std::exception &e) {
         cout << e.what();

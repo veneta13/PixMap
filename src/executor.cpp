@@ -21,71 +21,81 @@ void Executor::newCommand(Command command)
     execute();
 }
 
-int Executor::execute() {
+Executor::~Executor ()
+{
+    delete picture;
+    picture = nullptr;
+}
+
+void Executor::execute() {
 
     if (commandName.compare("EXIT") == 0){
-        return 1;
+        code = 0;
+        return;
     }
     
     if (commandName.compare("CLOSE") == 0){
-        cClose();
-        return -1;
+        closeFile();
+        return;
     }
 
     if (commandName.compare("SAVE") == 0){
-        cSave();
-        return -1;
+        saveFile();
+        return;
     }
 
     if (commandName.compare("OPEN") == 0){
-        cOpen();
-        return -1;
+        openFile();
+        return;
     }
 
     if (commandName.compare("SAVEAS") == 0){ 
-        cSaveAs();
-        return -1;
+        saveAsFile();
+        return;
     }
 
     if (commandName.compare("NEW") == 0){
-        cNew();
-        return -1;
+        newFile();
+        return;
     }
 
     if (commandName.compare("DITHER") == 0){
-        cDither();
-        return -1;
+        ditherFile();
+        return;
     }
 
     if (commandName.compare("CROP") == 0){
-        cCrop();
-        return -1;
+        cropFile();
+        return;
     }
 
     if (commandName.compare("RESIZE") == 0){
-        cResize();
-        return -1;
+        resizeFile();
+        return;
     }
     throw std::runtime_error("Error: Could not execute the command.");
 }
 
-void Executor::cClose()
+void Executor::closeFile()
 {
     if (unsavedChanges == true){
         std::cout << "Would you like to save the changes?\ny - yes\nother - no\n";
         char temp;
         std::cin >> temp;
         if (temp == 'y') {
-            cSave();
+            saveFile();
         }
     }
     commandName.clear();
     commandArguments.clear();
-    file.clear();
+    comments.clear();
+    imageGrid.clear();
+    delete picture;
+    picture = nullptr;
     unsavedChanges = false;
 }
 
-void Executor::cSave()
+void Executor::saveFile()
 {
     int fileType = getFileType();
     if (fileType == 1 || fileType == 2 || fileType == 3) {
@@ -147,16 +157,19 @@ void Executor::cNew()
 
 void Executor::cDither()
 {
+    //picture->ditherImage();
     unsavedChanges = true;
 }
 
 void Executor::cCrop()
 {
+    //picture->cropImage();
     unsavedChanges = true;
 }
 
 void Executor::cResize()
 {
+    //picture->resizeImage();
     unsavedChanges = true;
 }
 
@@ -168,18 +181,15 @@ int Executor::getFileType()
     fileStream.close();
 
     if (fileType.compare("P1") == 0) {
-        Pbm p;
-        picture = &p;
+        picture = new Pbm();
         return 1;
     }
     if (fileType.compare("P2") == 0) {
-        Pgm p;
-        picture = &p;
+        picture = new Pgm();
         return 2;
     }
     if (fileType.compare("P3") == 0) {
-        Ppm p;
-        picture = &p;
+        picture = new Ppm();
         return 3;
     }
     // if (fileType.compare("P4") == 0) {
