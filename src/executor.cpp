@@ -1,5 +1,4 @@
 #include "../inc/executor.h"
-#include "../inc/executor_functions.h"
 
 Executor::Executor (Command command)
 {
@@ -13,6 +12,9 @@ Executor::Executor (Command command)
 
 void Executor::newCommand(Command command)
 {
+    this->commandName.clear();
+    this->commandArguments.clear();
+
     this->commandName = command.getName();
     for (int i = 0; i < command.getArgCount(); i++)
     {
@@ -23,8 +25,8 @@ void Executor::newCommand(Command command)
 
 Executor::~Executor ()
 {
-    delete picture;
-    picture = nullptr;
+    // delete picture;
+    // picture = nullptr;
 }
 
 void Executor::execute() {
@@ -90,8 +92,8 @@ void Executor::closeFile()
     commandArguments.clear();
     comments.clear();
     imageGrid.clear();
-    delete picture;
-    picture = nullptr;
+    // delete picture;
+    // picture = nullptr;
     unsavedChanges = false;
 }
 
@@ -116,12 +118,12 @@ void Executor::saveFile()
 
 }
 
-void Executor::cOpen()
+void Executor::openFile()
 {
     loadFileIntoMemory();
 }
 
-void Executor::cSaveAs()
+void Executor::saveAsFile()
 {
     int fileType = getFileType();
     if (fileType == 1 || fileType == 2 || fileType == 3) {
@@ -138,7 +140,7 @@ void Executor::cSaveAs()
     throw std::runtime_error("Error: Unrecognised magic number when saving the file.");
 }
 
-void Executor::cNew()
+void Executor::newFile()
 {
     int pixel;
 
@@ -155,19 +157,19 @@ void Executor::cNew()
     unsavedChanges = true;
 }
 
-void Executor::cDither()
+void Executor::ditherFile()
 {
     //picture->ditherImage();
     unsavedChanges = true;
 }
 
-void Executor::cCrop()
+void Executor::cropFile()
 {
     //picture->cropImage();
     unsavedChanges = true;
 }
 
-void Executor::cResize()
+void Executor::resizeFile()
 {
     //picture->resizeImage();
     unsavedChanges = true;
@@ -177,57 +179,91 @@ int Executor::getFileType()
 {
     std::string fileType;
     fileStream.open(commandArguments.at(0), std::ios::in);
-    fileStream >> fileType;
-    fileStream.close();
+    char c = fileStream.get();
+    while (c != 'P')
+    {
+        c = fileStream.get();
+    }
+    c = fileStream.get();
+    int type = (int)c;
+    std::cout << type << std::endl;
 
-    if (fileType.compare("P1") == 0) {
-        picture = new Pbm();
+    fileStream.close();
+    
+    if (type == 49) {
+        // picture = new Pbm();
         return 1;
     }
-    if (fileType.compare("P2") == 0) {
-        picture = new Pgm();
+    if (type == 50) {
+        // picture = new Pgm();
         return 2;
     }
-    if (fileType.compare("P3") == 0) {
-        picture = new Ppm();
+    if (type == 51) {
+        // picture = new Ppm();
         return 3;
     }
-    // if (fileType.compare("P4") == 0) {
-    //     return 4;
-    // }
-    // if (fileType.compare("P5") == 0) {
-    //     return 5;
-    // }
-    // if (fileType.compare("P6") == 0) {
-    //     return 6;
-    // }
+    if (type == 52) {
+        return 4;
+    }
+    if (type == 53) {
+        return 5;
+    }
+    if (type == 54) {
+        return 6;
+    }
     throw std::runtime_error("Error: Unrecognised magic number when opening the file.");
 }
 
 void Executor::loadFileIntoMemory()
 {
     int fileType = getFileType();
+    std::cout << "***" << fileType;
+    
+
     if (fileType == 1 || fileType == 2 || fileType == 3) {
-        fileStream.open(commandArguments.at(0), std::ios::in);
-        if (fileStream.good()) {
-            std::string line;
-            while (std::getline(fileStream, line)) {
-                file.push_back(line);
-            }
-            fileStream.close();
-            return;
-        }
+        // fileStream.open(commandArguments.at(0), std::ios::in);
+        // if (fileStream.good()) {
+        //     std::string line;
+        //     while (std::getline(fileStream, line)) {
+        //         file.push_back(line);
+        //     }
+        //     fileStream.close();
+            // return;
+            // }
     }
-    // if (fileType == 4 || fileType == 5 || fileType == 6) {
-    //     fileStream.open(commandArg.at(0), std::ios::in | std::ios::binary);
-    //     if (fileStream.good()) {
-    //         std::string line;
-    //         while (std::getline(fileStream, line)) {
-    //             file.push_back(line);
-    //         }
-    //         fileStream.close();
-    //         return;
-    //     }
-    // }
+    if (fileType == 4 || fileType == 5 || fileType == 6)
+    {
+        std::stringstream file;
+        // std::string word;
+        int endOfHeader = 0;
+        std::cout << commandArguments.at(0);
+        fileStream.open(commandArguments.at(0), std::ios::in | std::ios::binary);
+
+        if (fileStream.good()) {
+            file << fileStream.rdbuf();
+            std::cout << file.str();
+
+            if (fileType == 4) {
+                endOfHeader = headerProcessor(width, height, max, file, 2);
+                file.seekg(endOfHeader);
+            }
+            else{
+                endOfHeader = headerProcessor(width, height, max, file, 3);
+                file.seekg(endOfHeader);
+                int pixelCount = (fileType == 5) ? width*height : 3*width*height;
+                char* pixelGrid = new char[pixelCount];
+                file.read(pixelGrid, pixelCount);
+                for ( int i = 0; i < pixelCount; i++ ) 
+                {
+                    unsigned char p = pixelGrid[i];
+                    imageGrid.push_back((int) p);
+                }
+                delete[] pixelGrid;
+                fileStream.close();
+                std::cout << " * * * " << height << " " << width << " " << max;
+                return;
+            } 
+        }
+
     throw std::runtime_error("Error: Error loading the file into memory.\n");
 }

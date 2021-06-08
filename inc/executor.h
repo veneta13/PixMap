@@ -3,21 +3,26 @@
 
 #include "inc.h"
 #include "command.h"
-#include "netpbm.h"
+// #include "netpbm.h"
 #include "dithering.h"
+#include "executor_functions.h"
 
 class Executor {
-    NetPBM * picture;
+    // NetPBM * picture;
     std::string commandName;
     std::vector<std::string> commandArguments;
     std::vector<std::string> comments;
-    std::vector<std::vector<int>> imageGrid;
+    std::vector<int> imageGrid;
+    int height = 0;
+    int width = 0;
+    int max = 0;
 
     std::fstream fileStream;
+    
     bool unsavedChanges = false;
     
 
-    int execute();
+    void execute();
     void exitFile();
     void closeFile();
     void saveFile();
