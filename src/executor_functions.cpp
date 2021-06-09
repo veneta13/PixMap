@@ -24,6 +24,7 @@ int headerProcessor(int& width, int& height, int& max, std::stringstream& file, 
             else if (numbersInHeader == 1)
             {
                 height = std::stoi(word);
+                endOfHeader = file.tellg();
             }
             else
             {
@@ -33,5 +34,78 @@ int headerProcessor(int& width, int& height, int& max, std::stringstream& file, 
             numbersInHeader++;
         }
     }
+    endOfHeader++;
     return endOfHeader;
+}
+
+int headerProcessorText(int& width, int& height, int& max, std::vector<std::string>& file, int maxNumInH)
+{
+    int numbersInHeader = 0;
+    std::stringstream line;
+    std::string word;
+    int number;
+    for (int i = 0; i < file.size(); i++)
+    {
+        line << file.at(i);
+        while (!line.eof()) {
+            line >> word;
+            if (std::stringstream(word) >> number && numbersInHeader == 0)
+            {
+                width = number;
+                numbersInHeader++;
+            }
+            else if (std::stringstream(word) >> number && numbersInHeader == 1)
+            {
+                height = number;
+                numbersInHeader++;
+            }
+            else if (std::stringstream(word) >> number && numbersInHeader == 2)
+            {
+                max = number;
+                numbersInHeader++;
+            }
+            if (numbersInHeader == maxNumInH){
+                return i;
+            }
+        }
+        line.clear();
+    }
+    throw std::runtime_error("Error: Could not recognise the numbers in the header.");
+    return -1;
+}
+
+void getBinaryNumbers(std::vector<int> &allPixels, std::int8_t number){
+    if (number == 0){
+        return;
+    }
+    if (number > number/2){
+       allPixels.push_back(1);
+    }
+    else {
+        allPixels.push_back(0);
+    }
+    getBinaryNumbers(allPixels, number/2);
+    return;
+}
+
+void loadImageGrid(int endOfHeader, std::vector<std::string>& file, std::vector<int>& imageGrid)
+{
+    std::stringstream line;
+    std::string word;
+    int number;
+    for (int i = endOfHeader + 1; i < file.size(); i++)
+    {
+        line << file.at(i);
+        while (!line.eof()) 
+        {
+            line >> word;
+            if (std::stringstream(word) >> number){
+                imageGrid.push_back(number);
+            }
+            else {
+                throw std::invalid_argument("Error: Not all pixels are numbers.");
+            }
+        }
+        line.clear();
+    }
 }

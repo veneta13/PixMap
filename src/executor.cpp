@@ -186,7 +186,6 @@ int Executor::getFileType()
     }
     c = fileStream.get();
     int type = (int)c;
-    std::cout << type << std::endl;
 
     fileStream.close();
     
@@ -217,35 +216,65 @@ int Executor::getFileType()
 void Executor::loadFileIntoMemory()
 {
     int fileType = getFileType();
-    std::cout << "***" << fileType;
-    
+    if(fileType == 1 || fileType == 2 || fileType == 3) {
+        int endOfHeader = 0;
+        std::vector<std::string> file;
 
-    if (fileType == 1 || fileType == 2 || fileType == 3) {
-        // fileStream.open(commandArguments.at(0), std::ios::in);
-        // if (fileStream.good()) {
-        //     std::string line;
-        //     while (std::getline(fileStream, line)) {
-        //         file.push_back(line);
-        //     }
-        //     fileStream.close();
-            // return;
-            // }
+        fileStream.open(commandArguments.at(0), std::ios::in);
+        if (fileStream.good()) {
+            std::string line;
+            while (std::getline(fileStream, line)) 
+            {
+                file.push_back(line);
+            }
+            fileStream.close();
+            for (int i = 0; i < file.size(); i++) {
+                if (file.at(i).find('#') != std::string::npos){
+                    int position = file.at(i).find('#');
+                    std::string comment = "";
+                    comment.append(std::to_string(i));
+                    comment.append(file.at(i).substr(position+1));
+                    file.at(i) = file.at(i).substr(0, position);
+                }
+            std::cout << file[i]<< std::endl;
+            }
+            if (fileType == 1){
+                endOfHeader = headerProcessorText(width, height, max, file, 2);
+            }
+            else{
+                endOfHeader = headerProcessorText(width, height, max, file, 3);
+            }
+            loadImageGrid(endOfHeader, file, imageGrid);        
+        }
+        else {
+            throw std::runtime_error("Error: Could not open file.\n");
+        }
+        return;
     }
     if (fileType == 4 || fileType == 5 || fileType == 6)
     {
         std::stringstream file;
-        // std::string word;
         int endOfHeader = 0;
-        std::cout << commandArguments.at(0);
         fileStream.open(commandArguments.at(0), std::ios::in | std::ios::binary);
 
         if (fileStream.good()) {
             file << fileStream.rdbuf();
-            std::cout << file.str();
 
             if (fileType == 4) {
                 endOfHeader = headerProcessor(width, height, max, file, 2);
                 file.seekg(endOfHeader);
+                int pixelCount = ((width * height) % 8 == 0) ? (width*height)/8 : (width*height)/8 + 1;
+                char* pixelGrid = new char[pixelCount];
+                file.read(pixelGrid, pixelCount);
+                std::vector<int> allPixels;
+                for ( int i = 0; i < pixelCount; i++ ) 
+                {
+                    std::int8_t number = pixelGrid[i];
+                    getBinaryNumbers(allPixels, number);
+                }
+                delete[] pixelGrid;
+                fileStream.close();
+                return;
             }
             else{
                 endOfHeader = headerProcessor(width, height, max, file, 3);
@@ -260,10 +289,12 @@ void Executor::loadFileIntoMemory()
                 }
                 delete[] pixelGrid;
                 fileStream.close();
-                std::cout << " * * * " << height << " " << width << " " << max;
                 return;
             } 
         }
-
+        else {
+            throw std::runtime_error("Error: Could not open file.\n");
+        }
+    }
     throw std::runtime_error("Error: Error loading the file into memory.\n");
 }
