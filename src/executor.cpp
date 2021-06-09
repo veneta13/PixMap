@@ -142,19 +142,6 @@ void Executor::saveAsFile()
 
 void Executor::newFile()
 {
-    int pixel;
-
-    pixel = (commandArguments[2] == "#FFFFFF") ? 1 : 0;
-
-    for (int i = 0; i < std::stoi(commandArguments[0]); i++)
-    {
-        std::string line = "";
-        for(int j = 0; j < std::stoi(commandArguments[1]);j++)
-        {
-            line += std::to_string(pixel);
-        }
-    } 
-    unsavedChanges = true;
 }
 
 void Executor::ditherFile()

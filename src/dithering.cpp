@@ -2,7 +2,7 @@
 
 void floydSteinberg()
 {
-
+    for (int i = 0; i <)
 }
 
 void falseFloydSteinberg()

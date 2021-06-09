@@ -3,7 +3,7 @@
 
 #include "inc.h"
 #include "command.h"
-// #include "netpbm.h"
+#include "netpbm.h"
 #include "dithering.h"
 #include "executor_functions.h"
 
