@@ -1,56 +1,65 @@
 #include "../inc/dithering.h"
 
-void floydSteinberg()
-{
-    for (int i = 0; i <)
-}
+Dithering::Dithering (Pbm * p)
+    : height (p->height), width (p->width), max (1){}
 
-void falseFloydSteinberg()
-{
+Dithering::Dithering (Pgm * p)
+    : height (p->height), width (p->width), max (p->max){}
 
-}
+Dithering::Dithering (Ppm * p)
+    : height (p->height), width (p->width), max (p->max){}
 
-void jarvisJudiceNinke()
-{
-
-}
-
-void stucki()
+void Dithering::floydSteinberg()
 {
 
 }
 
-void atkinson()
+void Dithering::falseFloydSteinberg()
 {
 
 }
 
-void burkes()
+void Dithering::jarvisJudiceNinke()
 {
 
 }
 
-void sierra()
+void Dithering::stucki()
 {
 
 }
 
-void twoRowSierra()
+void Dithering::atkinson()
 {
 
 }
 
-void sierraLite()
+void Dithering::burkes()
+{
+
+}
+
+void Dithering::sierra()
+{
+
+}
+
+void Dithering::twoRowSierra()
+{
+
+}
+
+void Dithering::sierraLite()
 {
     
 }
 
-void ordered4x4Bayermatrix()
+void Dithering::ordered4x4BayerMatrix()
 {
 
 }
 
-void ordered8x8Bayermatrix()
+void Dithering::ordered8x8BayerMatrix()
 {
 
 }
