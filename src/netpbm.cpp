@@ -56,7 +56,6 @@ int NetPBM::hexToInt (char hex)
     return -1;
         
 }
-
 void NetPBM::validateCrop(int topLeftX, int topLeftY, int& bottomRightX, int& bottomRightY)
 {
     if (topLeftX < 1 || topLeftY < 1 || bottomRightX < 1 || bottomRightY < 1) {
@@ -85,6 +84,7 @@ void NetPBM::validateCrop(int topLeftX, int topLeftY, int& bottomRightX, int& bo
         bottomRightY = height;
     }
 }
+
 ////////////////////////////////////////////////////////////////
 // PBM implementation
 
@@ -94,12 +94,10 @@ Pbm::Pbm(int height, int width, std::vector<int>& imageGrid)
     this->width = width;
     this->imageGrid = imageGrid;
 }
-
 Pbm::~Pbm()
 {
     ;
 }
-
 void Pbm::createFile(std::string bgcolor) 
 {
     int pixel;
@@ -119,7 +117,6 @@ void Pbm::createFile(std::string bgcolor)
         imageGrid.push_back(pixel);
     }
 }
-
 void Pbm::validateFile() 
 {
     if (height < 1 || width < 1)
@@ -150,9 +147,30 @@ void Pbm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
     validateCrop(topLeftX, topLeftY, bottomRightX, bottomRightY);
 }
 
-void Pbm::resizeImage(int number, bool isPercentage) 
+void Pbm::resizeImage(int percentage) 
 {
 
+}
+
+void Pbm::resizeImage(int width, int height)
+{
+    std::vector<int> scaledImage;
+
+    for (int y = 0; y < height; y++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            int srcX = int( round( float(x) / float(width) * float(this->width) ) );
+            int srcY = int( round( float(y) / float(width) * float(this->height) ) );
+            srcX = std::min( srcX, this->width-1);
+            srcY = std::min( srcY, this->height-1);
+            scaledImage.push_back(imageGrid.at(this->width*srcY+srcX));
+        }
+    }
+
+    imageGrid.clear();
+    imageGrid = scaledImage;
+    scaledImage.clear();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -229,7 +247,21 @@ void Pgm::validateFile()
 
 void Pgm::ditherImage() 
 {
+    // Dithering<Pgm> d (this);
 
+    // ditheringMessage();
+    // int temp = 0;
+    // std::cin >> temp;
+    // d.dither(temp);
+
+    // imageGrid.clear();
+    // for (int i = 0; i < d.returnImage().size(); i++)
+    // {
+    //     for (int j = 0; j < d.returnImage().at(i).size(); j++)
+    //     {
+    //         imageGrid.push_back(d.returnImage().at(i).at(j));
+    //     }
+    // }
 }
 
 void Pgm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) 
@@ -237,9 +269,30 @@ void Pgm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
     validateCrop(topLeftX, topLeftY, bottomRightX, bottomRightY);
 }
 
-void Pgm::resizeImage(int number, bool isPercentage) 
+void Pgm::resizeImage(int percentage) 
 {
 
+}
+
+void Pgm::resizeImage(int width, int height)
+{
+    std::vector<int> scaledImage;
+
+    for (int y = 0; y < height; y++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            int srcX = int( round( float(x) / float(width) * float(this->width) ) );
+            int srcY = int( round( float(y) / float(width) * float(this->height) ) );
+            srcX = std::min( srcX, this->width-1);
+            srcY = std::min( srcY, this->height-1);
+            scaledImage.push_back(imageGrid.at(this->width*srcY+srcX));
+        }
+    }
+
+    imageGrid.clear();
+    imageGrid = scaledImage;
+    scaledImage.clear();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -321,19 +374,58 @@ void Ppm::ditherImage()
 void Ppm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY)
 {
     validateCrop(topLeftX, topLeftY, bottomRightX, bottomRightY);
-    
-    std::vector<int> croppedImage;
 
-    for (int i = 0; i < height; i++) 
+    std::vector<std::vector<int>> croppedImage;
+    for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
         {
-            
+            line.push_back(p->imageGrid.at(i*width + j*3));
+            line.push_back(p->imageGrid.at(i*width + j*3 + 1));
+            line.push_back(p->imageGrid.at(i*width + j*3 + 2));
+        }
+        croppedImage.push_back(line);
+        line.clear();
+    }
+
+    imageGrid.clear();
+
+    for (int i = 0; i < height; i++) 
+    {
+        for (int j = 0; j < width*3; j+=3)
+        {
+            if (i < topLeftY && i > bottomRightY && j > topLeftX*3 && j < bottomRightX*3)
+            {
+                imageGrid.push_back(croppedImage.at());
+            }
         }
     }
+    croppedImage.clear();
 }
 
-void Ppm::resizeImage(int number, bool isPercentage)
+void Ppm::resizeImage(int percentage) 
 {
     
+}
+
+void Ppm::resizeImage(int width, int height)
+{
+    std::vector<int> scaledImage;
+
+    for (int y = 0; y < height; y++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            int srcX = int( round( float(x) / float(width) * float(this->width) ) );
+            int srcY = int( round( float(y) / float(width) * float(this->height) ) );
+            srcX = std::min( srcX, this->width-1);
+            srcY = std::min( srcY, this->height-1);
+            scaledImage.push_back(imageGrid.at(this->width*srcY+srcX));
+        }
+    }
+
+    imageGrid.clear();
+    imageGrid = scaledImage;
+    scaledImage.clear();
+      
 }

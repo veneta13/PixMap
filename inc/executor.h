@@ -8,19 +8,18 @@
 #include "executor_functions.h"
 
 class Executor {
-    // NetPBM * picture;
+    Pbm* pbm = nullptr;
+    Pgm* pgm = nullptr;
+    Ppm* ppm = nullptr;
     std::string commandName;
     std::vector<std::string> commandArguments;
     std::vector<std::string> comments;
+    std::fstream fileStream;
     std::vector<int> imageGrid;
     int height = 0;
     int width = 0;
     int max = 0;
-
-    std::fstream fileStream;
-    
     bool unsavedChanges = false;
-    
 
     void execute();
     void exitFile();
@@ -34,12 +33,14 @@ class Executor {
 
     int getFileType();
     void loadFileIntoMemory();
+    void createInstances(int type);
 
     public:
 
+    int code = 1;
+
     Executor(Command command);
     void newCommand (Command command);
-    int code = 1;
     ~Executor();
 };
 #endif 

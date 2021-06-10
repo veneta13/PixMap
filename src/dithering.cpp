@@ -1,29 +1,55 @@
 #include "../inc/dithering.h"
 
 template<class A>
-Dithering<A>::Dithering (const A &p)
+Dithering<A>::Dithering (const A *p)
 {
-    height = p.height;
-    width = p.width;
-    max = p.max;
+    height = p->height;
+    width = p->width;
+    max = p->max;
 
     std::vector<int> line;
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
         {
-            if (p.imageGrid.size() == width*height){
-                line.push_back(p.imageGrid.at(i*width + j));
+            if (p->imageGrid.size() == width*height){
+                line.push_back(p.imageGrid->at(i*width + j));
             }
-            else if (p.imageGrid.size() == width*height*3){
-                line.push_back(p.imageGrid.at(i*width + j*3));
-                line.push_back(p.imageGrid.at(i*width + j*3 + 1));
-                line.push_back(p.imageGrid.at(i*width + j*3 + 2));
+            else if (p->imageGrid.size() == width*height*3){
+                line.push_back(p->imageGrid.at(i*width + j*3));
+                line.push_back(p->imageGrid.at(i*width + j*3 + 1));
+                line.push_back(p->imageGrid.at(i*width + j*3 + 2));
             }
         }
         newImage.push_back(line);
         line.clear();
     }
+}
+
+template<class A>
+void Dithering<A>::dither(int type)
+{
+    switch (type)
+    {
+        case 1 : floydSteinberg();        break;
+        case 2 : falseFloydSteinberg();   break;
+        case 3 : jarvisJudiceNinke();     break;
+        case 4 : stucki();                break;
+        case 5 : atkinson();              break;
+        case 6 : burkes();                break;
+        case 7 : sierra();                break;
+        case 8 : twoRowSierra();          break;
+        case 9 : sierraLite();            break;
+        case 10: ordered4x4BayerMatrix(); break;
+        case 11: ordered4x4BayerMatrix(); break;
+        default : throw std::runtime_error("Error: Unknown dither type."); break;
+    }   
+}
+
+template<class A>
+std::vector<std::vector<int>> Dithering<A>::returnImage()
+{
+    return newImage;
 }
 
 template<class A>

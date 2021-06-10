@@ -25,8 +25,12 @@ void Executor::newCommand(Command command)
 
 Executor::~Executor ()
 {
-    // delete picture;
-    // picture = nullptr;
+    delete pbm;
+    delete pgm;
+    delete ppm;
+    pbm = nullptr;
+    pgm = nullptr;
+    ppm = nullptr;
 }
 
 void Executor::execute() {
@@ -92,8 +96,6 @@ void Executor::closeFile()
     commandArguments.clear();
     comments.clear();
     imageGrid.clear();
-    // delete picture;
-    // picture = nullptr;
     unsavedChanges = false;
     std::cout << "\nSuccessfully closed the file.\n";
 }
@@ -154,7 +156,7 @@ void Executor::saveFile()
         if (fileStream.good()){
             for (int i = 0; i < imageGrid.size(); i++) 
             {
-                fileStream.write(imageGrid[i]);
+                fileStream.write((char*)&(imageGrid[i]), sizeof(imageGrid[i]));
             }
             fileStream.close();
             std::cout << "\nSuccessfully saved the changes to " << commandArguments.at(0) << ".\n";
@@ -165,12 +167,13 @@ void Executor::saveFile()
         }
     }
     throw std::runtime_error("Error: Unrecognised magic number when saving the file.");
-
 }
 
 void Executor::openFile()
 {
     loadFileIntoMemory();
+    int type = getFileType();
+    createInstances(type);
     std::cout << "\nSuccessfully opened the file.\n";
 }
 
@@ -181,18 +184,66 @@ void Executor::newFile()
 
 void Executor::ditherFile()
 {
-    
+    if (getFileType() == 1 || getFileType() == 4){
+        pbm->ditherImage();
+    }
+    else if (getFileType() == 2 || getFileType() == 5){
+        pgm->ditherImage();
+    }
+    else {
+        ppm->ditherImage();
+    }
     unsavedChanges = true;
 }
 
 void Executor::cropFile()
 {
-    
+    int temp1 = std::stoi(commandArguments.at(0));
+    int temp2 = std::stoi(commandArguments.at(1));
+    int temp3 = std::stoi(commandArguments.at(2));
+    int temp4 = std::stoi(commandArguments.at(3));
+
+    if (getFileType() == 1 || getFileType() == 4){
+        pbm->cropImage(temp1, temp2, temp3, temp4);
+    }
+    else if (getFileType() == 2 || getFileType() == 5){
+        pgm->cropImage(temp1, temp2, temp3, temp4);
+    }
+    else {
+        ppm->cropImage(temp1, temp2, temp3, temp4);
+    }
     unsavedChanges = true;
 }
 
 void Executor::resizeFile()
 {
+    if (commandArguments.size() == 1) {
+        int percentage = std::stoi(commandArguments.at(0));
+
+        if (getFileType() == 1 || getFileType() == 4){
+            pbm->resizeImage(percentage);
+        }
+        else if (getFileType() == 2 || getFileType() == 5){
+            pgm->resizeImage(percentage);
+        }
+        else {
+            ppm->resizeImage(percentage);
+        }
+    }
+    else {
+        int width = std::stoi(commandArguments.at(0));
+        int height = std::stoi(commandArguments.at(1));
+
+        if (getFileType() == 1 || getFileType() == 4){
+            pbm->resizeImage( width,  height);
+        }
+        else if (getFileType() == 2 || getFileType() == 5){
+            pgm->resizeImage( width,  height);
+        }
+        else {
+            ppm->resizeImage( width,  height);
+        }
+    }
     
     unsavedChanges = true;
 }
@@ -212,15 +263,12 @@ int Executor::getFileType()
     fileStream.close();
     
     if (type == 49) {
-        // picture = new Pbm();
         return 1;
     }
     if (type == 50) {
-        // picture = new Pgm();
         return 2;
     }
     if (type == 51) {
-        // picture = new Ppm();
         return 3;
     }
     if (type == 52) {
@@ -266,7 +314,7 @@ void Executor::loadFileIntoMemory()
             else{
                 endOfHeader = headerProcessorText(width, height, max, file, 3);
             }
-            loadImageGrid(endOfHeader, file, imageGrid);        
+            loadImageGrid(endOfHeader, file, imageGrid);
         }
         else {
             throw std::runtime_error("Error: Could not open file.\n");
@@ -319,4 +367,25 @@ void Executor::loadFileIntoMemory()
         }
     }
     throw std::runtime_error("Error: Error loading the file into memory.\n");
+}
+
+void Executor::createInstances(int type)
+{
+    if (type == 1 || type == 4)
+    {
+        pbm = new Pbm(width, height, imageGrid);
+        return;
+    }
+
+    if (type == 2 || type == 5)
+    {
+        pgm = new Pgm(width, height, max, imageGrid);
+        return;
+    }
+
+    if (type == 3 || type == 6)
+    {
+        ppm = new Ppm(width, height, max, imageGrid);
+        return;
+    }
 }

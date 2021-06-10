@@ -12,31 +12,34 @@ class NetPBM {
     int max;
     std::vector<int> imageGrid;
 
-    int hexToInt (char hex);
-    int ditheringMessage();
-    void validateCrop(int topLeftX, int topLeftY, int& bottomRightX, int& bottomRightY);
+    int hexToInt (char hex); //*
+    int ditheringMessage(); //*
+    void validateCrop(int topLeftX, int topLeftY, int& bottomRightX, int& bottomRightY); //*
     
     public:
 
     NetPBM ();
     virtual ~NetPBM();
+    std::vector<int> returnImage();
 
     virtual void createFile(std::string bgcolor) = 0;
     virtual void validateFile() = 0;
     virtual void ditherImage() = 0;
     virtual void cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) = 0;
-    virtual void resizeImage(int number, bool isPercentage) = 0;
+    virtual void resizeImage(int percentage) = 0;
+    virtual void resizeImage(int width, int height) = 0;
 };
 
 class Pbm : public NetPBM {
     public:
-    Pbm(int height, int width, std::vector<int>& imageGrid);
+    Pbm(int height, int width, std::vector<int>& imageGrid); //*
     ~Pbm();
-    void createFile(std::string bgcolor) override;
-    void validateFile() override;
+    void createFile(std::string bgcolor) override; //*
+    void validateFile() override; //*
     void ditherImage() override;
     void cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) override;
-    void resizeImage(int number, bool isPercentage) override;
+    void resizeImage(int percentage) override;
+    void resizeImage(int width, int height) override;
 };
 
 class Pgm : public NetPBM {
@@ -47,7 +50,8 @@ class Pgm : public NetPBM {
     void validateFile() override;
     void ditherImage() override;
     void cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) override;
-    void resizeImage(int number, bool isPercentage) override;
+    void resizeImage(int percentage) override;
+    void resizeImage(int width, int height) override;
 };
 
 class Ppm : public NetPBM {
@@ -58,7 +62,8 @@ class Ppm : public NetPBM {
     void validateFile() override;
     void ditherImage() override;
     void cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) override;
-    void resizeImage(int number, bool isPercentage) override;
+    void resizeImage(int percentage) override;
+    void resizeImage(int width, int height) override;
 };
 
 #endif

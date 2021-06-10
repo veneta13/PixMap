@@ -12,10 +12,6 @@ class Dithering
     int max;
     std::vector<std::vector<int>> newImage;
 
-    public:
-    Dithering (const A &p);
-    ~Dithering() = default;
-
     void floydSteinberg();
     void falseFloydSteinberg();
     void jarvisJudiceNinke();
@@ -27,6 +23,12 @@ class Dithering
     void twoRowSierra();
     void ordered4x4BayerMatrix();
     void ordered8x8BayerMatrix();
+
+    public:
+    Dithering (const A *p);
+    ~Dithering() = default;
+    void dither(int type);
+    std::vector<std::vector<int>> returnImage();
 };
 
 #endif
