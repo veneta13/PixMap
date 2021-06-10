@@ -4,17 +4,17 @@
 #include "inc.h"
 #include "netpbm.h"
 
+template<class A>
 class Dithering
 {
     int height;
     int width;
     int max;
 
-    public:
+    std::vector<std::vector<int>> newImage;
 
-    Dithering(Pbm * p);
-    Dithering(Pgm * p);
-    Dithering(Ppm * p);
+    public:
+    Dithering (const Dithering<A> &p);
     ~Dithering() = default;
 
     void floydSteinberg();

@@ -29,7 +29,6 @@ class NetPBM {
 };
 
 class Pbm : public NetPBM {
-    
     public:
     Pbm(int height, int width, std::vector<int>& imageGrid);
     ~Pbm();
