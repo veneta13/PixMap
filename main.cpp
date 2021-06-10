@@ -8,6 +8,7 @@ using std::cout;
 
 int main()
 {
+    printInstruction();
     try {
         Command command = createCommand();
         Executor executor (command);

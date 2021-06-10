@@ -27,7 +27,6 @@ class Executor {
     void closeFile();
     void saveFile();
     void openFile();
-    void saveAsFile();
     void newFile();
     void ditherFile();
     void cropFile();

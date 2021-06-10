@@ -52,7 +52,7 @@ void Executor::execute() {
     }
 
     if (commandName.compare("SAVEAS") == 0){ 
-        saveAsFile();
+        saveFile();
         return;
     }
 
@@ -95,6 +95,7 @@ void Executor::closeFile()
     // delete picture;
     // picture = nullptr;
     unsavedChanges = false;
+    std::cout << "\nSuccessfully closed the file.\n";
 }
 
 void Executor::saveFile()
@@ -103,11 +104,60 @@ void Executor::saveFile()
     if (fileType == 1 || fileType == 2 || fileType == 3) {
         fileStream.open(commandArguments.at(0), std::ios::out | std::ios::trunc);
         if (fileStream.good()) {
-            for (int i = 0; i < commandArguments.size(); i++) 
+
+            std::string temp;
+            temp = "P" + std::to_string(fileType) + "\n";
+            fileStream >> temp;
+            temp.clear();
+
+            fileStream >> height;
+            fileStream >> width;
+            if (fileType != 1) {
+                fileStream >> max;
+            }
+
+            for (int i = 0; i < imageGrid.size(); i++) 
             {
-                fileStream >> commandArguments.at(i);
+                fileStream >> imageGrid.at(i);
+            }
+
+            fileStream.close();
+            std::cout << "\nSuccessfully saved the changes to " << commandArguments.at(0) << ".\n";
+            return;
+        }
+        else {
+            throw std::runtime_error("Error: Could not open the file.\nHint: Check if you have loaded the file via open.");
+        }
+    }
+    else if (fileType == 4 || fileType == 5 || fileType == 6)
+    {
+        fileStream.open(commandArguments.at(0), std::ios::out | std::ios::trunc);
+        if (fileStream.good()) {
+
+            std::string temp;
+            temp = "P" + std::to_string(fileType) + "\n";
+            fileStream >> temp;
+            temp.clear();
+
+            fileStream >> height;
+            fileStream >> width;
+            if (fileType != 4) {
+                fileStream >> max;
             }
             fileStream.close();
+        }
+        else {
+            throw std::runtime_error("Error: Could not open the file.\nHint: Check if you have loaded the file via open.");
+        }
+
+        fileStream.open(commandArguments.at(0), std::ios::out | std::ios::app | std::ios::binary);
+        if (fileStream.good()){
+            for (int i = 0; i < imageGrid.size(); i++) 
+            {
+                fileStream.write(imageGrid[i]);
+            }
+            fileStream.close();
+            std::cout << "\nSuccessfully saved the changes to " << commandArguments.at(0) << ".\n";
             return;
         }
         else {
@@ -121,44 +171,29 @@ void Executor::saveFile()
 void Executor::openFile()
 {
     loadFileIntoMemory();
-}
-
-void Executor::saveAsFile()
-{
-    int fileType = getFileType();
-    if (fileType == 1 || fileType == 2 || fileType == 3) {
-        fileStream.open(commandArguments.at(0), std::ios::out | std::ios::trunc);
-        if (fileStream.good()) {
-            for (int i = 0; i < commandArguments.size(); i++) 
-            {
-                fileStream >> commandArguments.at(i);
-            }
-            fileStream.close();
-            return;
-        }
-    }
-    throw std::runtime_error("Error: Unrecognised magic number when saving the file.");
+    std::cout << "\nSuccessfully opened the file.\n";
 }
 
 void Executor::newFile()
 {
+    std::cout << "Choose ";
 }
 
 void Executor::ditherFile()
 {
-    //picture->ditherImage();
+    
     unsavedChanges = true;
 }
 
 void Executor::cropFile()
 {
-    //picture->cropImage();
+    
     unsavedChanges = true;
 }
 
 void Executor::resizeFile()
 {
-    //picture->resizeImage();
+    
     unsavedChanges = true;
 }
 

@@ -10,11 +10,10 @@ class Dithering
     int height;
     int width;
     int max;
-
     std::vector<std::vector<int>> newImage;
 
     public:
-    Dithering (const Dithering<A> &p);
+    Dithering (const A &p);
     ~Dithering() = default;
 
     void floydSteinberg();

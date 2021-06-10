@@ -7,5 +7,6 @@
 #include <sstream>
 #include <fstream>
 #include <cstdint>
+#include <math.h> 
 
 #endif

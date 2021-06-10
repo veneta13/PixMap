@@ -1,5 +1,20 @@
 #include "../inc/main_functions.h"
 
+void printInstruction()
+{
+    std::cout << "To use this program, you must enter the following instructions:\n"
+              << " - open <path to pbm/pgm/ppm file >\n"
+              << " - new <image width> <image height> <background color #XXXXXX format>\n"
+              << " - save\n"
+              << " - saveAs <path>\n"
+              << " - dither\n"
+              << " - crop <leftUpperCorner X> <leftUpperCorner Y> <rightBottomCorner X> <rightBottomCorner Y> \n"
+              << " - resize <scaling percentage>\n"
+              << " - resize <image width> <image height>\n"
+              << " - close\n"
+              << " - exit\n";
+}
+
 void inputLineHandler (std::string& inputLine)
 {
     int count = 0;
