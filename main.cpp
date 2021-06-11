@@ -18,7 +18,8 @@ int main()
             executor.newCommand(command);
         }
     }
-    catch (std::exception &e) {
+    catch (std::exception &e) { 
+        //catch any exception
         cout << e.what();
     }
     
