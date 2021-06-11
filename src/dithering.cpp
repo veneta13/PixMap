@@ -682,10 +682,40 @@ void Dithering<A>::sierraLite()
 template<class A>
 void Dithering<A>::ordered4x4BayerMatrix()
 {
-    unsigned int bayer4x4[4][4] ={{0,  8,  2,  10}, 
-                                  {12, 4,  14, 6 }, 
-                                  {3 , 11, 1,  9 }, 
-                                  {15, 7,  13, 5 }};
+    unsigned int bayer4x4[4][4] ={{1, 9, 3, 11}, 
+                                  {13, 5, 15, 7}, 
+                                  {4, 12, 2, 10}, 
+                                  {16, 8, 14, 6}};
+
+    int pixel;
+    int factor = 1;
+    int offset = (16 * (16 / 2) - 0.5) / (16 * 16); 
+    int r = max / factor;
+
+    for (int y = 0; y < height; y++)
+    {
+        if (width == newImage.at(0).size()){
+            for (int x = 0; x < width; x++)
+            {
+                pixel = newImage[y][x];
+                pixel += r * (ditherMatrix[x % 16][y % 16] - offset);
+            }
+        }
+        else {
+            for (int x = 0; x < width; x+=3)
+            {
+                //Red pixel
+                pixel = newImage[y][x];
+                pixel += r * (ditherMatrix[x % 16][y % 16] - offset);
+                //Green pixel
+                pixel = newImage[y][x+1];
+                pixel += r * (ditherMatrix[x % 16][y % 16] - offset);
+                //Green pixel
+                pixel = newImage[y][x+2];
+                pixel += r * (ditherMatrix[x % 16][y % 16] - offset);
+            }
+        }
+    }
 }
 
 template<class A>
@@ -699,4 +729,34 @@ void Dithering<A>::ordered8x8BayerMatrix()
                                    {51, 19, 59, 27, 49, 17, 57, 25},
                                    {15, 47, 7,  39, 13, 45, 5,  37},
                                    {63, 31, 55, 23, 61, 29, 53, 21}};
+    
+    int pixel;
+    int factor = 1;
+    int offset = (64 * (64 / 2) - 0.5) / (64 * 64); 
+    int r = max / factor;
+
+    for (int y = 0; y < height; y++)
+    {
+        if (width == newImage.at(0).size()){
+            for (int x = 0; x < width; x++)
+            {
+                pixel = newImage[y][x];
+                pixel += r * (ditherMatrix[x % 64][y % 64] - offset);
+            }
+        }
+        else {
+            for (int x = 0; x < width; x+=3)
+            {
+                //Red pixel
+                pixel = newImage[y][x];
+                pixel += r * (ditherMatrix[x % 64][y % 64] - offset);
+                //Green pixel
+                pixel = newImage[y][x+1];
+                pixel += r * (ditherMatrix[x % 64][y % 64] - offset);
+                //Green pixel
+                pixel = newImage[y][x+2];
+                pixel += r * (ditherMatrix[x % 64][y % 64] - offset);
+            }
+        }
+    }
 }
