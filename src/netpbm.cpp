@@ -1,16 +1,13 @@
 #include "../inc/netpbm.h"
 
-NetPBM::NetPBM ()
-{
-    ;
-}
-NetPBM::~NetPBM ()
-{
-    ;
-}
+// NetPBM
+
+NetPBM::NetPBM (){}
+NetPBM::~NetPBM (){}
 
 int NetPBM::ditheringMessage ()
 {
+    //print message and return chosen algorithm
     std::cout << "Choose a dithering algorithm:\n"
               << "1 - Floyd-Steinberg Dithering\n"
               << "2 - False Floyd-Steinberg Dithering\n"
@@ -32,6 +29,7 @@ int NetPBM::ditheringMessage ()
 }
 int NetPBM::hexToInt (char hex)
 {
+    //convert hex value to integer
     switch (hex)
     {
         case '0' : return 0; break;
@@ -57,6 +55,7 @@ int NetPBM::hexToInt (char hex)
 }
 void NetPBM::validateCrop(int topLeftX, int topLeftY, int& bottomRightX, int& bottomRightY)
 {
+    //if both coordinates are out of bounds the operation is not possible
     if (topLeftX < 1 || topLeftY < 1 || bottomRightX < 1 || bottomRightY < 1) {
         throw std::invalid_argument("Error: Coordinates must be positive.");
     }
@@ -75,6 +74,7 @@ void NetPBM::validateCrop(int topLeftX, int topLeftY, int& bottomRightX, int& bo
         throw std::runtime_error("Error: The Y coordinate of bottom right is greater than top left.");
     }
 
+    //if only one coordinate is out of bounds resize to bounds
     if (bottomRightX > width) {
         bottomRightX = width;
     }
@@ -88,21 +88,19 @@ std::vector<int> NetPBM::returnImage()
     return imageGrid;
 }
 
-////////////////////////////////////////////////////////////////
-// PBM implementation
+// PBM 
 
 Pbm::Pbm(int height, int width, std::vector<int>& imageGrid)
 {
+    //constructor
     this->height = height;
     this->width = width;
     this->imageGrid = imageGrid;
 }
-Pbm::~Pbm()
-{
-    ;
-}
+Pbm::~Pbm(){}
 void Pbm::createFile(std::string bgcolor) 
 {
+    //create file according to bgcolor
     int pixel;
     
     if (bgcolor == "#FFFFFF"){
@@ -115,6 +113,7 @@ void Pbm::createFile(std::string bgcolor)
         throw std::invalid_argument("Invalid background color for PBM.");
     }
 
+    //save new file
     for (int i = 0; i < height*width; i++)
     {
         imageGrid.push_back(pixel);
@@ -141,12 +140,13 @@ void Pbm::validateFile()
 }
 void Pbm::ditherImage() 
 {
+    //create a Dithering object
     Dithering<Pbm> d(height, width, max, imageGrid);
-    ditheringMessage();
-    int temp = 0;
-    std::cin >> temp;
+    int temp = ditheringMessage();
+    //dither using the object
     d.dither(temp);
 
+    //save result in imageGrid
     imageGrid.clear();
     for (int i = 0; i < d.returnImage().size(); i++)
     {
@@ -158,6 +158,7 @@ void Pbm::ditherImage()
 }
 void Pbm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) 
 {
+    //validate crop parameters
     validateCrop(topLeftX, topLeftY, bottomRightX, bottomRightY);
 }
 void Pbm::resizeImage(int percentage) 
@@ -166,6 +167,7 @@ void Pbm::resizeImage(int percentage)
 }
 void Pbm::resizeImage(int width, int height)
 {
+    //scale image
     std::vector<int> scaledImage;
 
     for (int y = 0; y < height; y++)
@@ -180,13 +182,13 @@ void Pbm::resizeImage(int width, int height)
         }
     }
 
+    //save scaled image
     imageGrid.clear();
     imageGrid = scaledImage;
     scaledImage.clear();
 }
 
-////////////////////////////////////////////////////////////////
-// PGM implementation
+// PGM 
 
 Pgm::Pgm (int height, int width, int max, std::vector<int> & imageGrid)
 {
@@ -195,12 +197,10 @@ Pgm::Pgm (int height, int width, int max, std::vector<int> & imageGrid)
     this->max = max;
     this->imageGrid = imageGrid;
 }
-Pgm::~Pgm () 
-{
-    ;;;
-}
+Pgm::~Pgm (){}
 void Pgm::createFile(std::string bgcolor)
 {
+    //ensure the hexadecimal color is grayscale
     if (bgcolor.at(1) != bgcolor.at(3) || 
         bgcolor.at(3) != bgcolor.at(5) || 
         bgcolor.at(1) != bgcolor.at(5) ||
@@ -211,13 +211,14 @@ void Pgm::createFile(std::string bgcolor)
             throw std::invalid_argument("Error: The hexadecimal background color is not grayscale.");
         }
     else {
+        //create pixel
         int pixel = 0;
-        int temp = 0;
-        for (int i = 1 ; i < 3; i++)
+        for (int j = 1 ; j < 3; j++)
         {
-            char c = bgcolor.at(i);
-            temp = hexToInt(c);
-            if (i % 2 == 0) {
+            //convert color to integer
+            char c = bgcolor.at(j);
+            int temp = hexToInt(c);
+            if (j % 2 == 0) {
                 pixel += temp;
             }
             else {
@@ -226,6 +227,7 @@ void Pgm::createFile(std::string bgcolor)
         }
         for (int i = 0; i < height*width; i++)
         {
+            //save pixels
             imageGrid.push_back(pixel);
         }
     }
@@ -248,6 +250,7 @@ void Pgm::validateFile()
 
     for (int i = 0; i < imageGrid.size(); i++)
     {
+        //check is every pixel is >= than max value
         if (imageGrid[i] > max){
             throw std::invalid_argument("Error: The value of the pixels is greater than the maximum.");
         }
@@ -255,12 +258,12 @@ void Pgm::validateFile()
 }
 void Pgm::ditherImage() 
 {
+    //create Dithering object and use it to perform the dither
     Dithering<Pgm> d(height, width, max, imageGrid);
-    ditheringMessage();
-    int temp = 0;
-    std::cin >> temp;
+    int temp = ditheringMessage();
     d.dither(temp);
 
+    //save result to imageGrid
     imageGrid.clear();
     for (int i = 0; i < d.returnImage().size(); i++)
     {
@@ -272,6 +275,7 @@ void Pgm::ditherImage()
 }
 void Pgm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) 
 {
+    //validate crop parameters
     validateCrop(topLeftX, topLeftY, bottomRightX, bottomRightY);
 }
 void Pgm::resizeImage(int percentage) 
@@ -299,25 +303,24 @@ void Pgm::resizeImage(int width, int height)
     scaledImage.clear();
 }
 
-////////////////////////////////////////////////////////////////
-// PPM implementation
+// PPM
 
 Ppm::Ppm (int height, int width, int max, std::vector<int> & imageGrid)
 {
+    //constructor
     this->height = height;
     this->width = width;
     this->max = max;
     this->imageGrid = imageGrid;
 }
-Ppm::~Ppm()
-{
-    ;
-}
+Ppm::~Ppm(){}
 void Ppm::createFile(std::string bgcolor)
 {
+    //create rgb triple
     int rgb [3];
     int pixel = 0;
     int temp = 0;
+    //create individual colors
     for (int i = 1 ; i < 7; i++)
     {
         char c = bgcolor.at(i);
@@ -330,6 +333,7 @@ void Ppm::createFile(std::string bgcolor)
             pixel = (16*temp);
         }
     }
+    //save coloured pixels
     for (int i = 0; i < height*width*3; i++)
     {
         if (i % 2 == 0){
@@ -368,12 +372,12 @@ void Ppm::validateFile()
 }
 void Ppm::ditherImage()
 {
+    //use Dithering object to dither the image
     Dithering<Ppm> d(height, width, max, imageGrid);
-    ditheringMessage();
-    int temp = 0;
-    std::cin >> temp;
+    int temp = ditheringMessage();
     d.dither(temp);
 
+    //save result
     imageGrid.clear();
     for (int i = 0; i < d.returnImage().size(); i++)
     {
