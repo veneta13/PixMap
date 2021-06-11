@@ -1,24 +1,24 @@
 #include "../inc/dithering.h"
 
 template<class A>
-Dithering<A>::Dithering (const A *p)
+Dithering<A>::Dithering (int height, int width, int man, std::vector<int> imageGrid)
 {
-    height = p->height;
-    width = p->width;
-    max = p->max;
+    this->height = height;
+    this->width = width;
+    this->max = max;
 
     std::vector<int> line;
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
         {
-            if (p->imageGrid.size() == width*height){
-                line.push_back(p.imageGrid->at(i*width + j));
+            if (imageGrid.size() == width*height){
+                line.push_back(imageGrid.at(i*width + j));
             }
-            else if (p->imageGrid.size() == width*height*3){
-                line.push_back(p->imageGrid.at(i*width + j*3));
-                line.push_back(p->imageGrid.at(i*width + j*3 + 1));
-                line.push_back(p->imageGrid.at(i*width + j*3 + 2));
+            else if (imageGrid.size() == width*height*3){
+                line.push_back(imageGrid.at(i*width + j*3));
+                line.push_back(imageGrid.at(i*width + j*3 + 1));
+                line.push_back(imageGrid.at(i*width + j*3 + 2));
             }
         }
         newImage.push_back(line);
@@ -698,7 +698,7 @@ void Dithering<A>::ordered4x4BayerMatrix()
             for (int x = 0; x < width; x++)
             {
                 pixel = newImage[y][x];
-                pixel += r * (ditherMatrix[x % 16][y % 16] - offset);
+                pixel += r * (bayer4x4[x % 16][y % 16] - offset);
             }
         }
         else {
@@ -706,13 +706,13 @@ void Dithering<A>::ordered4x4BayerMatrix()
             {
                 //Red pixel
                 pixel = newImage[y][x];
-                pixel += r * (ditherMatrix[x % 16][y % 16] - offset);
+                pixel += r * (bayer4x4[x % 16][y % 16] - offset);
                 //Green pixel
                 pixel = newImage[y][x+1];
-                pixel += r * (ditherMatrix[x % 16][y % 16] - offset);
+                pixel += r * (bayer4x4[x % 16][y % 16] - offset);
                 //Green pixel
                 pixel = newImage[y][x+2];
-                pixel += r * (ditherMatrix[x % 16][y % 16] - offset);
+                pixel += r * (bayer4x4[x % 16][y % 16] - offset);
             }
         }
     }
@@ -741,7 +741,7 @@ void Dithering<A>::ordered8x8BayerMatrix()
             for (int x = 0; x < width; x++)
             {
                 pixel = newImage[y][x];
-                pixel += r * (ditherMatrix[x % 64][y % 64] - offset);
+                pixel += r * (bayer8x8[x % 64][y % 64] - offset);
             }
         }
         else {
@@ -749,14 +749,18 @@ void Dithering<A>::ordered8x8BayerMatrix()
             {
                 //Red pixel
                 pixel = newImage[y][x];
-                pixel += r * (ditherMatrix[x % 64][y % 64] - offset);
+                pixel += r * (bayer8x8[x % 64][y % 64] - offset);
                 //Green pixel
                 pixel = newImage[y][x+1];
-                pixel += r * (ditherMatrix[x % 64][y % 64] - offset);
+                pixel += r * (bayer8x8[x % 64][y % 64] - offset);
                 //Green pixel
                 pixel = newImage[y][x+2];
-                pixel += r * (ditherMatrix[x % 64][y % 64] - offset);
+                pixel += r * (bayer8x8[x % 64][y % 64] - offset);
             }
         }
     }
 }
+
+template class Dithering <Pbm>; 
+template class Dithering <Pgm>; 
+template class Dithering <Ppm>; 

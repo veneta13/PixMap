@@ -12,9 +12,9 @@ class NetPBM {
     int max;
     std::vector<int> imageGrid;
 
-    int hexToInt (char hex); //*
-    int ditheringMessage(); //*
-    void validateCrop(int topLeftX, int topLeftY, int& bottomRightX, int& bottomRightY); //*
+    int hexToInt (char hex);
+    int ditheringMessage();
+    void validateCrop(int topLeftX, int topLeftY, int& bottomRightX, int& bottomRightY);
     
     public:
 
@@ -31,11 +31,12 @@ class NetPBM {
 };
 
 class Pbm : public NetPBM {
+
     public:
-    Pbm(int height, int width, std::vector<int>& imageGrid); //*
+    Pbm(int height, int width, std::vector<int>& imageGrid);
     ~Pbm();
-    void createFile(std::string bgcolor) override; //*
-    void validateFile() override; //*
+    void createFile(std::string bgcolor) override; 
+    void validateFile() override;
     void ditherImage() override;
     void cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) override;
     void resizeImage(int percentage) override;
@@ -43,6 +44,7 @@ class Pbm : public NetPBM {
 };
 
 class Pgm : public NetPBM {
+
     public:
     Pgm (int height, int width, int max, std::vector<int>& imageGrid);
     ~Pgm(); 
@@ -55,6 +57,7 @@ class Pgm : public NetPBM {
 };
 
 class Ppm : public NetPBM {
+
     public:
     Ppm (int height, int width, int max, std::vector <int>& imageGrid);
     ~Ppm(); 

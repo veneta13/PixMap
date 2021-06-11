@@ -2,12 +2,11 @@
 
 NetPBM::NetPBM ()
 {
-    ;;;
+    ;
 }
-
 NetPBM::~NetPBM ()
 {
-    ;;;
+    ;
 }
 
 int NetPBM::ditheringMessage ()
@@ -136,22 +135,18 @@ void Pbm::validateFile()
         }
     }
 }
-
 void Pbm::ditherImage() 
 {
     
 }
-
 void Pbm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) 
 {
     validateCrop(topLeftX, topLeftY, bottomRightX, bottomRightY);
 }
-
 void Pbm::resizeImage(int percentage) 
 {
 
 }
-
 void Pbm::resizeImage(int width, int height)
 {
     std::vector<int> scaledImage;
@@ -183,12 +178,10 @@ Pgm::Pgm (int height, int width, int max, std::vector<int> & imageGrid)
     this->max = max;
     this->imageGrid = imageGrid;
 }
-
 Pgm::~Pgm () 
 {
     ;;;
 }
-
 void Pgm::createFile(std::string bgcolor)
 {
     if (bgcolor.at(1) != bgcolor.at(3) || 
@@ -220,7 +213,6 @@ void Pgm::createFile(std::string bgcolor)
         }
     }
 } 
-
 void Pgm::validateFile() 
 {
     if (height < 1 || width < 1)
@@ -244,36 +236,31 @@ void Pgm::validateFile()
         }
     }
 }
-
 void Pgm::ditherImage() 
 {
-    // Dithering<Pgm> d (this);
+    Dithering<Pgm> d(height, width, max, imageGrid);
+    ditheringMessage();
+    int temp = 0;
+    std::cin >> temp;
+    d.dither(temp);
 
-    // ditheringMessage();
-    // int temp = 0;
-    // std::cin >> temp;
-    // d.dither(temp);
-
-    // imageGrid.clear();
-    // for (int i = 0; i < d.returnImage().size(); i++)
-    // {
-    //     for (int j = 0; j < d.returnImage().at(i).size(); j++)
-    //     {
-    //         imageGrid.push_back(d.returnImage().at(i).at(j));
-    //     }
-    // }
+    imageGrid.clear();
+    for (int i = 0; i < d.returnImage().size(); i++)
+    {
+        for (int j = 0; j < d.returnImage().at(i).size(); j++)
+        {
+            imageGrid.push_back(d.returnImage().at(i).at(j));
+        }
+    }
 }
-
 void Pgm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) 
 {
     validateCrop(topLeftX, topLeftY, bottomRightX, bottomRightY);
 }
-
 void Pgm::resizeImage(int percentage) 
 {
 
 }
-
 void Pgm::resizeImage(int width, int height)
 {
     std::vector<int> scaledImage;
@@ -305,12 +292,10 @@ Ppm::Ppm (int height, int width, int max, std::vector<int> & imageGrid)
     this->max = max;
     this->imageGrid = imageGrid;
 }
-
 Ppm::~Ppm()
 {
     ;
 }
-
 void Ppm::createFile(std::string bgcolor)
 {
     int rgb [3];
@@ -341,7 +326,6 @@ void Ppm::createFile(std::string bgcolor)
         }
     }
 }
-
 void Ppm::validateFile()
 {
     if (height < 1 || width < 1)
@@ -365,24 +349,24 @@ void Ppm::validateFile()
         }
     }
 }
-
 void Ppm::ditherImage()
 {
 
 }
-
 void Ppm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY)
 {
     validateCrop(topLeftX, topLeftY, bottomRightX, bottomRightY);
 
     std::vector<std::vector<int>> croppedImage;
+    std::vector<int> line;
+
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
         {
-            line.push_back(p->imageGrid.at(i*width + j*3));
-            line.push_back(p->imageGrid.at(i*width + j*3 + 1));
-            line.push_back(p->imageGrid.at(i*width + j*3 + 2));
+            line.push_back(imageGrid.at(i*width + j*3));
+            line.push_back(imageGrid.at(i*width + j*3 + 1));
+            line.push_back(imageGrid.at(i*width + j*3 + 2));
         }
         croppedImage.push_back(line);
         line.clear();
@@ -396,18 +380,18 @@ void Ppm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
         {
             if (i < topLeftY && i > bottomRightY && j > topLeftX*3 && j < bottomRightX*3)
             {
-                imageGrid.push_back(croppedImage.at());
+                imageGrid.push_back(croppedImage.at(i).at(j));
+                imageGrid.push_back(croppedImage.at(i).at(j+1));
+                imageGrid.push_back(croppedImage.at(i).at(j+2));
             }
         }
     }
     croppedImage.clear();
 }
-
 void Ppm::resizeImage(int percentage) 
 {
     
 }
-
 void Ppm::resizeImage(int width, int height)
 {
     std::vector<int> scaledImage;
