@@ -34,6 +34,14 @@ Executor::~Executor ()
 }
 
 void Executor::execute() {
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < (imageGrid.size()/height); j++)
+        {
+            std::cout << imageGrid.at(i*width + j) << " ";
+        }
+        std::cout << "\n";
+    }
 
     if (commandName.compare("EXIT") == 0){
         code = 0;
@@ -51,16 +59,19 @@ void Executor::execute() {
     }
 
     if (commandName.compare("OPEN") == 0){
+        imageGrid.clear();
         openFile();
         return;
     }
 
-    if (commandName.compare("SAVEAS") == 0){ 
+    if (commandName.compare("SAVEAS") == 0){
+        currentPath = commandArguments.at(0); 
         saveFile();
         return;
     }
 
     if (commandName.compare("NEW") == 0){
+        imageGrid.clear();
         newFile();
         return;
     }
@@ -94,7 +105,7 @@ void Executor::closeFile()
     }
     commandName.clear();
     commandArguments.clear();
-    comments.clear();
+    currentPath.clear();
     imageGrid.clear();
     unsavedChanges = false;
     std::cout << "\nSuccessfully closed the file.\n";
@@ -102,49 +113,60 @@ void Executor::closeFile()
 
 void Executor::saveFile()
 {
-    int fileType = getFileType();
-    if (fileType == 1 || fileType == 2 || fileType == 3) {
-        fileStream.open(commandArguments.at(0), std::ios::out | std::ios::trunc);
+    if (type == 1 || type == 2 || type == 3) {
+        std::cout << currentPath;
+        fileStream.open(currentPath, std::ios::out | std::ios::trunc);
         if (fileStream.good()) {
-
             std::string temp;
-            temp = "P" + std::to_string(fileType) + "\n";
-            fileStream >> temp;
+            temp = "P" + std::to_string(type) + "\n";
+            fileStream << temp;
             temp.clear();
-
-            fileStream >> height;
-            fileStream >> width;
-            if (fileType != 1) {
-                fileStream >> max;
+            fileStream << (width) << " ";
+            fileStream << (height) << "\n";
+            if (type != 1) {
+                fileStream << max << "\n";
             }
 
-            for (int i = 0; i < imageGrid.size(); i++) 
+            for (int i = 0; i < height; i++)
             {
-                fileStream >> imageGrid.at(i);
+                if (type == 3){
+                for (int j = 0; j < width*3; j+=3)
+                    {
+                        fileStream << imageGrid.at(i*width*3 + j) << " ";
+                        fileStream << imageGrid.at(i*width*3 + j+1) << " ";
+                        fileStream << imageGrid.at(i*width*3 + j+2) << " ";
+                    }
+                }
+                else{
+                    for (int j = 0; j < (imageGrid.size()/height); j++)
+                    {
+                        fileStream << imageGrid.at(i*width + j) << " ";
+                    }
+                }
+                fileStream << "\n";
             }
-
             fileStream.close();
-            std::cout << "\nSuccessfully saved the changes to " << commandArguments.at(0) << ".\n";
+            std::cout << "\nSuccessfully saved the changes to " << currentPath << ".\n";
             return;
         }
         else {
             throw std::runtime_error("Error: Could not open the file.\nHint: Check if you have loaded the file via open.");
         }
     }
-    else if (fileType == 4 || fileType == 5 || fileType == 6)
+    else if (type == 4 || type == 5 || type == 6)
     {
-        fileStream.open(commandArguments.at(0), std::ios::out | std::ios::trunc);
+        fileStream.open(currentPath, std::ios::out | std::ios::trunc);
         if (fileStream.good()) {
 
             std::string temp;
-            temp = "P" + std::to_string(fileType) + "\n";
-            fileStream >> temp;
+            temp = "P" + std::to_string(type) + "\n";
+            fileStream << temp;
             temp.clear();
 
-            fileStream >> height;
-            fileStream >> width;
-            if (fileType != 4) {
-                fileStream >> max;
+            fileStream << (width) << " ";
+            fileStream << (height) << "\n";
+            if (type != 4) {
+                fileStream << max << "\n";
             }
             fileStream.close();
         }
@@ -152,14 +174,14 @@ void Executor::saveFile()
             throw std::runtime_error("Error: Could not open the file.\nHint: Check if you have loaded the file via open.");
         }
 
-        fileStream.open(commandArguments.at(0), std::ios::out | std::ios::app | std::ios::binary);
+        fileStream.open(currentPath, std::ios::out | std::ios::app | std::ios::binary);
         if (fileStream.good()){
             for (int i = 0; i < imageGrid.size(); i++) 
             {
                 fileStream.write((char*)&(imageGrid[i]), sizeof(imageGrid[i]));
             }
             fileStream.close();
-            std::cout << "\nSuccessfully saved the changes to " << commandArguments.at(0) << ".\n";
+            std::cout << "\nSuccessfully saved the changes to " << currentPath << ".\n";
             return;
         }
         else {
@@ -171,23 +193,49 @@ void Executor::saveFile()
 
 void Executor::openFile()
 {
+    currentPath = commandArguments.at(0);
+    getFileType();
     loadFileIntoMemory();
-    int type = getFileType();
     createInstances(type);
     std::cout << "\nSuccessfully opened the file.\n";
 }
 
 void Executor::newFile()
 {
-    std::cout << "Choose ";
+    currentPath = commandArguments.at(2);
+    std::cout << "Choose file type:\n1 - PBM\n2 - PGM\n3 - PPM\n";
+    int choice;
+    std::cin >> choice;
+    if (choice == 1)
+    {
+        createInstances(choice);
+        pbm->createFile(currentPath);
+        std::cout << "\nSuccessfully created a new PBM file.\n";
+        return;
+    }
+    if ( choice == 2)
+    {
+        createInstances(choice);
+        pgm->createFile(currentPath);
+        std::cout << "\nSuccessfully created a new PGM file.\n";
+        return;
+    }
+    if ( choice == 3)
+    {
+        createInstances(choice);
+        ppm->createFile(currentPath);
+        std::cout << "\nSuccessfully created a new PPM file.\n";
+        return;
+    }
+    else throw std::runtime_error("Error: Invalid file choice.");
 }
 
 void Executor::ditherFile()
 {
-    if (getFileType() == 1 || getFileType() == 4){
+    if (type == 1 || type == 4){
         pbm->ditherImage();
     }
-    else if (getFileType() == 2 || getFileType() == 5){
+    else if (type == 2 || type == 5){
         pgm->ditherImage();
     }
     else {
@@ -203,10 +251,10 @@ void Executor::cropFile()
     int temp3 = std::stoi(commandArguments.at(2));
     int temp4 = std::stoi(commandArguments.at(3));
 
-    if (getFileType() == 1 || getFileType() == 4){
+    if (type == 1 || type == 4){
         pbm->cropImage(temp1, temp2, temp3, temp4);
     }
-    else if (getFileType() == 2 || getFileType() == 5){
+    else if (type == 2 || type == 5){
         pgm->cropImage(temp1, temp2, temp3, temp4);
     }
     else {
@@ -220,10 +268,10 @@ void Executor::resizeFile()
     if (commandArguments.size() == 1) {
         int percentage = std::stoi(commandArguments.at(0));
 
-        if (getFileType() == 1 || getFileType() == 4){
+        if (type == 1 || type == 4){
             pbm->resizeImage(percentage);
         }
-        else if (getFileType() == 2 || getFileType() == 5){
+        else if (type == 2 || type == 5){
             pgm->resizeImage(percentage);
         }
         else {
@@ -234,81 +282,93 @@ void Executor::resizeFile()
         int width = std::stoi(commandArguments.at(0));
         int height = std::stoi(commandArguments.at(1));
 
-        if (getFileType() == 1 || getFileType() == 4){
+        if (type == 1 || type == 4){
             pbm->resizeImage( width,  height);
         }
-        else if (getFileType() == 2 || getFileType() == 5){
+        else if (type == 2 || type == 5){
             pgm->resizeImage( width,  height);
         }
         else {
             ppm->resizeImage( width,  height);
         }
-    }
-    
+    }  
     unsavedChanges = true;
 }
 
-int Executor::getFileType()
+void Executor::getFileType()
 {
     std::string fileType;
-    fileStream.open(commandArguments.at(0), std::ios::in);
+    fileStream.open(currentPath, std::ios::in);
     char c = fileStream.get();
-    while (c != 'P')
+    char next = fileStream.peek();
+    while (c != 'P' && next != EOF)
     {
+        std::cout << c << "\n";
         c = fileStream.get();
     }
     c = fileStream.get();
     int type = (int)c;
-
     fileStream.close();
     
     if (type == 49) {
-        return 1;
+        this->type = 1;
+        return;
     }
     if (type == 50) {
-        return 2;
+        this->type = 2;
+        return;
     }
     if (type == 51) {
-        return 3;
+       this->type = 3;
+       return;
     }
     if (type == 52) {
-        return 4;
+        this->type = 4;
+        return;
     }
     if (type == 53) {
-        return 5;
+        this->type = 5;
+        return;
     }
     if (type == 54) {
-        return 6;
+        this->type = 6;
+        return;
     }
     throw std::runtime_error("Error: Unrecognised magic number when opening the file.");
 }
 
 void Executor::loadFileIntoMemory()
 {
-    int fileType = getFileType();
-    if(fileType == 1 || fileType == 2 || fileType == 3) {
+    if(type == 1 || type == 2 || type == 3) {
         int endOfHeader = 0;
         std::vector<std::string> file;
 
-        fileStream.open(commandArguments.at(0), std::ios::in);
+        fileStream.open(currentPath, std::ios::in);
         if (fileStream.good()) {
+
+            //save lines in the file
             std::string line;
             while (std::getline(fileStream, line)) 
             {
                 file.push_back(line);
             }
             fileStream.close();
+
+            //remove comments
             for (int i = 0; i < file.size(); i++) {
                 if (file.at(i).find('#') != std::string::npos){
                     int position = file.at(i).find('#');
-                    std::string comment = "";
-                    comment.append(std::to_string(i));
-                    comment.append(file.at(i).substr(position+1));
                     file.at(i) = file.at(i).substr(0, position);
+                    if (file.at(i).find_first_not_of(' ') == std::string::npos)
+                    {
+                        file.erase (file.begin() + i);
+                        i--;
+                    }
                 }
-            std::cout << file[i]<< std::endl;
             }
-            if (fileType == 1){
+
+            //find header
+            if (type == 1){
                 endOfHeader = headerProcessorText(width, height, max, file, 2);
             }
             else{
@@ -321,16 +381,17 @@ void Executor::loadFileIntoMemory()
         }
         return;
     }
-    if (fileType == 4 || fileType == 5 || fileType == 6)
+
+    if (type == 4 || type == 5 || type == 6)
     {
         std::stringstream file;
         int endOfHeader = 0;
-        fileStream.open(commandArguments.at(0), std::ios::in | std::ios::binary);
+        fileStream.open(currentPath, std::ios::in | std::ios::binary);
 
         if (fileStream.good()) {
             file << fileStream.rdbuf();
 
-            if (fileType == 4) {
+            if (type == 4) {
                 endOfHeader = headerProcessor(width, height, max, file, 2);
                 file.seekg(endOfHeader);
                 int pixelCount = ((width * height) % 8 == 0) ? (width*height)/8 : (width*height)/8 + 1;
@@ -349,7 +410,7 @@ void Executor::loadFileIntoMemory()
             else{
                 endOfHeader = headerProcessor(width, height, max, file, 3);
                 file.seekg(endOfHeader);
-                int pixelCount = (fileType == 5) ? width*height : 3*width*height;
+                int pixelCount = (type == 5) ? width*height : 3*width*height;
                 char* pixelGrid = new char[pixelCount];
                 file.read(pixelGrid, pixelCount);
                 for ( int i = 0; i < pixelCount; i++ ) 

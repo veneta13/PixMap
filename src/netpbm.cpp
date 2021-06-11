@@ -137,7 +137,20 @@ void Pbm::validateFile()
 }
 void Pbm::ditherImage() 
 {
-    
+    Dithering<Pbm> d(height, width, max, imageGrid);
+    ditheringMessage();
+    int temp = 0;
+    std::cin >> temp;
+    d.dither(temp);
+
+    imageGrid.clear();
+    for (int i = 0; i < d.returnImage().size(); i++)
+    {
+        for (int j = 0; j < d.returnImage().at(i).size(); j++)
+        {
+            imageGrid.push_back(d.returnImage().at(i).at(j));
+        }
+    }
 }
 void Pbm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) 
 {
@@ -351,7 +364,20 @@ void Ppm::validateFile()
 }
 void Ppm::ditherImage()
 {
+    Dithering<Ppm> d(height, width, max, imageGrid);
+    ditheringMessage();
+    int temp = 0;
+    std::cin >> temp;
+    d.dither(temp);
 
+    imageGrid.clear();
+    for (int i = 0; i < d.returnImage().size(); i++)
+    {
+        for (int j = 0; j < d.returnImage().at(i).size(); j++)
+        {
+            imageGrid.push_back(d.returnImage().at(i).at(j));
+        }
+    }
 }
 void Ppm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY)
 {

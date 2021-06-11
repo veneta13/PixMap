@@ -52,16 +52,19 @@ int headerProcessorText(int& width, int& height, int& max, std::vector<std::stri
             if (std::stringstream(word) >> number && numbersInHeader == 0)
             {
                 width = number;
+                word = "";
                 numbersInHeader++;
             }
             else if (std::stringstream(word) >> number && numbersInHeader == 1)
             {
                 height = number;
+                word = "";
                 numbersInHeader++;
             }
             else if (std::stringstream(word) >> number && numbersInHeader == 2)
             {
                 max = number;
+                word = "";
                 numbersInHeader++;
             }
             if (numbersInHeader == maxNumInH){
@@ -98,12 +101,10 @@ void loadImageGrid(int endOfHeader, std::vector<std::string>& file, std::vector<
         line << file.at(i);
         while (!line.eof()) 
         {
-            line >> word;
+            line >> word; 
             if (std::stringstream(word) >> number){
                 imageGrid.push_back(number);
-            }
-            else {
-                throw std::invalid_argument("Error: Not all pixels are numbers.");
+                word = "";
             }
         }
         line.clear();

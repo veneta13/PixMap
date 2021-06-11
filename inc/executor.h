@@ -13,12 +13,13 @@ class Executor {
     Ppm* ppm = nullptr;
     std::string commandName;
     std::vector<std::string> commandArguments;
-    std::vector<std::string> comments;
+    std::string currentPath;
     std::fstream fileStream;
     std::vector<int> imageGrid;
     int height = 0;
     int width = 0;
     int max = 0;
+    int type = 0;
     bool unsavedChanges = false;
 
     void execute();
@@ -31,7 +32,7 @@ class Executor {
     void cropFile();
     void resizeFile();
 
-    int getFileType();
+    void getFileType();
     void loadFileIntoMemory();
     void createInstances(int type);
 
