@@ -159,14 +159,14 @@ void Executor::saveFile()
         if (fileStream.good()) {
 
             std::string temp;
-            temp = "P" + std::to_string(type) + "\n";
+            temp = "P" + std::to_string(type) + " ";
             fileStream << temp;
             temp.clear();
 
             fileStream << (width) << " ";
-            fileStream << (height) << "\n";
+            fileStream << (height) << " ";
             if (type != 4) {
-                fileStream << max << "\n";
+                fileStream << max << " ";
             }
             fileStream.close();
         }
@@ -178,7 +178,7 @@ void Executor::saveFile()
         if (fileStream.good()){
             for (int i = 0; i < imageGrid.size(); i++) 
             {
-                fileStream.write((char*)&(imageGrid[i]), sizeof(imageGrid[i]));
+                fileStream.write((char*)&(imageGrid[i]), sizeof(char));
             }
             fileStream.close();
             std::cout << "\nSuccessfully saved the changes to " << currentPath << ".\n";
@@ -213,14 +213,14 @@ void Executor::newFile()
         std::cout << "\nSuccessfully created a new PBM file.\n";
         return;
     }
-    if ( choice == 2)
+    else if ( choice == 2)
     {
         createInstances(choice);
         pgm->createFile(currentPath);
         std::cout << "\nSuccessfully created a new PGM file.\n";
         return;
     }
-    if ( choice == 3)
+    else if ( choice == 3)
     {
         createInstances(choice);
         ppm->createFile(currentPath);
@@ -339,6 +339,7 @@ void Executor::getFileType()
 
 void Executor::loadFileIntoMemory()
 {
+    //ASCII files
     if(type == 1 || type == 2 || type == 3) {
         int endOfHeader = 0;
         std::vector<std::string> file;
@@ -382,6 +383,7 @@ void Executor::loadFileIntoMemory()
         return;
     }
 
+    //Binary files
     if (type == 4 || type == 5 || type == 6)
     {
         std::stringstream file;
@@ -416,6 +418,7 @@ void Executor::loadFileIntoMemory()
                 for ( int i = 0; i < pixelCount; i++ ) 
                 {
                     unsigned char p = pixelGrid[i];
+                    std::cout << (int) p << std::endl;
                     imageGrid.push_back((int) p);
                 }
                 delete[] pixelGrid;
@@ -432,6 +435,7 @@ void Executor::loadFileIntoMemory()
 
 void Executor::createInstances(int type)
 {
+    //create instances of the image classes
     if (type == 1 || type == 4)
     {
         pbm = new Pbm(width, height, imageGrid);

@@ -28,7 +28,7 @@ void inputLineHandler (std::string& inputLine)
     for (int i = 0; i < inputLine.length(); i++)
     {
         if (inputLine[i] == '"') {
-            count ++
+            count ++;
 
             //if quote character is found, save position
             if (count == 1){
@@ -71,6 +71,7 @@ Command createCommand (){
     std::string argument;
     std::vector<std::string> args;
 
+    std::cin.sync();
     std::getline(std::cin, inputLine); //get input
     inputLineHandler(inputLine); //prepare inputLine
     std::stringstream commandStream(inputLine);
