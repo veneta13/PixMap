@@ -29,21 +29,42 @@ Dithering<A>::Dithering (int height, int width, int man, std::vector<int> imageG
 template<class A>
 void Dithering<A>::dither(int type)
 {
-    switch (type)
-    {
-        case 1 : floydSteinberg();        break;
-        case 2 : falseFloydSteinberg();   break;
-        case 3 : jarvisJudiceNinke();     break;
-        case 4 : stucki();                break;
-        case 5 : atkinson();              break;
-        case 6 : burkes();                break;
-        case 7 : sierra();                break;
-        case 8 : twoRowSierra();          break;
-        case 9 : sierraLite();            break;
-        case 10: ordered4x4BayerMatrix(); break;
-        case 11: ordered4x4BayerMatrix(); break;
-        default : throw std::runtime_error("Error: Unknown dither type."); break;
-    }   
+        if (type == 1){
+            floydSteinberg();
+        }
+        else if (type == 2){
+            falseFloydSteinberg();
+        }
+        else if (type == 3){
+            jarvisJudiceNinke();
+        }
+        else if (type == 4){
+            stucki();
+        }
+        else if (type == 5){
+            atkinson();
+        }
+        else if (type == 6){
+            burkes();
+        }
+        else if (type == 7){
+            sierra();
+        }
+        else if (type == 8){
+            twoRowSierra();
+        }
+        else if (type == 9){
+            sierraLite();
+        }
+        else if (type == 10){
+            ordered4x4BayerMatrix();
+        }
+        else if (type == 11){
+            ordered8x8BayerMatrix();
+        }
+        else {
+            throw std::runtime_error("Error: Unknown dither type.");
+        }
 }
 
 template<class A>

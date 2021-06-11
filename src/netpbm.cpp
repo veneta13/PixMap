@@ -13,7 +13,7 @@ int NetPBM::ditheringMessage ()
 {
     std::cout << "Choose a dithering algorithm:\n"
               << "1 - Floyd-Steinberg Dithering\n"
-              << "2 - “False Floyd-Steinberg” Dithering\n"
+              << "2 - False Floyd-Steinberg Dithering\n"
               << "3 - Jarvis, Judice, and Ninke Dithering\n"
               << "4 - Stucki Dithering\n"
               << "5 - Atkinson Dithering\n"
@@ -82,6 +82,10 @@ void NetPBM::validateCrop(int topLeftX, int topLeftY, int& bottomRightX, int& bo
     if (bottomRightY > height) {
         bottomRightY = height;
     }
+}
+std::vector<int> NetPBM::returnImage()
+{
+    return imageGrid;
 }
 
 ////////////////////////////////////////////////////////////////
