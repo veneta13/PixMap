@@ -121,6 +121,7 @@ void Pbm::createFile(std::string bgcolor)
 }
 void Pbm::validateFile() 
 {
+    //chack if the file is valid PBM file
     if (height < 1 || width < 1)
     {
         throw std::runtime_error("Error: Invalid height or width.");
@@ -160,20 +161,51 @@ void Pbm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
 {
     //validate crop parameters
     validateCrop(topLeftX, topLeftY, bottomRightX, bottomRightY);
+    
+    //save imageGrid to croppedImage
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            line.push_back(imageGrid.at(i*width + j));
+        }
+        croppedImage.push_back(line);
+        line.clear();
+    }
+
+    imageGrid.clear();
+
+    //save cropped part to imageGrid
+    for (int i = 0; i < height; i++) 
+    {
+        for (int j = 0; j < width; j++)
+        {
+            if (i < topLeftY && i > bottomRightY && j > topLeftX && j < bottomRightX)
+            {
+                imageGrid.push_back(croppedImage.at(i).at(j));
+            }
+        }
+    }
+    croppedImage.clear();
 }
 void Pbm::resizeImage(int percentage) 
 {
-
+    //update width and height
+    int newWidth = width * (percentage / 100);
+    int newHeight = height * (percentage / 100);
+    //save image
+    resizeImage(newWidth, newHeight);
 }
 void Pbm::resizeImage(int width, int height)
 {
-    //scale image
+    //save result into scaledImage
     std::vector<int> scaledImage;
 
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)
         {
+            //scale
             int srcX = int( round( float(x) / float(width) * float(this->width) ) );
             int srcY = int( round( float(y) / float(width) * float(this->height) ) );
             srcX = std::min( srcX, this->width-1);
@@ -182,16 +214,21 @@ void Pbm::resizeImage(int width, int height)
         }
     }
 
-    //save scaled image
+    //save scaled image to imageGrid
     imageGrid.clear();
     imageGrid = scaledImage;
     scaledImage.clear();
+
+    //update width and height
+    this->width = width;
+    this->height = height;
 }
 
 // PGM 
 
 Pgm::Pgm (int height, int width, int max, std::vector<int> & imageGrid)
 {
+    //constructor
     this->height = height;
     this->width = width;
     this->max = max;
@@ -277,19 +314,54 @@ void Pgm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
 {
     //validate crop parameters
     validateCrop(topLeftX, topLeftY, bottomRightX, bottomRightY);
+    //save result to croppedImage
+    std::vector<std::vector<int>> croppedImage;
+    std::vector<int> line;
+
+    //save imageGrid to croppedImage
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            line.push_back(imageGrid.at(i*width + j));
+        }
+        croppedImage.push_back(line);
+        line.clear();
+    }
+
+    imageGrid.clear();
+
+    //save cropped part to imageGrid
+    for (int i = 0; i < height; i++) 
+    {
+        for (int j = 0; j < width; j++)
+        {
+            if (i < topLeftY && i > bottomRightY && j > topLeftX && j < bottomRightX)
+            {
+                imageGrid.push_back(croppedImage.at(i).at(j));
+            }
+        }
+    }
+    croppedImage.clear();
 }
 void Pgm::resizeImage(int percentage) 
 {
-
+    //update width and height to match the percentage
+    int newWidth = width * (percentage / 100);
+    int newHeight = height * (percentage / 100);
+    //resize image
+    resizeImage(newWidth, newHeight);
 }
 void Pgm::resizeImage(int width, int height)
 {
+    //save inw image to scaledImage
     std::vector<int> scaledImage;
 
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)
         {
+            //scale
             int srcX = int( round( float(x) / float(width) * float(this->width) ) );
             int srcY = int( round( float(y) / float(width) * float(this->height) ) );
             srcX = std::min( srcX, this->width-1);
@@ -298,9 +370,14 @@ void Pgm::resizeImage(int width, int height)
         }
     }
 
+    //save result into ImageGrid
     imageGrid.clear();
     imageGrid = scaledImage;
     scaledImage.clear();
+
+    //update width and height
+    this->width = width;
+    this->height = height;
 }
 
 // PPM
@@ -349,6 +426,7 @@ void Ppm::createFile(std::string bgcolor)
 }
 void Ppm::validateFile()
 {
+    //check if file is valid PPM file
     if (height < 1 || width < 1)
     {
         throw std::runtime_error("Error: Invalid height or width.");
@@ -389,11 +467,14 @@ void Ppm::ditherImage()
 }
 void Ppm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY)
 {
+    //validate crop parameters
     validateCrop(topLeftX, topLeftY, bottomRightX, bottomRightY);
 
+    //save result to croppedImage
     std::vector<std::vector<int>> croppedImage;
     std::vector<int> line;
 
+    //save imageGrid to croppedImage
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
@@ -408,6 +489,7 @@ void Ppm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
 
     imageGrid.clear();
 
+    //save cropped part to imageGrid
     for (int i = 0; i < height; i++) 
     {
         for (int j = 0; j < width*3; j+=3)
@@ -424,26 +506,37 @@ void Ppm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
 }
 void Ppm::resizeImage(int percentage) 
 {
-    
+    //update height and width
+    int newWidth = width * (percentage / 100);
+    int newHeight = height * (percentage / 100);
+    //resize image
+    resizeImage(newWidth, newHeight);
 }
 void Ppm::resizeImage(int width, int height)
 {
+    //save scaledImage into scaledImage
     std::vector<int> scaledImage;
 
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)
         {
+            //scale
             int srcX = int( round( float(x) / float(width) * float(this->width) ) );
             int srcY = int( round( float(y) / float(width) * float(this->height) ) );
             srcX = std::min( srcX, this->width-1);
             srcY = std::min( srcY, this->height-1);
+            //save new image
             scaledImage.push_back(imageGrid.at(this->width*srcY+srcX));
         }
     }
 
     imageGrid.clear();
+    //save scaledImage into imageGrid
     imageGrid = scaledImage;
     scaledImage.clear();
-      
+
+    //update width and height
+    this->width = width;
+    this->height = height;
 }
