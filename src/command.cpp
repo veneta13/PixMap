@@ -106,7 +106,7 @@ void Command::validateArgs()
     }
 
     if (name == "RESIZE") {
-        if (args.size() != 1 || args.size() != 2) {
+        if (args.size() != 1 && args.size() != 2) {
             throw std::invalid_argument("Error: This command requires 1 (%) or 2 (size) arguments.");
         }
         else {

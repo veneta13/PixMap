@@ -21,6 +21,8 @@ class NetPBM {
     NetPBM ();
     virtual ~NetPBM();
     std::vector<int> returnImage();
+    int returnWidth();
+    int returnHeight();
 
     virtual void createFile(std::string bgcolor) = 0;
     virtual void validateFile() = 0;

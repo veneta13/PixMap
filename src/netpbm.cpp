@@ -83,6 +83,14 @@ void NetPBM::validateCrop(int topLeftX, int topLeftY, int& bottomRightX, int& bo
         bottomRightY = height;
     }
 }
+int NetPBM::returnWidth()
+{
+    return width;
+}
+int NetPBM::returnHeight()
+{
+    return height;
+}
 std::vector<int> NetPBM::returnImage()
 {
     return imageGrid;
@@ -163,6 +171,9 @@ void Pbm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
     validateCrop(topLeftX, topLeftY, bottomRightX, bottomRightY);
     
     //save imageGrid to croppedImage
+    std::vector<std::vector<int>> croppedImage;
+    std::vector<int> line;
+
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
