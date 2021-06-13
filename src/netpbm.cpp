@@ -55,37 +55,61 @@ int NetPBM::hexToInt (char hex)
 }
 void NetPBM::validateCrop(int topLeftX, int topLeftY, int& bottomRightX, int& bottomRightY)
 {
-    std::cout << "Top left x: " << topLeftX << std::endl;
-    std::cout << "Top left y: " << topLeftY << std::endl;
-    std::cout << "Bottom right x: " << bottomRightX << std::endl;
-    std::cout << "Bottom right y: " << bottomRightY << std::endl;
     //if both coordinates are out of bounds the operation is not possible
     if (topLeftX < 1 || topLeftY < 1 || bottomRightX < 1 || bottomRightY < 1) {
         throw std::invalid_argument("Error: Coordinates must be positive.");
     }
 
-    if ((topLeftX > width && bottomRightX > width) ||
-        (bottomRightY > height && topLeftY > height))
+    if (width*height == imageGrid.size())
     {
-        throw std::runtime_error("Error: Rectangle is out of bounds. Hint: Enter top left and bottom right coordinates.");
+        if ((topLeftX > width && bottomRightX > width) ||
+        (bottomRightY > height && topLeftY > height))
+        {
+            throw std::runtime_error("Error: Rectangle is out of bounds. Hint: Enter top left and bottom right coordinates.");
+        }
+
+        if (topLeftX > bottomRightX) {
+            throw std::runtime_error("Error: The X coordinate of top left is greater than bottom right.");
+        }
+
+        if (bottomRightY > topLeftY) {
+            throw std::runtime_error("Error: The Y coordinate of bottom right is greater than top left.");
+        }
+
+        //if only one coordinate is out of bounds resize to bounds
+        if (bottomRightX > width) {
+            bottomRightX = width;
+        }
+
+        if (bottomRightY > height) {
+            bottomRightY = height;
+        }
+    }
+    else {
+        if ((topLeftX > width*3 && bottomRightX > width*3) ||
+        (bottomRightY > height && topLeftY > height))
+        {
+            throw std::runtime_error("Error: Rectangle is out of bounds. Hint: Enter top left and bottom right coordinates.");
+        }
+
+        if (topLeftX > bottomRightX) {
+            throw std::runtime_error("Error: The X coordinate of top left is greater than bottom right.");
+        }
+
+        if (bottomRightY > topLeftY) {
+            throw std::runtime_error("Error: The Y coordinate of bottom right is greater than top left.");
+        }
+
+        //if only one coordinate is out of bounds resize to bounds
+        if (bottomRightX > width*3) {
+            bottomRightX = width*3;
+        }
+
+        if (bottomRightY > height) {
+            bottomRightY = height;
+        }
     }
 
-    if (topLeftX > bottomRightX) {
-        throw std::runtime_error("Error: The X coordinate of top left is greater than bottom right.");
-    }
-
-    if (bottomRightY > topLeftY) {
-        throw std::runtime_error("Error: The Y coordinate of bottom right is greater than top left.");
-    }
-
-    //if only one coordinate is out of bounds resize to bounds
-    if (bottomRightX > width) {
-        bottomRightX = width;
-    }
-
-    if (bottomRightY > height) {
-        bottomRightY = height;
-    }
 }
 int NetPBM::returnWidth()
 {
@@ -381,9 +405,6 @@ void Pgm::resizeImage(int width, int height)
             int srcY = int( round( float(y) / float(width) * float(this->height) ) );
             srcX = std::min( srcX, this->width-1);
             srcY = std::min( srcY, this->height-1);
-            std::cout << x << " " << y << std::endl;
-            std::cout << srcX << " " << srcY << std::endl;
-            std ::cout << imageGrid.at(this->width*srcY+srcX) << std::endl;
             scaledImage.push_back(imageGrid.at(this->width*srcY+srcX));
         }
     }
@@ -494,17 +515,17 @@ void Ppm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
 
     //save imageGrid to croppedImage
     for (int i = 0; i < height; i++)
-    {
-        for (int j = 0; j < width; j++)
+    {    
+        for (int j = 0; j < width*3; j+=3)
         {
-            line.push_back(imageGrid.at(i*width + j*3));
-            line.push_back(imageGrid.at(i*width + j*3 + 1));
-            line.push_back(imageGrid.at(i*width + j*3 + 2));
+            for (int z = 0; z < 3; z++)
+            {
+                line.push_back(imageGrid.at(i*width*3 + j + z));
+            }
         }
         croppedImage.push_back(line);
         line.clear();
     }
-
     imageGrid.clear();
 
     //save cropped part to imageGrid
@@ -537,13 +558,13 @@ void Ppm::resizeImage(int width, int height)
 
     for (int y = 0; y < height; y++)
     {
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < width*3; x++)
         {
             //scale
-            int srcX = int( round( float(x) / float(width) * float(this->width) ) );
-            int srcY = int( round( float(y) / float(width) * float(this->height) ) );
-            srcX = std::min( srcX, this->width-1);
-            srcY = std::min( srcY, this->height-1);
+            int srcX = int( round( float(x) / float(width*3) * float(this->width*3) ) );
+            int srcY = int( round( float(y) / float(width*3) * float(this->height*3) ) );
+            srcX = std::min( srcX, (this->width)*3-4);
+            srcY = std::min( srcY, (this->height)*3-4);
             //save new image
             scaledImage.push_back(imageGrid.at(this->width*srcY+srcX));
         }

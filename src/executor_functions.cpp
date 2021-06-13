@@ -93,6 +93,7 @@ void getBinaryNumbers(std::vector<int> &allPixels, std::int8_t number){
 
 void loadImageGrid(int endOfHeader, std::vector<std::string>& file, std::vector<int>& imageGrid)
 {
+    //read numbers from the file into the imageGrid vector
     std::stringstream line;
     std::string word;
     int number;

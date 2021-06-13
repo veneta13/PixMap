@@ -1,3 +1,9 @@
+/*
+    For the NetPBM class, I used the Template Method design pattern.
+    I put common for all subclasses functions in the NetPBM class, and
+    created virtual functions for all of the other ones.
+*/
+
 #ifndef __NETPBM_H__
 #define __NETPBM_H__
 

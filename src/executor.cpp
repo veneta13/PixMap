@@ -37,18 +37,6 @@ Executor::~Executor ()
 }
 
 void Executor::execute() {
-    // for (int i = 0; i < height; i++)
-    // {
-    //     for (int j = 0; j < (imageGrid.size()/height); j++)
-    //     {
-    //         std::cout << imageGrid.at(i*width + j) << " ";
-    //     }
-    //     std::cout << "\n";
-    // }
-
-    /*
-    Use execute function to call all other functions
-    */
 
     if (commandName.compare("EXIT") == 0){
         code = 0;
@@ -370,7 +358,6 @@ void Executor::getFileType()
     //find the P_ magic number
     while (c != 'P' && next != EOF)
     {
-        std::cout << c << "\n";
         c = fileStream.get();
     }
     c = fileStream.get();

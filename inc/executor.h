@@ -1,3 +1,8 @@
+/*
+    I tried to implement the Strategy behavioral design pattern
+    by creating the execute function that calls all other functions.
+*/
+
 #ifndef __EXECUTOR_H__
 #define __EXECUTOR_H__
 

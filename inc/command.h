@@ -1,3 +1,7 @@
+/*
+    For the Command class, I used the Command behavioral design pattern
+    to separate the user input from the execution of the command.
+*/
 #ifndef COMMANDH
 #define COMMANDH
 
