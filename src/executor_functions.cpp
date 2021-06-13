@@ -78,17 +78,10 @@ int headerProcessorText(int& width, int& height, int& max, std::vector<std::stri
 }
 
 void getBinaryNumbers(std::vector<int> &allPixels, std::int8_t number){
-    if (number == 0){
-        return;
+    if (number / 2 != 0) {
+        getBinaryNumbers(allPixels, number / 2);
     }
-    if (number > number/2){
-       allPixels.push_back(1);
-    }
-    else {
-        allPixels.push_back(0);
-    }
-    getBinaryNumbers(allPixels, number/2);
-    return;
+    allPixels.push_back(number % 2);
 }
 
 void loadImageGrid(int endOfHeader, std::vector<std::string>& file, std::vector<int>& imageGrid)

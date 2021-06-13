@@ -32,34 +32,3 @@ TEST_CASE("Constructor")
         REQUIRE_THROWS_AS(Command(exitCommandW) , std::invalid_argument);
     }
 }
-
-TEST_CASE("Add Arguments")
-{
-    SECTION("Add 1 argument")
-    {
-        std::string exitCommand = "EXIT";
-    }
-
-    SECTION("Count Error")
-    {
-        //std::vector  <std::string> = {"Arg1"}
-    }
-}
-
-TEST_CASE("Copy Constructor")
-{
-    SECTION("Name only")
-    {
-        std::string exitCommand = "EXIT";
-        Command testCommand1(exitCommand);
-        Command testCommand2 = testCommand1;
-        
-    }
-
-    SECTION("Name and arguments")
-    {
-        std::string exitCommand = "EXIT";
-        Command testCommand1(exitCommand);
-        Command testCommand2 = testCommand1;
-    }
-}

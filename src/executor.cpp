@@ -461,7 +461,7 @@ void Executor::loadFileIntoMemory()
                 for ( int i = 0; i < pixelCount; i++ ) 
                 {
                     std::int8_t number = pixelGrid[i];
-                    getBinaryNumbers(allPixels, number);
+                    getBinaryNumbers(imageGrid, number);
                 }
                 delete[] pixelGrid;
                 fileStream.close();

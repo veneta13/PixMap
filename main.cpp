@@ -1,3 +1,6 @@
+// GitHub repository link for the project:
+// https://github.com/veneta13/PixMap
+
 #include "inc/inc.h"
 #include "inc/command.h"
 #include "inc/executor.h"
