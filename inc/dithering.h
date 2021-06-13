@@ -25,7 +25,7 @@ class Dithering
     void ordered8x8BayerMatrix();
 
     public:
-    Dithering(int height, int width, int man, std::vector<int> imageGrid); //constructor
+    Dithering(int width, int height, int max, std::vector<int> imageGrid); //constructor
     ~Dithering() = default;
     void dither(int type); //dither
     std::vector<std::vector<int>> returnImage(); //return image

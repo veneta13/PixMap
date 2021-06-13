@@ -37,14 +37,14 @@ Executor::~Executor ()
 }
 
 void Executor::execute() {
-    for (int i = 0; i < height; i++)
-    {
-        for (int j = 0; j < (imageGrid.size()/height); j++)
-        {
-            std::cout << imageGrid.at(i*width + j) << " ";
-        }
-        std::cout << "\n";
-    }
+    // for (int i = 0; i < height; i++)
+    // {
+    //     for (int j = 0; j < (imageGrid.size()/height); j++)
+    //     {
+    //         std::cout << imageGrid.at(i*width + j) << " ";
+    //     }
+    //     std::cout << "\n";
+    // }
 
     /*
     Use execute function to call all other functions
@@ -317,14 +317,20 @@ void Executor::resizeFile()
         if (type == 1 || type == 4){
             pbm->resizeImage(percentage);
             imageGrid = pbm->returnImage();
+            width = pbm->returnWidth();
+            height = pbm->returnHeight();
         }
         else if (type == 2 || type == 5){
             pgm->resizeImage(percentage);
             imageGrid = pgm->returnImage();
+            width = pgm->returnWidth();
+            height = pgm->returnHeight();
         }
         else {
             ppm->resizeImage(percentage);
             imageGrid = ppm->returnImage();
+            width = ppm->returnWidth();
+            height = ppm->returnHeight();
         }
     }
     //if two arguments are provided resize by sizes
@@ -335,14 +341,20 @@ void Executor::resizeFile()
         if (type == 1 || type == 4){
             pbm->resizeImage( width,  height);
             imageGrid = pbm->returnImage();
+            this->width = pbm->returnWidth();
+            this->height = pbm->returnHeight();
         }
         else if (type == 2 || type == 5){
             pgm->resizeImage( width,  height);
             imageGrid = pgm->returnImage();
+            this->width = pgm->returnWidth();
+            this->height = pgm->returnHeight();
         }
         else {
             ppm->resizeImage( width,  height);
             imageGrid = ppm->returnImage();
+            this->width = ppm->returnWidth();
+            this->height = ppm->returnHeight();
         }
     }  
     unsavedChanges = true;

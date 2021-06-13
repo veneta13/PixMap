@@ -1,7 +1,7 @@
 #include "../inc/executor_functions.h"
 
 int headerProcessor(int& width, int& height, int& max, std::stringstream& file, int maxNumInH) 
-{
+{   //find the header of the file via counting the numbers /binary files implementation
     int numbersInHeader = 0;
     std::string word;
     int endOfHeader = 0;
@@ -39,7 +39,7 @@ int headerProcessor(int& width, int& height, int& max, std::stringstream& file, 
 }
 
 int headerProcessorText(int& width, int& height, int& max, std::vector<std::string>& file, int maxNumInH)
-{
+{   //find the header of the file via counting the numbers / ASCII files implementation
     int numbersInHeader = 0;
     std::stringstream line;
     std::string word;

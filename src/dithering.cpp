@@ -1,7 +1,7 @@
 #include "../inc/dithering.h"
 
 template<class A>
-Dithering<A>::Dithering (int height, int width, int man, std::vector<int> imageGrid)
+Dithering<A>::Dithering (int width, int height, int max, std::vector<int> imageGrid)
 {
     //copy the information from the image to Dithering object
     this->height = height;
@@ -11,20 +11,27 @@ Dithering<A>::Dithering (int height, int width, int man, std::vector<int> imageG
     std::vector<int> line;
     for (int i = 0; i < height; i++)
     {
-        for (int j = 0; j < width; j++)
-        {
-            if (imageGrid.size() == width*height){
+        
+        if (imageGrid.size() == width*height)
+        {   
+            for (int j = 0; j < width; j++){
                 line.push_back(imageGrid.at(i*width + j));
             }
-            else if (imageGrid.size() == width*height*3){
-                //if the image is PPM copy all colors
-                line.push_back(imageGrid.at(i*width + j*3));
-                line.push_back(imageGrid.at(i*width + j*3 + 1));
-                line.push_back(imageGrid.at(i*width + j*3 + 2));
-            }
+            newImage.push_back(line);
+            line.clear();
         }
-        newImage.push_back(line);
-        line.clear();
+        else
+        {     
+            for (int j = 0; j < width*3; j+=3)
+            {
+                for (int z = 0; z < 3; z++)
+                {
+                    line.push_back(imageGrid.at(i*width*3 + j + z));
+                }
+            }
+            newImage.push_back(line);
+            line.clear();
+        }
     }
 }
 
@@ -90,7 +97,7 @@ void Dithering<A>::floydSteinberg()
     int oldPixel; //old pixel value
     int newPixel; //new pixel value
     int error; //error value
-
+    
     for (int y = 0; y < height-1; y++)
     {
         if (width == newImage.at(0).size()){
@@ -98,46 +105,30 @@ void Dithering<A>::floydSteinberg()
             for (int x = 1; x < width-1; x++)
             {
                 oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
+                newPixel = (oldPixel > (max/2)) ? max : 0;
                 newImage[y][x] = newPixel;
                 error = oldPixel - newPixel;
-                newImage[y][x+1]   += error * 7 / 16;
-                newImage[y+1][x-1] += error * 3 / 16;
-                newImage[y+1][x]   += error * 5 / 16;
-                newImage[y+1][x+1] += error * 1 / 16;
+                newImage[y][x+1]   += ((error * 7) / 16);
+                newImage[y+1][x-1] += ((error * 3) / 16);
+                newImage[y+1][x]   += ((error * 5) / 16);
+                newImage[y+1][x+1] += ((error * 1) / 16);
             }   
         }
         else {
             //dithering for PPM images
-            for (int x = 3; x < width-3; x+=3)
+            for (int x = 3; x < (width*3)-5; x+=3)
             {
-                //Red pixel
-                oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
-                newImage[y][x] = newPixel;
-                error = oldPixel - newPixel;
-                newImage[y][x+3]   += error * 7 / 16;
-                newImage[y+1][x-3] += error * 3 / 16;
-                newImage[y+1][x]   += error * 5 / 16;
-                newImage[y+1][x+3] += error * 1 / 16;
-                //Green pixel
-                oldPixel = newImage[y][x+1];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+1] = newPixel;
-                error = oldPixel - newPixel;
-                newImage[y][x+4]   += error * 7 / 16;
-                newImage[y+1][x-4] += error * 3 / 16;
-                newImage[y+1][x+1] += error * 5 / 16;
-                newImage[y+1][x+4] += error * 1 / 16;
-                //Blue pixel
-                oldPixel = newImage[y][x+2];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+2] = newPixel;
-                error = oldPixel - newPixel;
-                newImage[y][x+5]   += error * 7 / 16;
-                newImage[y+1][x-5] += error * 3 / 16;
-                newImage[y+1][x+2] += error * 5 / 16;
-                newImage[y+1][x+5] += error * 1 / 16;
+                for (int z = 0; z < 3; z++)
+                {
+                    oldPixel = newImage[y][z+x];
+                    newPixel = (oldPixel > (max/2)) ? max : 0;
+                    newImage[y][z+x] = newPixel;
+                    error = oldPixel - newPixel;
+                    newImage[y][z+x+3]   += ((error * 7) / 16);
+                    newImage[y+1][z+x-3] += ((error * 3) / 16);
+                    newImage[y+1][z+x]   += ((error * 5) / 16);
+                    newImage[y+1][z+x+3] += ((error * 1) / 16);
+                }
             }
         }
     }
@@ -165,7 +156,7 @@ void Dithering<A>::falseFloydSteinberg()
             for (int x = 0; x < width-1; x++)
             {
                 oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
+                newPixel = (oldPixel > (max/2)) ? max : 0;
                 newImage[y][x] = newPixel;
                 error = oldPixel - newPixel;
                 newImage[y][x+1]   += error * 3 / 8;
@@ -175,32 +166,18 @@ void Dithering<A>::falseFloydSteinberg()
         }
         else {
             //dithering for PPM images
-            for (int x = 0; x < width-3; x+=3)
+            for (int x = 0; x < (width*3)-5; x+=3)
             {
-                //Red pixel
-                oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
-                newImage[y][x] = newPixel;
-                error = oldPixel - newPixel;
-                newImage[y][x+3]   += error * 3 / 8;
-                newImage[y+1][x]   += error * 3 / 8;
-                newImage[y+1][x+3] += error * 2 / 8;
-                //Green pixel
-                oldPixel = newImage[y][x+1];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+1] = newPixel;
-                error = oldPixel - newPixel;
-                newImage[y][x+4]   += error * 3 / 8;
-                newImage[y+1][x+1] += error * 3 / 8;
-                newImage[y+1][x+4] += error * 2 / 8;
-                //Blue pixel
-                oldPixel = newImage[y][x+2];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+2] = newPixel;
-                error = oldPixel - newPixel;
-                newImage[y][x+5]   += error * 3 / 8;
-                newImage[y+1][x+2] += error * 3 / 8;
-                newImage[y+1][x+5] += error * 2 / 8;
+                for (int z = 0; z < 3; z++)
+                {
+                    oldPixel = newImage[y][z+x];
+                    newPixel = (oldPixel > (max/2)) ? max : 0;
+                    newImage[y][z+x] = newPixel;
+                    error = oldPixel - newPixel;
+                    newImage[y][z+x+3]   += ((error * 3) / 8);
+                    newImage[y+1][z+x]   += ((error * 3) / 8);
+                    newImage[y+1][z+x+3] += ((error * 2) / 8);
+                }
             }
         }
     }
@@ -228,7 +205,7 @@ void Dithering<A>::jarvisJudiceNinke()
             for (int x = 2; x < width-2; x++)
             {
                 oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
+                newPixel = (oldPixel > (max/2)) ? max : 0;
                 newImage[y][x] = newPixel;
                 error = oldPixel - newPixel;
                 //first row
@@ -250,68 +227,30 @@ void Dithering<A>::jarvisJudiceNinke()
         }
         else {
             //dithering for PPM images
-            for (int x = 6; x < width-6; x+=3)
+            for (int x = 6; x < (width*3)-8; x+=3)
             {
-            //Red pixel
-                oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
-                newImage[y][x] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+3]   += error * 7 / 48;
-                newImage[y][x+6]   += error * 5 / 48;
-                //second row
-                newImage[y+1][x-6] += error * 3 / 48;
-                newImage[y+1][x-3] += error * 5 / 48;
-                newImage[y+1][x]   += error * 7 / 48;
-                newImage[y+1][x+3] += error * 5 / 48;
-                newImage[y+1][x+6] += error * 3 / 48;
-                //third row
-                newImage[y+2][x-6] += error * 1 / 48;
-                newImage[y+2][x-3] += error * 3 / 48;
-                newImage[y+2][x]   += error * 5 / 48;
-                newImage[y+2][x+3] += error * 3 / 48;
-                newImage[y+2][x+6] += error * 1 / 48;
-            //Green pixel
-                oldPixel = newImage[y][x+1];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+1] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+4]   += error * 7 / 48;
-                newImage[y][x+7]   += error * 5 / 48;
-                //second row
-                newImage[y+1][x-7] += error * 3 / 48;
-                newImage[y+1][x-4] += error * 5 / 48;
-                newImage[y+1][x+1] += error * 7 / 48;
-                newImage[y+1][x+4] += error * 5 / 48;
-                newImage[y+1][x+7] += error * 3 / 48;
-                //third row
-                newImage[y+2][x-7] += error * 1 / 48;
-                newImage[y+2][x-4] += error * 3 / 48;
-                newImage[y+2][x+1] += error * 5 / 48;
-                newImage[y+2][x+4] += error * 3 / 48;
-                newImage[y+2][x+7] += error * 1 / 48;
-            //Blue pixel
-                oldPixel = newImage[y][x+2];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+2] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+5]   += error * 7 / 48;
-                newImage[y][x+8]   += error * 5 / 48;
-                //second row
-                newImage[y+1][x-8] += error * 3 / 48;
-                newImage[y+1][x-5] += error * 5 / 48;
-                newImage[y+1][x+2] += error * 7 / 48;
-                newImage[y+1][x+5] += error * 5 / 48;
-                newImage[y+1][x+8] += error * 3 / 48;
-                //third row
-                newImage[y+2][x-8] += error * 1 / 48;
-                newImage[y+2][x-5] += error * 3 / 48;
-                newImage[y+2][x+2] += error * 5 / 48;
-                newImage[y+2][x+5] += error * 3 / 48;
-                newImage[y+2][x+8] += error * 1 / 48;
+                for (int z = 0; z < 3; z++)
+                {
+                    oldPixel = newImage[y][z+x];
+                    newPixel = (oldPixel > (max/2)) ? max : 0;
+                    newImage[y][z+x] = newPixel;
+                    error = oldPixel - newPixel;
+                    //first row
+                    newImage[y][z+x+3]   += (error * 7) / 48;
+                    newImage[y][z+x+6]   += (error * 5) / 48;
+                    //second row
+                    newImage[y+1][z+x-6] += (error * 3) / 48;
+                    newImage[y+1][z+x-3] += (error * 5) / 48;
+                    newImage[y+1][z+x]   += (error * 7) / 48;
+                    newImage[y+1][z+x+3] += (error * 5) / 48;
+                    newImage[y+1][z+x+6] += (error * 3) / 48;
+                    //third row
+                    newImage[y+2][z+x-6] += (error * 1) / 48;
+                    newImage[y+2][z+x-3] += (error * 3) / 48;
+                    newImage[y+2][z+x]   += (error * 5) / 48;
+                    newImage[y+2][z+x+3] += (error * 3) / 48;
+                    newImage[y+2][z+x+6] += (error * 1) / 48;
+                }
             }
         }
     }
@@ -338,7 +277,7 @@ void Dithering<A>::stucki()
             for (int x = 2; x < width-2; x++)
             {
                 oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
+                newPixel = (oldPixel > (max/2)) ? max : 0;
                 newImage[y][x] = newPixel;
                 error = oldPixel - newPixel;
                 //first row
@@ -360,68 +299,30 @@ void Dithering<A>::stucki()
         }
         else {
             //dithering for PPM images
-            for (int x = 6; x < width-6; x+=3)
+            for (int x = 6; x < (width*3)-8; x+=3)
             {
-            //Red pixel
-                oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
-                newImage[y][x] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+3]   += error * 8 / 42;
-                newImage[y][x+6]   += error * 4 / 42;
-                //second row
-                newImage[y+1][x-6] += error * 2 / 42;
-                newImage[y+1][x-3] += error * 4 / 42;
-                newImage[y+1][x]   += error * 8 / 42;
-                newImage[y+1][x+3] += error * 4 / 42;
-                newImage[y+1][x+6] += error * 2 / 42;
-                //third row
-                newImage[y+2][x-6] += error * 1 / 42;
-                newImage[y+2][x-3] += error * 2 / 42;
-                newImage[y+2][x]   += error * 4 / 42;
-                newImage[y+2][x+3] += error * 2 / 42;
-                newImage[y+2][x+6] += error * 1 / 42;
-            //Green pixel
-                oldPixel = newImage[y][x+1];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+1] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+4]   += error * 8 / 42;
-                newImage[y][x+7]   += error * 4 / 42;
-                //second row
-                newImage[y+1][x-7] += error * 2 / 42;
-                newImage[y+1][x-4] += error * 4 / 42;
-                newImage[y+1][x+1] += error * 8 / 42;
-                newImage[y+1][x+4] += error * 4 / 42;
-                newImage[y+1][x+7] += error * 2 / 42;
-                //third row
-                newImage[y+2][x-7] += error * 1 / 42;
-                newImage[y+2][x-4] += error * 2 / 42;
-                newImage[y+2][x+1] += error * 4 / 42;
-                newImage[y+2][x+4] += error * 2 / 42;
-                newImage[y+2][x+7] += error * 1 / 42;
-            //Blue pixel
-                oldPixel = newImage[y][x+2];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+2] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+5]   += error * 8 / 42;
-                newImage[y][x+8]   += error * 4 / 42;
-                //second row
-                newImage[y+1][x-8] += error * 2 / 42;
-                newImage[y+1][x-5] += error * 4 / 42;
-                newImage[y+1][x+2] += error * 8 / 42;
-                newImage[y+1][x+5] += error * 4 / 42;
-                newImage[y+1][x+8] += error * 2 / 42;
-                //third row
-                newImage[y+2][x-8] += error * 1 / 42;
-                newImage[y+2][x-5] += error * 2 / 42;
-                newImage[y+2][x+2] += error * 4 / 42;
-                newImage[y+2][x+5] += error * 2 / 42;
-                newImage[y+2][x+8] += error * 1 / 42;
+                for (int z = 0; z < 3; z++)
+                {
+                    oldPixel = newImage[y][z+x];
+                    newPixel = (oldPixel > (max/2)) ? max : 0;
+                    newImage[y][z+x] = newPixel;
+                    error = oldPixel - newPixel;
+                    //first row
+                    newImage[y][z+x+3]   += (error * 8) / 42;
+                    newImage[y][z+x+6]   += (error * 4) / 42;
+                    //second row
+                    newImage[y+1][z+x-6] += (error * 2) / 42;
+                    newImage[y+1][z+x-3] += (error * 4) / 42;
+                    newImage[y+1][z+x]   += (error * 8) / 42;
+                    newImage[y+1][z+x+3] += (error * 4) / 42;
+                    newImage[y+1][z+x+6] += (error * 2) / 42;
+                    //third row
+                    newImage[y+2][z+x-6] += (error * 1) / 42;
+                    newImage[y+2][z+x-3] += (error * 2) / 42;
+                    newImage[y+2][z+x]   += (error * 4) / 42;
+                    newImage[y+2][z+x+3] += (error * 2) / 42;
+                    newImage[y+2][z+x+6] += (error * 1) / 42;
+                }
             }
         }
     }
@@ -448,7 +349,7 @@ void Dithering<A>::atkinson()
             for (int x = 0; x < width-2; x++)
             {
                 oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
+                newPixel = (oldPixel > (max/2)) ? max : 0;
                 newImage[y][x] = newPixel;
                 error = oldPixel - newPixel;
                 //first row
@@ -464,50 +365,24 @@ void Dithering<A>::atkinson()
         }
         else {
             //dithering for PPM images
-            for (int x = 3; x < width-6; x+=3)
+            for (int x = 3; x < (width*3)-8; x+=3)
             {
-            //Red pixel
-                oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
-                newImage[y][x] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+3]   += error / 8;
-                newImage[y][x+6]   += error / 8;
-                //second row
-                newImage[y+1][x-3] += error / 8;
-                newImage[y+1][x]   += error / 8;
-                newImage[y+1][x+3] += error / 8;
-                //third row
-                newImage[y+2][x]   += error / 8;
-            //Green pixel
-                oldPixel = newImage[y][x+1];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+1] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+4]   += error / 8;
-                newImage[y][x+7]   += error / 8;
-                //second row
-                newImage[y+1][x-4] += error / 8;
-                newImage[y+1][x+1] += error / 8;
-                newImage[y+1][x+4] += error / 8;
-                //third row
-                newImage[y+2][x+1] += error / 8;
-            //Blue pixel
-                oldPixel = newImage[y][x+2];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+2] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+5]   += error / 8;
-                newImage[y][x+8]   += error / 8;
-                //second row
-                newImage[y+1][x-5] += error / 8;
-                newImage[y+1][x+2] += error / 8;
-                newImage[y+1][x+5] += error / 8;
-                //third row
-                newImage[y+2][x+2] += error / 8;
+                for (int z = 0; z < 3; z++)
+                {
+                    oldPixel = newImage[y][z+x];
+                    newPixel = (oldPixel > (max/2)) ? max : 0;
+                    newImage[y][z+x] = newPixel;
+                    error = oldPixel - newPixel;
+                    //first row
+                    newImage[y][z+x+3]   += error / 8;
+                    newImage[y][z+x+6]   += error / 8;
+                    //second row
+                    newImage[y+1][z+x-3] += error / 8;
+                    newImage[y+1][z+x]   += error / 8;
+                    newImage[y+1][z+x+3] += error / 8;
+                    //third row
+                    newImage[y+2][z+x]   += error / 8;
+                }
             }
         }
     }
@@ -533,7 +408,7 @@ void Dithering<A>::burkes()
             for (int x = 2; x < width-2; x++)
             {
                 oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
+                newPixel = (oldPixel > (max/2)) ? max : 0;
                 newImage[y][x] = newPixel;
                 error = oldPixel - newPixel;
                 //first row
@@ -549,50 +424,24 @@ void Dithering<A>::burkes()
         }
         else {
             //dithering for PPM images
-            for (int x = 6; x < width-6; x+=3)
+            for (int x = 6; x < (width*3)-8; x+=3)
             {
-            //Red pixel
-                oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
-                newImage[y][x] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+3]   += error * 8 / 32;
-                newImage[y][x+6]   += error * 4 / 32;
-                //second row
-                newImage[y+1][x-6] += error * 2 / 32;
-                newImage[y+1][x-3] += error * 4 / 32;
-                newImage[y+1][x]   += error * 8 / 32;
-                newImage[y+1][x+3] += error * 4 / 32;
-                newImage[y+1][x+6] += error * 2 / 32;
-            //Green pixel
-                oldPixel = newImage[y][x+1];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+1] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+4]   += error * 8 / 32;
-                newImage[y][x+7]   += error * 4 / 32;
-                //second row
-                newImage[y+1][x-7] += error * 2 / 32;
-                newImage[y+1][x-4] += error * 4 / 32;
-                newImage[y+1][x+1] += error * 8 / 32;
-                newImage[y+1][x+4] += error * 4 / 32;
-                newImage[y+1][x+7] += error * 2 / 32;
-            //Blue pixel
-                oldPixel = newImage[y][x+2];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+2] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+5]   += error * 8 / 32;
-                newImage[y][x+8]   += error * 4 / 32;
-                //second row
-                newImage[y+1][x-8] += error * 2 / 32;
-                newImage[y+1][x-5] += error * 4 / 32;
-                newImage[y+1][x+2] += error * 8 / 32;
-                newImage[y+1][x+5] += error * 4 / 32;
-                newImage[y+1][x+8] += error * 2 / 32;
+                for (int z = 0; z < 3; z++)
+                {
+                    oldPixel = newImage[y][z+x];
+                    newPixel = (oldPixel > (max/2)) ? max : 0;
+                    newImage[y][z+x] = newPixel;
+                    error = oldPixel - newPixel;
+                    //first row
+                    newImage[y][z+x+3]   += (error * 8) / 32;
+                    newImage[y][z+x+6]   += (error * 4) / 32;
+                    //second row
+                    newImage[y+1][z+x-6] += (error * 2) / 32;
+                    newImage[y+1][z+x-3] += (error * 4) / 32;
+                    newImage[y+1][z+x]   += (error * 8) / 32;
+                    newImage[y+1][z+x+3] += (error * 4) / 32;
+                    newImage[y+1][z+x+6] += (error * 2) / 32;
+                }
             }
         }
     }
@@ -619,7 +468,7 @@ void Dithering<A>::sierra()
             for (int x = 2; x < width-2; x++)
             {
                 oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
+                newPixel = (oldPixel > (max/2)) ? max : 0;
                 newImage[y][x] = newPixel;
                 error = oldPixel - newPixel;
                 //first row
@@ -640,62 +489,28 @@ void Dithering<A>::sierra()
         }
         else {
             //dithering for PPM images
-            for (int x = 6; x < width-6; x+=3)
+            for (int x = 6; x < (width*3)-8; x+=3)
             {
-            //Red pixel
-                oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
-                newImage[y][x] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+3]   += error * 5 / 42;
-                newImage[y][x+6]   += error * 3 / 42;
-                //second row
-                newImage[y+1][x-6] += error * 2 / 42;
-                newImage[y+1][x-3] += error * 4 / 42;
-                newImage[y+1][x]   += error * 5 / 42;
-                newImage[y+1][x+3] += error * 4 / 42;
-                newImage[y+1][x+6] += error * 2 / 42;
-                //third row
-                newImage[y+2][x-3] += error * 2 / 42;
-                newImage[y+2][x]   += error * 3 / 42;
-                newImage[y+2][x+3] += error * 2 / 42;
-            //Green pixel
-                oldPixel = newImage[y][x+1];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+1] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+4]   += error * 5 / 42;
-                newImage[y][x+7]   += error * 3 / 42;
-                //second row
-                newImage[y+1][x-7] += error * 2 / 42;
-                newImage[y+1][x-4] += error * 4 / 42;
-                newImage[y+1][x+1] += error * 5 / 42;
-                newImage[y+1][x+4] += error * 4 / 42;
-                newImage[y+1][x+7] += error * 2 / 42;
-                //third row
-                newImage[y+2][x-4] += error * 2 / 42;
-                newImage[y+2][x+1] += error * 3 / 42;
-                newImage[y+2][x+4] += error * 2 / 42;
-            //Blue pixel
-                oldPixel = newImage[y][x+2];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+2] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+5]   += error * 5 / 42;
-                newImage[y][x+8]   += error * 3 / 42;
-                //second row
-                newImage[y+1][x-8] += error * 2 / 42;
-                newImage[y+1][x-5] += error * 4 / 42;
-                newImage[y+1][x+2] += error * 5 / 42;
-                newImage[y+1][x+5] += error * 4 / 42;
-                newImage[y+1][x+8] += error * 2 / 42;
-                //third row
-                newImage[y+2][x-5] += error * 2 / 42;
-                newImage[y+2][x+2] += error * 3 / 42;
-                newImage[y+2][x+5] += error * 2 / 42;
+                for (int z = 0; z < 3; z++)
+                {
+                    oldPixel = newImage[y][z+x];
+                    newPixel = (oldPixel > (max/2)) ? max : 0;
+                    newImage[y][z+x] = newPixel;
+                    error = oldPixel - newPixel;
+                    //first row
+                    newImage[y][z+x+3]   += error * 5 / 42;
+                    newImage[y][z+x+6]   += error * 3 / 42;
+                    //second row
+                    newImage[y+1][z+x-6] += error * 2 / 42;
+                    newImage[y+1][z+x-3] += error * 4 / 42;
+                    newImage[y+1][z+x]   += error * 5 / 42;
+                    newImage[y+1][z+x+3] += error * 4 / 42;
+                    newImage[y+1][z+x+6] += error * 2 / 42;
+                    //third row
+                    newImage[y+2][z+x-3] += error * 2 / 42;
+                    newImage[y+2][z+x]   += error * 3 / 42;
+                    newImage[y+2][z+x+3] += error * 2 / 42;
+                }
             }
         }
     }
@@ -721,7 +536,7 @@ void Dithering<A>::twoRowSierra()
             for (int x = 2; x < width-2; x++)
             {
                 oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
+                newPixel = (oldPixel > (max/2)) ? max : 0;
                 newImage[y][x] = newPixel;
                 error = oldPixel - newPixel;
                 //first row
@@ -737,50 +552,24 @@ void Dithering<A>::twoRowSierra()
         }
         else {
             //dithering for PPM images
-            for (int x = 6; x < width-6; x+=3)
+            for (int x = 6; x < (width*3)-8; x+=3)
             {
-            //Red pixel
-                oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
-                newImage[y][x] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+3]   += error * 4 / 16;
-                newImage[y][x+6]   += error * 3 / 16;
-                //second row
-                newImage[y+1][x-6] += error * 1 / 16;
-                newImage[y+1][x-3] += error * 2 / 16;
-                newImage[y+1][x]   += error * 3 / 16;
-                newImage[y+1][x+3] += error * 2 / 16;
-                newImage[y+1][x+6] += error * 1 / 16;
-            //Green pixel
-                oldPixel = newImage[y][x+1];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+1] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+4]   += error * 4 / 16;
-                newImage[y][x+7]   += error * 3 / 16;
-                //second row
-                newImage[y+1][x-7] += error * 1 / 16;
-                newImage[y+1][x-4] += error * 2 / 16;
-                newImage[y+1][x+1] += error * 3 / 16;
-                newImage[y+1][x+4] += error * 2 / 16;
-                newImage[y+1][x+7] += error * 1 / 16;
-            //Blue pixel
-                oldPixel = newImage[y][x+2];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+2] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+5]   += error * 4 / 16;
-                newImage[y][x+8]   += error * 3 / 16;
-                //second row
-                newImage[y+1][x-8] += error * 1 / 16;
-                newImage[y+1][x-5] += error * 2 / 16;
-                newImage[y+1][x+2] += error * 3 / 16;
-                newImage[y+1][x+5] += error * 2 / 16;
-                newImage[y+1][x+8] += error * 1 / 16;
+                for (int z = 0; z < 3; z++)
+                {
+                    oldPixel = newImage[y][z+x];
+                    newPixel = (oldPixel > (max/2)) ? max : 0;
+                    newImage[y][z+x] = newPixel;
+                    error = oldPixel - newPixel;
+                    //first row
+                    newImage[y][z+x+3]   += (error * 4) / 16;
+                    newImage[y][z+x+6]   += (error * 3) / 16;
+                    //second row
+                    newImage[y+1][z+x-6] += (error * 1) / 16;
+                    newImage[y+1][z+x-3] += (error * 2) / 16;
+                    newImage[y+1][z+x]   += (error * 3) / 16;
+                    newImage[y+1][z+x+3] += (error * 2) / 16;
+                    newImage[y+1][z+x+6] += (error * 1) / 16;
+                }
             }
         }
     }
@@ -806,7 +595,7 @@ void Dithering<A>::sierraLite()
             for (int x = 1; x < width-1; x++)
             {
                 oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
+                newPixel = (oldPixel > (max/2)) ? max : 0;
                 newImage[y][x] = newPixel;
                 error = oldPixel - newPixel;
                 //first row
@@ -818,38 +607,20 @@ void Dithering<A>::sierraLite()
         }
         else {
             //dithering for PPM images
-            for (int x = 3; x < width-3; x+=3)
+            for (int x = 3; x < (width*3)-5; x+=3)
             {
-            //Red pixel
-                oldPixel = newImage[y][x];
-                newPixel = round(oldPixel/max);
-                newImage[y][x] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+3]   += error * 2 / 4;
-                //second row
-                newImage[y+1][x-3] += error * 1 / 4;
-                newImage[y+1][x]   += error * 1 / 4;
-            //Green pixel
-                oldPixel = newImage[y][x+1];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+1] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+4]   += error * 2 / 8;
-                //second row
-                newImage[y+1][x-4] += error * 1 / 8;
-                newImage[y+1][x+1] += error * 1 / 8;
-            //Blue pixel
-                oldPixel = newImage[y][x+2];
-                newPixel = round(oldPixel/max);
-                newImage[y][x+2] = newPixel;
-                error = oldPixel - newPixel;
-                //first row
-                newImage[y][x+5]   += error * 2 / 8;
-                //second row
-                newImage[y+1][x-5] += error * 1 / 8;
-                newImage[y+1][x+2] += error * 1 / 8;
+                for (int z = 0; z < 3; z++)
+                {
+                    oldPixel = newImage[y][z+x];
+                    newPixel = (oldPixel > (max/2)) ? max : 0;
+                    newImage[y][z+x] = newPixel;
+                    error = oldPixel - newPixel;
+                    //first row
+                    newImage[y][z+x+3]   += error * 2 / 4;
+                    //second row
+                    newImage[y+1][z+x-3] += error * 1 / 4;
+                    newImage[y+1][z+x]   += error * 1 / 4;
+                }
             }
         }
     }
@@ -881,7 +652,7 @@ void Dithering<A>::ordered4x4BayerMatrix()
         }
         else {
             //dithering for PPM images
-            for (int x = 0; x < width; x+=3)
+            for (int x = 0; x < width*3; x+=3)
             {
                 //Red pixel
                 pixel = newImage[y][x];
@@ -927,7 +698,7 @@ void Dithering<A>::ordered8x8BayerMatrix()
         }
         else {
             //dithering for PPM images
-            for (int x = 0; x < width; x+=3)
+            for (int x = 0; x < width*3; x+=3)
             {
                 //Red pixel
                 pixel = newImage[y][x];

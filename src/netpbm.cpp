@@ -55,6 +55,10 @@ int NetPBM::hexToInt (char hex)
 }
 void NetPBM::validateCrop(int topLeftX, int topLeftY, int& bottomRightX, int& bottomRightY)
 {
+    std::cout << "Top left x: " << topLeftX << std::endl;
+    std::cout << "Top left y: " << topLeftY << std::endl;
+    std::cout << "Bottom right x: " << bottomRightX << std::endl;
+    std::cout << "Bottom right y: " << bottomRightY << std::endl;
     //if both coordinates are out of bounds the operation is not possible
     if (topLeftX < 1 || topLeftY < 1 || bottomRightX < 1 || bottomRightY < 1) {
         throw std::invalid_argument("Error: Coordinates must be positive.");
@@ -365,7 +369,7 @@ void Pgm::resizeImage(int percentage)
 }
 void Pgm::resizeImage(int width, int height)
 {
-    //save inw image to scaledImage
+    //save result into scaledImage
     std::vector<int> scaledImage;
 
     for (int y = 0; y < height; y++)
@@ -377,6 +381,9 @@ void Pgm::resizeImage(int width, int height)
             int srcY = int( round( float(y) / float(width) * float(this->height) ) );
             srcX = std::min( srcX, this->width-1);
             srcY = std::min( srcY, this->height-1);
+            std::cout << x << " " << y << std::endl;
+            std::cout << srcX << " " << srcY << std::endl;
+            std ::cout << imageGrid.at(this->width*srcY+srcX) << std::endl;
             scaledImage.push_back(imageGrid.at(this->width*srcY+srcX));
         }
     }
