@@ -22,7 +22,7 @@ void Pbm::createFile(std::string bgcolor) {
         imageGrid.push_back(pixel);
     }
 
-    Image image = Image::getInstance();
+    Image& image = Image::getInstance();
     image.setPixels(imageGrid);
 }
 
@@ -30,7 +30,7 @@ void Pbm::validateFile() {
 
     //check if the file is valid PBM file
 
-    Image image = Image::getInstance();
+    Image& image = Image::getInstance();
 
     if (image.getHeight() < 1 || image.getWidth() < 1) {
         throw std::runtime_error("Error: Invalid height or width.");
@@ -62,7 +62,7 @@ void Pbm::ditherImage() {
 
 void Pbm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) {
 
-    Image image = Image::getInstance();
+    Image& image = Image::getInstance();
 
     //validate crop parameters
     validateCrop(topLeftX, topLeftY, bottomRightX, bottomRightY);
@@ -101,7 +101,7 @@ void Pbm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
 
 void Pbm::resizeImage(int percentage) {
 
-    Image image = Image::getInstance();
+    Image& image = Image::getInstance();
 
     //update width and height to match the percentage
     int newWidth = (image.getWidth() * percentage) / 100;
@@ -113,7 +113,7 @@ void Pbm::resizeImage(int percentage) {
 
 void Pbm::resizeImage(int width, int height) {
 
-    Image image = Image::getInstance();
+    Image& image = Image::getInstance();
 
     //save result into scaledImage
     std::vector<int> scaledImage;
@@ -135,6 +135,6 @@ void Pbm::resizeImage(int width, int height) {
     scaledImage.clear();
 
     //update width and height
-    image.setWidth(newWidth);
-    image.setHeight(newHeight);
+    image.setWidth(width);
+    image.setHeight(height);
 }

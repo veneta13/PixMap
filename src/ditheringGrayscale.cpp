@@ -2,7 +2,7 @@
 
 DitheringGrayscale::DitheringGrayscale()
 {
-    Image image = Image::getInstance();
+    Image& image = Image::getInstance();
 
     this->height = image.getHeight();
     this->width = image.getWidth();
@@ -47,8 +47,6 @@ void DitheringGrayscale::floydSteinberg()
           (1/16)
     */
 
-    Image image = Image::getInstance();
-
     int oldPixel; //old pixel value
     int newPixel; //new pixel value
     int error; //error value
@@ -68,9 +66,7 @@ void DitheringGrayscale::floydSteinberg()
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
-
+    newImageToImage();
 }
 
 void DitheringGrayscale::falseFloydSteinberg() {
@@ -80,8 +76,6 @@ void DitheringGrayscale::falseFloydSteinberg() {
        3   2
        (1/8)
    */
-
-    Image image = Image::getInstance();
 
     int oldPixel; //old pixel value
     int newPixel; //new pixel value
@@ -101,8 +95,7 @@ void DitheringGrayscale::falseFloydSteinberg() {
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
+    newImageToImage();
 
 }
 
@@ -115,8 +108,6 @@ void DitheringGrayscale::jarvisJudiceNinke()
     1   3   5   3   1
           (1/48)
    */
-
-    Image image = Image::getInstance();
 
     int oldPixel; //old pixel value
     int newPixel; //new pixel value
@@ -146,8 +137,7 @@ void DitheringGrayscale::jarvisJudiceNinke()
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
+    newImageToImage();
 
 }
 
@@ -162,8 +152,6 @@ void DitheringGrayscale::stucki() {
     int oldPixel;//old pixel value
     int newPixel;//new pixel value
     int error;//error value
-
-    Image image = Image::getInstance();
 
     for (int y = 0; y < height - 2; y++)
     {
@@ -191,9 +179,7 @@ void DitheringGrayscale::stucki() {
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
-
+    newImageToImage();
 }
 
 void DitheringGrayscale::atkinson() {
@@ -207,8 +193,6 @@ void DitheringGrayscale::atkinson() {
     int oldPixel; //old pixel value
     int newPixel; //new pixel value
     int error; //error value
-
-    Image image = Image::getInstance();
 
     for (int y = 0; y < height - 2; y++)
     {
@@ -230,8 +214,8 @@ void DitheringGrayscale::atkinson() {
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
+    newImageToImage();
+
 }
 
 void DitheringGrayscale::burkes() {
@@ -244,8 +228,6 @@ void DitheringGrayscale::burkes() {
     int oldPixel; //old pixel value
     int newPixel; //new pixel value
     int error; //error value
-
-    Image image = Image::getInstance();
 
     for (int y = 0; y < height - 1; y++)
     {
@@ -267,8 +249,7 @@ void DitheringGrayscale::burkes() {
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
+    newImageToImage();
 
 }
 
@@ -283,8 +264,6 @@ void DitheringGrayscale::sierra() {
     int oldPixel; //old pixel value
     int newPixel; //new pixel value
     int error; //error value
-
-    Image image = Image::getInstance();
 
     for (int y = 0; y < height - 2; y++)
     {
@@ -310,8 +289,8 @@ void DitheringGrayscale::sierra() {
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
+    newImageToImage();
+
 }
 
 void DitheringGrayscale::twoRowSierra() {
@@ -324,8 +303,6 @@ void DitheringGrayscale::twoRowSierra() {
     int oldPixel; //old pixel value
     int newPixel; //new pixel value
     int error; //error value
-
-    Image image = Image::getInstance();
 
     for (int y = 0; y < height - 1; y++)
     {
@@ -347,8 +324,7 @@ void DitheringGrayscale::twoRowSierra() {
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
+    newImageToImage();
 
 }
 
@@ -362,8 +338,6 @@ void DitheringGrayscale::sierraLite() {
     int oldPixel; //old pixel value
     int newPixel; //new pixel value
     int error; //error value
-
-    Image image = Image::getInstance();
 
     for (int y = 0; y < height - 1; y++)
     {
@@ -381,8 +355,7 @@ void DitheringGrayscale::sierraLite() {
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
+    newImageToImage();
 }
 
 void DitheringGrayscale::ordered4x4BayerMatrix() {
@@ -391,8 +364,6 @@ void DitheringGrayscale::ordered4x4BayerMatrix() {
                                    {13, 5,  15, 7},
                                    {4,  12, 2,  10},
                                    {16, 8,  14, 6}};
-
-    Image image = Image::getInstance();
 
     int pixel; //current pixel
     int factor = 16;
@@ -404,12 +375,12 @@ void DitheringGrayscale::ordered4x4BayerMatrix() {
         for (int x = 0; x < width; x++)
         {
             pixel = newImage[y][x];
-            pixel += error * (bayer4x4[x % 16][y % 16] - offset);
+            pixel += (error * (bayer4x4[x % 16][y % 16] - offset));
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
+    newImageToImage();
+
 }
 
 void DitheringGrayscale::ordered8x8BayerMatrix() {
@@ -423,8 +394,6 @@ void DitheringGrayscale::ordered8x8BayerMatrix() {
                                    {15, 47, 7,  39, 13, 45, 5,  37},
                                    {63, 31, 55, 23, 61, 29, 53, 21}};
 
-    Image image = Image::getInstance();
-
     int pixel; //current pixel
     int factor = 64;
     int offset = (64 * (64 / 2) - 0.5) / (64 * 64); //calculate offset
@@ -435,11 +404,10 @@ void DitheringGrayscale::ordered8x8BayerMatrix() {
         for (int x = 0; x < width; x++)
         {
             pixel = newImage[y][x];
-            pixel += error * (bayer8x8[x % 64][y % 64] - offset);
+            pixel += (error * (bayer8x8[x % 64][y % 64] - offset));
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
+    newImageToImage();
 
 }

@@ -2,7 +2,7 @@
 
 DitheringRGB::DitheringRGB()
 {
-    Image image = Image::getInstance();
+    Image& image = Image::getInstance();
 
     this->height = image.getHeight();
     this->width = image.getWidth();
@@ -50,8 +50,6 @@ void DitheringRGB::floydSteinberg()
           (1/16)
     */
 
-    Image image = Image::getInstance();
-
     int oldPixel; //old pixel value
     int newPixel; //new pixel value
     int error; //error value
@@ -73,9 +71,6 @@ void DitheringRGB::floydSteinberg()
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
-
 }
 
 void DitheringRGB::falseFloydSteinberg() {
@@ -85,8 +80,6 @@ void DitheringRGB::falseFloydSteinberg() {
        3   2
        (1/8)
    */
-
-    Image image = Image::getInstance();
 
     int oldPixel; //old pixel value
     int newPixel; //new pixel value
@@ -109,9 +102,6 @@ void DitheringRGB::falseFloydSteinberg() {
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
-
 }
 
 void DitheringRGB::jarvisJudiceNinke()
@@ -123,8 +113,6 @@ void DitheringRGB::jarvisJudiceNinke()
     1   3   5   3   1
           (1/48)
    */
-
-    Image image = Image::getInstance();
 
     int oldPixel; //old pixel value
     int newPixel; //new pixel value
@@ -159,12 +147,9 @@ void DitheringRGB::jarvisJudiceNinke()
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
-
 }
 
-void DitheringRGB:stucki() {
+void DitheringRGB::stucki() {
     /*
    Dither according to the Stucki matrix:
             X   8   4
@@ -176,7 +161,6 @@ void DitheringRGB:stucki() {
     int newPixel;//new pixel value
     int error;//error value
 
-    Image image = Image::getInstance();
 
     for (int y = 0; y < height - 2; y++)
     {
@@ -207,9 +191,6 @@ void DitheringRGB:stucki() {
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
-
 }
 
 void DitheringRGB::atkinson() {
@@ -223,8 +204,6 @@ void DitheringRGB::atkinson() {
     int oldPixel; //old pixel value
     int newPixel; //new pixel value
     int error; //error value
-
-    Image image = Image::getInstance();
 
     for (int y = 0; y < height - 2; y++)
     {
@@ -249,8 +228,6 @@ void DitheringRGB::atkinson() {
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
 }
 
 void DitheringRGB::burkes() {
@@ -263,8 +240,6 @@ void DitheringRGB::burkes() {
     int oldPixel; //old pixel value
     int newPixel; //new pixel value
     int error; //error value
-
-    Image image = Image::getInstance();
 
     for (int y = 0; y < height - 1; y++)
     {
@@ -289,9 +264,6 @@ void DitheringRGB::burkes() {
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
-
 }
 
 void DitheringRGB::sierra() {
@@ -305,8 +277,6 @@ void DitheringRGB::sierra() {
     int oldPixel; //old pixel value
     int newPixel; //new pixel value
     int error; //error value
-
-    Image image = Image::getInstance();
 
     for (int y = 0; y < height - 2; y++)
     {
@@ -335,9 +305,6 @@ void DitheringRGB::sierra() {
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
-
 }
 
 void DitheringRGB::twoRowSierra() {
@@ -350,8 +317,6 @@ void DitheringRGB::twoRowSierra() {
     int oldPixel; //old pixel value
     int newPixel; //new pixel value
     int error; //error value
-
-    Image image = Image::getInstance();
 
     for (int y = 0; y < height - 1; y++)
     {
@@ -376,9 +341,6 @@ void DitheringRGB::twoRowSierra() {
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
-
 }
 
 void DitheringRGB::sierraLite() {
@@ -391,8 +353,6 @@ void DitheringRGB::sierraLite() {
     int oldPixel; //old pixel value
     int newPixel; //new pixel value
     int error; //error value
-
-    Image image = Image::getInstance();
 
     for (int y = 0; y < height - 1; y++)
     {
@@ -412,9 +372,6 @@ void DitheringRGB::sierraLite() {
             }
         }
     }
-
-    image.setPixels(newImage);
-    newImage.clear();
 }
 
 void DitheringRGB::ordered4x4BayerMatrix() {
@@ -423,8 +380,6 @@ void DitheringRGB::ordered4x4BayerMatrix() {
                                    {13, 5,  15, 7},
                                    {4,  12, 2,  10},
                                    {16, 8,  14, 6}};
-
-    Image image = Image::getInstance();
 
     int pixel; //current pixel
     int factor = 16;
@@ -447,9 +402,6 @@ void DitheringRGB::ordered4x4BayerMatrix() {
         }
     }
 
-    image.setPixels(newImage);
-    newImage.clear();
-
 }
 
 void DitheringRGB::ordered8x8BayerMatrix() {
@@ -462,8 +414,6 @@ void DitheringRGB::ordered8x8BayerMatrix() {
                                    {51, 19, 59, 27, 49, 17, 57, 25},
                                    {15, 47, 7,  39, 13, 45, 5,  37},
                                    {63, 31, 55, 23, 61, 29, 53, 21}};
-
-    Image image = Image::getInstance();
 
     int pixel; //current pixel
     int factor = 64;
@@ -485,8 +435,5 @@ void DitheringRGB::ordered8x8BayerMatrix() {
             pixel += error * (bayer8x8[x % 64][y % 64] - offset);
         }
     }
-
-    image.setPixels(newImage);
-    newImage.clear();
-
 }
+

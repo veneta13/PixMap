@@ -10,7 +10,7 @@ protected:
     int height;
     int width;
     int max;
-    std::vector<int> newImage;
+    std::vector<std::vector<int>> newImage;
 
     virtual void floydSteinberg() = 0;
 
@@ -33,6 +33,8 @@ protected:
     virtual void ordered4x4BayerMatrix() = 0;
 
     virtual void ordered8x8BayerMatrix() = 0;
+
+    void newImageToImage();
 
 public:
 

@@ -12,13 +12,15 @@ class Command {
 
     void setName(std::string name);
     void setArguments(std::vector <std::string> args);
-    int argumentCount() const;
 
     void transformFilePath();
 
 public:
     Command();
     std::string tellName();
+    std::vector<std::string> tellArguments();
+
+    int argumentCount() const;
     std::string stringify() const;
 
     friend class CommandReader;

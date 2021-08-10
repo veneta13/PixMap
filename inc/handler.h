@@ -1,15 +1,25 @@
 #ifndef PROJECT_HANDLER_H
 #define PROJECT_HANDLER_H
 
+#include "inc.h"
 #include "fileManager.h"
-#include "netpbm.h"
+#include "pbm.h"
+#include "pgm.h"
+#include "ppm.h"
+#include "image.h"
+#include "textHandler.h"
+#include "binaryHandler.h"
 
 class Handler {
 
     Handler* currentInstance;
-    FileManager* fileManager;
 
+    bool unsavedChanges;
     void getFileType();
+
+protected:
+
+    FileManager* fileManager;
 
     public:
 
@@ -18,13 +28,13 @@ class Handler {
 
     void open(std::vector<std::string> args);
     void close();
-    virtual void create(std::vector<std::string> args);
+    void create(std::vector<std::string> args);
 
-    virtual void save() = 0;
-    virtual void exit() = 0;
-    virtual void dither() = 0;
-    virtual void crop() = 0;
-    virtual void resize() = 0;
+    void save();
+    void saveAs(std::vector<std::string> args);
+    void dither();
+    void crop(std::vector<std::string> args);
+    void resize(std::vector<std::string> args);
 
 };
 

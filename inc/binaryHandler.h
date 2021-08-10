@@ -1,5 +1,5 @@
-#ifndef TEXTHANDLER
-#define TEXTHANDLER
+#ifndef BINARYEX
+#define BINARYEX
 
 #include "inc.h"
 #include "fileManager.h"
@@ -10,7 +10,7 @@
 #include "textHandler.h"
 #include "binaryHandler.h"
 
-class TextHandler {
+class BinaryHandler {
 
     NetPBM* myFile = nullptr;
 
@@ -18,9 +18,9 @@ class TextHandler {
 
     FileManager* fileManager;
 
-    public:
-    TextHandler();
-    ~TextHandler();
+public:
+    BinaryHandler();
+    ~BinaryHandler();
 
     void open(std::vector<std::string> args);
     void save();

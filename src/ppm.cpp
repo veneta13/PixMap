@@ -6,7 +6,7 @@ Ppm::~Ppm() {}
 
 void Ppm::createFile(std::string bgcolor) {
 
-    Image image = Image::getInstance();
+    Image& image = Image::getInstance();
     std::vector<int> imageGrid;
 
     int rgb[3]; //rgb triple
@@ -47,7 +47,7 @@ void Ppm::validateFile() {
 
     //check if file is valid PPM file
 
-    Image image = Image::getInstance();
+    Image& image = Image::getInstance();
 
     if (image.getHeight() < 1 || image.getWidth() < 1) {
         throw std::runtime_error("Error: Invalid height or width.");
@@ -81,7 +81,7 @@ void Ppm::ditherImage() {
 
 void Ppm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) {
 
-    Image image = Image::getInstance();
+    Image& image = Image::getInstance();
 
     //validate crop parameters
     validateCrop(topLeftX, topLeftY, bottomRightX, bottomRightY);
@@ -128,7 +128,7 @@ void Ppm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
 
 void Ppm::resizeImage(int percentage) {
 
-    Image image = Image::getInstance();
+    Image& image = Image::getInstance();
 
     //update width and height to match the percentage
     int newWidth = (image.getWidth() * percentage) / 100;
@@ -140,7 +140,7 @@ void Ppm::resizeImage(int percentage) {
 
 void Ppm::resizeImage(int width, int height) {
 
-    Image image = Image::getInstance();
+    Image& image = Image::getInstance();
 
     //save scaledImage into scaledImage
     std::vector<int> scaledImage;
@@ -163,6 +163,6 @@ void Ppm::resizeImage(int width, int height) {
     scaledImage.clear();
 
     //update width and height
-    image.setWidth(newWidth);
-    image.setHeight(newHeight);
+    image.setWidth(width);
+    image.setHeight(height);
 }

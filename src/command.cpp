@@ -36,6 +36,11 @@ std::string Command::tellName()
     return name;
 }
 
+std::vector<std::string> Command::tellArguments()
+{
+    return args;
+}
+
 std::string Command::stringify() const {
     std::string stringCommand = name;
 

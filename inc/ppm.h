@@ -7,7 +7,7 @@ class Ppm : public NetPBM {
 
     public:
 
-    Ppm(int height, int width, int max, std::vector<int> &imageGrid);
+    Ppm();
 
     ~Ppm();
 

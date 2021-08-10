@@ -1,16 +1,16 @@
-#include "../inc/textHandler.h"
+#include "../inc/binaryHandler.h"
 
-TextHandler::TextHandler()
+BinaryHandler::BinaryHandler()
 {
     fileManager = &FileManager::getInstance();
 }
 
-TextHandler::~TextHandler() {
+BinaryHandler::~BinaryHandler() {
     delete myFile;
     myFile = nullptr;
 }
 
-void TextHandler::open(std::vector<std::string> args) {
+void BinaryHandler::open(std::vector<std::string> args) {
     Image& image = Image::getInstance();
     FileManager* fileManager = &FileManager::getInstance();
     fileManager->getFileType();
@@ -18,12 +18,19 @@ void TextHandler::open(std::vector<std::string> args) {
     fileManager->load();
 }
 
-void TextHandler::save() {
-    FileManager* fileManager = &FileManager::getInstance();
-    fileManager->saveTextFile();
+void BinaryHandler::createInstances(int type) {
+    //create instances of the image classes
+    if (type == 4 )      { myFile = new Pbm(); }
+    else if (type == 5 ) { myFile = new Pgm(); }
+    else                 { myFile = new Ppm(); }
 }
 
-void TextHandler::create(std::vector<std::string> args) {
+void BinaryHandler::save() {
+    FileManager* fileManager = &FileManager::getInstance();
+    fileManager->saveBinaryFile();
+}
+
+void BinaryHandler::create(std::vector<std::string> args) {
     //update file path
     fileManager->newFile(args);
 
@@ -35,7 +42,7 @@ void TextHandler::create(std::vector<std::string> args) {
         use a PBM object to create a new file
         and save new file to imageGrid
         */
-        createInstances(1);
+        createInstances(4);
         myFile->createFile(args[4]);
 
     }
@@ -44,7 +51,7 @@ void TextHandler::create(std::vector<std::string> args) {
         use a PGM object to create a new file
         and save new file to imageGrid
         */
-        createInstances(2);
+        createInstances(5);
         myFile->createFile(args[4]);
     }
     else if (choice == 3) {
@@ -52,25 +59,18 @@ void TextHandler::create(std::vector<std::string> args) {
         use a PPM object to create a new file
         and save new file to imageGrid
         */
-        createInstances(3);
+        createInstances(6);
         myFile->createFile(args[4]);
 
     }
     else {throw std::runtime_error("Error: Invalid file choice.");}
 }
 
-void TextHandler::createInstances(int type) {
-    //create instances of the image classes
-    if (type == 1 )      { myFile = new Pbm(); }
-    else if (type == 2 ) { myFile = new Pgm(); }
-    else                 { myFile = new Ppm(); }
-}
-
-void TextHandler::dither() {
+void BinaryHandler::dither() {
     myFile->ditherImage();
 }
 
-void TextHandler::crop(std::vector<std::string> args) {
+void BinaryHandler::crop(std::vector<std::string> args) {
     //cast arguments to integers
     int temp1 = std::stoi(args.at(0));
     int temp2 = std::stoi(args.at(1));
@@ -81,7 +81,7 @@ void TextHandler::crop(std::vector<std::string> args) {
     myFile->cropImage(temp1, temp2, temp3, temp4);
 }
 
-void TextHandler::resize(std::vector<std::string> args) {
+void BinaryHandler::resize(std::vector<std::string> args) {
     //if one argument is provided resize by percentage
     if (args.size() == 1) {
         int percentage = std::stoi(args.at(0));

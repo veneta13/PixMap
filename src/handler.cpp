@@ -1,7 +1,7 @@
 #include "../inc/handler.h"
 
 Handler::Handler() {
-    currentInstance = this;
+    currentInstance = nullptr;
     fileManager = &FileManager::getInstance();
 }
 
@@ -10,8 +10,14 @@ Handler::~Handler() {
 }
 
 void Handler::open(std::vector<std::string> args) {
-    int type = fileManager->openFile();
-    if (type < 4) {currentInstance = new TextHandler();}
+
+    //ensuring image is clear
+    Image& image = Image::getInstance();
+    image.clear();
+    unsavedChanges = false;
+
+    fileManager->openFile(args);
+    if (image.getType() < 4) {currentInstance = new TextHandler();}
     else {currentInstance = new BinaryHandler();}
 
     currentInstance->open(args);
@@ -19,7 +25,9 @@ void Handler::open(std::vector<std::string> args) {
 
 void Handler::close()
 {
-    if (fileManager->closeFile() == -1){
+    Image& image = Image::getInstance();
+
+    if (unsavedChanges){
         std::cout << "Would you like to save the changes?\ny - yes\nother - no\n";
         char temp;
         std::cin >> temp;
@@ -28,14 +36,15 @@ void Handler::close()
             fileManager->closeFile();
         }
     }
-    delete currentInstance;
-    currentInstance = this;
+
+    image.clear();
+    currentInstance = nullptr;
+    unsavedChanges = false;
 }
 
 void Handler::create(std::vector<std::string> args)
 {
-    delete currentInstance;
-    currentInstance = this;
+    currentInstance = nullptr;
     fileManager->newFile(args);
 
     int choice = -1;
@@ -47,5 +56,36 @@ void Handler::create(std::vector<std::string> args)
     }
     if (choice == 1){currentInstance = new TextHandler();}
     else {currentInstance = new BinaryHandler();}
-    currentInstance->create();
+    currentInstance->create(args);
+    unsavedChanges = true;
+}
+
+void Handler::save()
+{
+    currentInstance->save();
+    unsavedChanges = false;
+}
+
+void Handler::saveAs(std::vector <std::string> args)
+{
+    currentInstance->saveAs(args);
+    unsavedChanges = false;
+}
+
+void Handler::dither()
+{
+    currentInstance->dither();
+    unsavedChanges = true;
+}
+
+void Handler::crop(std::vector<std::string> args)
+{
+    currentInstance->crop(args);
+    unsavedChanges = true;
+}
+
+void Handler::resize(std::vector<std::string> args)
+{
+    currentInstance->resize(args);
+    unsavedChanges = true;
 }

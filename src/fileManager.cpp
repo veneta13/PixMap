@@ -1,18 +1,17 @@
 #include "../inc/fileManager.h"
 
-static FileManager& FileManager::getInstance(){
+ FileManager& FileManager::getInstance(){
     static FileManager instance;
     return instance;
 }
 
-int FileManager::openFile(std::vector<std::string> args) {
+void FileManager::openFile(std::vector<std::string> args) {
     currentPath = args.at(0);
-//    loadFileIntoMemory();
-//    std::cout << "\nSuccessfully opened the file.\n";
-    return getFileType();
 }
 
-int FileManager::getFileType() {
+void FileManager::getFileType() {
+
+    Image& image = Image::getInstance();
 
     //read file to find the magic number
     std::fstream fileStream;
@@ -27,19 +26,42 @@ int FileManager::getFileType() {
     int type = (int) c;
     fileStream.close();
 
-    if (type == 49)      { return 1; }
-    else if (type == 50) { return 2; }
-    else if (type == 51) { return 3; }
-    else if (type == 52) { return 4; }
-    else if (type == 53) { return 5; }
-    else if (type == 54) { return 6; }
+    if (type == 49)      { image.setType(1); return; }
+    else if (type == 50) { image.setType(2); return; }
+    else if (type == 51) { image.setType(3); return; }
+    else if (type == 52) { image.setType(4); return; }
+    else if (type == 53) { image.setType(5); return; }
+    else if (type == 54) { image.setType(6); return; }
     else {
         throw std::runtime_error("Error: Unrecognised magic number when opening the file.");
     }
 }
 
+void FileManager::load()
+{
+    Image& image = Image::getInstance();
+
+    int type = image.getType();
+
+    if ((type == 1) || (type == 2) || (type == 3)){
+        loadText();
+    }
+    else if (type == 4) {
+        loadBinaryPBM();
+    }
+    else if (type == 5 || type == 6){
+        loadBinary();
+    }
+    else {
+        throw std::runtime_error("Error: Cannot open file.");
+    }
+}
+
 void FileManager::loadText()
 {
+    Image& image = Image::getInstance();
+    std::vector <int> imageGrid;
+
     int endOfHeader;
     std::vector <std::string> file;
 
@@ -70,35 +92,43 @@ void FileManager::loadText()
     }
 
     //for PBM file only search for 2 numbers in the header
-    if (getFileType() == 1) {
+    int type = image.getType();
+    if (type == 1) {
+        //TODO add file in declaration of header processor!!!!!!!!!!!!!!!!!
         endOfHeader = headerProcessorText(2);
     }
     else {
         endOfHeader = headerProcessorText(3);
     }
 
-    std::stringstream line;
+    std::stringstream lineStream;
     std::string word;
     int number;
 
     for (int i = endOfHeader + 1; i < file.size(); i++)
     {
-        line << file.at(i);
-        while (!line.eof())
+        lineStream << file.at(i);
+        while (!lineStream.eof())
         {
-            line >> word;
+            lineStream >> word;
 
             if (std::stringstream(word) >> number) {
                 imageGrid.push_back(number);
                 word = "";
             }
         }
-        line.clear();
+        lineStream.clear();
     }
+
+    image.setPixels(imageGrid);
+    imageGrid.clear();
+
 }
 
-void FileManager::loadBinaryPBM()
-{
+void FileManager::loadBinaryPBM(){
+    Image& image = Image::getInstance();
+    std::vector<int> imageGrid;
+
     std::stringstream file;
     int endOfHeader;
     std::fstream fileStream;
@@ -111,15 +141,15 @@ void FileManager::loadBinaryPBM()
     //read the whole file into the file stringstream
     file << fileStream.rdbuf();
 
-    endOfHeader = headerProcessor(2);
+    endOfHeader = headerProcessorBinary(2);
     file.seekg(endOfHeader);
     int pixelCount;
 
-    if ((width * height) % 8 == 0){
-        pixelCount = (width * height) / 8;
+    if ((image.getWidth() * image.getHeight()) % 8 == 0){
+        pixelCount = (image.getWidth() * image.getHeight()) / 8;
     }
     else {
-        pixelCount = (width * height) / 8 + 1;
+        pixelCount = (image.getWidth() * image.getHeight()) / 8 + 1;
     }
 
     char *pixelGrid = new char[pixelCount];
@@ -133,11 +163,18 @@ void FileManager::loadBinaryPBM()
 
     delete[] pixelGrid;
     fileStream.close();
+
+    image.setPixels(imageGrid);
+    imageGrid.clear();
+
     return;
 }
 
 void FileManager::loadBinary()
 {
+    Image& image = Image::getInstance();
+    std::vector<int> imageGrid;
+
     std::stringstream file;
     int endOfHeader;
     std::fstream fileStream;
@@ -151,13 +188,14 @@ void FileManager::loadBinary()
     file << fileStream.rdbuf();
 
     //find the end of the file header
-    endOfHeader = headerProcessor(3);
+    endOfHeader = headerProcessorBinary(3);
 
     //skip the file header
     file.seekg(endOfHeader);
 
     //calculate pixel count according to file type
-    int pixelCount = (type == 5) ? width * height : 3 * width * height;
+    int type = image.getType();
+    int pixelCount = (type == 5) ? (image.getWidth() * image.getHeight()) : (3 * image.getWidth() * image.getHeight());
 
     char *pixelGrid = new char[pixelCount];
 
@@ -171,30 +209,41 @@ void FileManager::loadBinary()
 
     delete[] pixelGrid;
     fileStream.close();
+
+    image.setPixels(imageGrid);
+
+    imageGrid.clear();
+
     return;
 }
 
 int FileManager::headerProcessorText(int headerNumberCount) {
     //find the header of the file via counting the numbers
     //ASCII files implementation
+
+    Image& image = Image::getInstance();
+
     int numbersInHeader = 0;
     std::stringstream line;
     std::string word;
     int number;
-    for (int i = 0; i < file.size(); i++) {
+
+    for (int i = 0; i < file.size(); i++)
+    {
         line << file.at(i);
-        while (!line.eof()) {
+        while (!line.eof())
+        {
             line >> word;
             if (std::stringstream(word) >> number && numbersInHeader == 0) {
-                width = number;
+                image.setWidth(number);
                 word = "";
                 numbersInHeader++;
             } else if (std::stringstream(word) >> number && numbersInHeader == 1) {
-                height = number;
+                image.setHeight(number);
                 word = "";
                 numbersInHeader++;
             } else if (std::stringstream(word) >> number && numbersInHeader == 2) {
-                max = number;
+                image.setMax(number);
                 word = "";
                 numbersInHeader++;
             }
@@ -212,24 +261,34 @@ int FileManager::headerProcessorText(int headerNumberCount) {
 int FileManager::headerProcessorBinary(int headerNumberCount) {
     //find the header of the file via counting the numbers
     // binary files implementation
+
+    Image& image = Image::getInstance();
+
     int numbersInHeader = 0;
     std::string word;
     int endOfHeader = 0;
-    while (file >> word && numbersInHeader < headerNumberCount) {
+    while (file >> word && numbersInHeader < headerNumberCount)
+    {
         bool isNumber = true;
-        for (int i = 0; i < word.length(); i++) {
-            if (!std::isdigit(word[i])) {
+        for (int i = 0; i < word.length(); i++)
+        {
+            if (!std::isdigit(word[i]))
+            {
                 isNumber = false;
             }
         }
+
         if (isNumber) {
-            if (numbersInHeader == 0) {
-                width = std::stoi(word);
-            } else if (numbersInHeader == 1) {
-                height = std::stoi(word);
+            if (numbersInHeader == 0)
+            {
+                image.setWidth(std::stoi(word));
+            }
+            else if (numbersInHeader == 1) {
+                image.setHeight(std::stoi(word));
                 endOfHeader = file.tellg();
-            } else {
-                max = std::stoi(word);
+            }
+            else {
+                image.setMax(std::stoi(word));
                 endOfHeader = file.tellg();
             }
             numbersInHeader++;
@@ -246,40 +305,18 @@ void FileManager::getBinaryNumbers(std::vector<int> &allPixels, std::int8_t numb
     allPixels.push_back(number % 2);
 }
 
-int FileManager::closeFile() {
-
-    //ask to save unsaved changes
-    if (unsavedChanges) {
-        return 1;
-    }
+void FileManager::closeFile() {
 
     //clear file associated values
     currentPath.clear();
-    imageGrid.clear();
-    unsavedChanges = false;
     std::cout << "\nSuccessfully closed the file.\n";
-    return 0;
+
 }
 
-void fileManager::closeFile() {
-
-    //ask to save unsaved changes
-    if (unsavedChanges) {
-        std::cout << "Would you like to save the changes?\ny - yes\nother - no\n";
-        char temp;
-        std::cin >> temp;
-        if (temp == 'y') {
-            saveFile();
-        }
-    }
-
-    currentPath.clear();
-    unsavedChanges = false;
-    std::cout << "\nSuccessfully closed the file.\n";
-}
-
-void FileManager::saveTextFile(int type)
+void FileManager::saveTextFile()
 {
+    Image& image = Image::getInstance();
+
     std::fstream fileStream;
     fileStream.open(currentPath, std::ios::out | std::ios::trunc);
 
@@ -291,41 +328,46 @@ void FileManager::saveTextFile(int type)
 
     //write header information into the file
     std::string temp;
-    temp = "P" + std::to_string(type) + "\n";
+    temp = "P" + std::to_string(image.getType()) + "\n";
     fileStream << temp;
     temp.clear();
-    fileStream << (width) << " ";
-    fileStream << (height) << "\n";
+    fileStream << (image.getWidth()) << " ";
+    fileStream << (image.getHeight()) << "\n";
+
+    int type = image.getType();
 
     //if the file is PBM don't include max value
-    if (type != 1) {fileStream << max << "\n";}
+    if (type != 1) {fileStream << image.getMax() << "\n";}
 
     //save pixels into the file
-    for (int i = 0; i < height; i++) {
-
+    for (int i = 0; i < image.getHeight(); i++)
+    {
         //if the file is PPM save all 3 colors
         if (type == 3) {
-            for (int j = 0; j < width * 3; j += 3) {
-                fileStream << imageGrid.at(i * width * 3 + j) << " ";
-                fileStream << imageGrid.at(i * width * 3 + j + 1) << " ";
-                fileStream << imageGrid.at(i * width * 3 + j + 2) << " ";
+            for (int j = 0; j < image.getWidth() * 3; j += 3)
+            {
+                fileStream << image.getPixels().at(i * image.getWidth() * 3 + j) << " ";
+                fileStream << image.getPixels().at(i * image.getWidth() * 3 + j + 1) << " ";
+                fileStream << image.getPixels().at(i * image.getWidth() * 3 + j + 2) << " ";
             }
         }
         else{
-            for (int j = 0; j < (imageGrid.size() / height); j++) {
-                fileStream << imageGrid.at(i * width + j) << " ";
+            for (int j = 0; j < (image.getPixels().size() / image.getHeight()); j++) {
+                fileStream << image.getPixels().at(i * image.getWidth() + j) << " ";
             }
         }
         fileStream << "\n";
     }
 
     fileStream.close();
-    unsavedChanges = false;
     std::cout << "\nSuccessfully saved the changes to " << currentPath << ".\n";
 }
 
-void FileManager::saveBinaryFile(int type)
+void FileManager::saveBinaryFile()
 {
+
+    Image& image = Image::getInstance();
+
     std::fstream fileStream;
     fileStream.open(currentPath, std::ios::out | std::ios::trunc);
 
@@ -336,15 +378,17 @@ void FileManager::saveBinaryFile(int type)
 
     //save header information as ASCII
     std::string temp;
-    temp = "P" + std::to_string(type) + " ";
+    temp = "P" + std::to_string(image.getType()) + " ";
     fileStream << temp;
     temp.clear();
 
-    fileStream << (width) << " ";
-    fileStream << (height) << " ";
+    fileStream << (image.getWidth()) << " ";
+    fileStream << (image.getHeight()) << " ";
+
+    int type = image.getType();
 
     //if the file is PBM don't include max
-    if (type != 4) { fileStream << max << " ";}
+    if (type != 4) { fileStream << image.getMax() << " ";}
     fileStream.close();
 
     fileStream.open(currentPath, std::ios::out | std::ios::app | std::ios::binary);
@@ -356,47 +400,14 @@ void FileManager::saveBinaryFile(int type)
     }
 
     //cast values to char and save to file
-    for (int i = 0; i < imageGrid.size(); i++) {
-        fileStream.write((char *) &(imageGrid[i]), sizeof(char));
+    for (int i = 0; i < image.getPixels().size(); i++) {
+        fileStream.write((char *) &(image.getPixels().at(i)), sizeof(char));
     }
 
     fileStream.close();
-    unsavedChanges = false;
     std::cout << "\nSuccessfully saved the changes to " << currentPath << ".\n";
 }
 
 void FileManager::newFile(std::vector<std::string> args) {
-    //update file path
-    currentPath = commandArguments.at(2);
-    std::cout << "Choose file type:\n1 - PBM\n2 - PGM\n3 - PPM\n";
-    int choice;
-    std::cin >> choice;
-    if (choice == 1) {
-        Pbm* pbm = new Pbm();
-        pbm->createFile(currentPath);
-        imageGrid = pbm->returnImage();
-        std::cout << "\nSuccessfully created a new PBM file.\n";
-    }
-    else if (choice == 2) {
-        createInstances(choice);
-        pgm->createFile(currentPath);
-        imageGrid = pgm->returnImage();
-        std::cout << "\nSuccessfully created a new PGM file.\n";
-    }
-    else if (choice == 3) {
-        createInstances(choice);
-        ppm->createFile(currentPath);
-        imageGrid = ppm->returnImage();
-        std::cout << "\nSuccessfully created a new PPM file.\n";
-    }
-    else {throw std::runtime_error("Error: Invalid file choice.");}
-}
-
-fileStruct FileManager::getFile() {
-    fileStruct file;
-    file.height = this->height;
-    file.width = this->width;
-    file.max = this->max;
-    file.pixels = this->pixels;
-    return file;
+    currentPath = args.at(2);
 }

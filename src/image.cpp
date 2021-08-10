@@ -2,7 +2,7 @@
 
  Image::Image() {}
 
- static Image& Image::getInstance()
+ Image& Image::getInstance()
 {
     static Image instance;
     return instance;
@@ -23,6 +23,11 @@ int Image::getMax()
     return max;
 }
 
+int Image::getType()
+{
+    return type;
+}
+
 std::vector <int> Image::getPixels()
 {
     return pixels;
@@ -41,6 +46,11 @@ void Image::setHeight(int height)
 void Image::setMax(int max)
 {
     this->max = max;
+}
+
+void Image::setType(int type)
+{
+    this->type = type;
 }
 
 void Image::setPixels(std::vector<int> pixels)

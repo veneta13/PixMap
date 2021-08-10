@@ -6,7 +6,7 @@ Pgm::~Pgm() {}
 
 void Pgm::createFile(std::string bgcolor) {
 
-    Image image = Image::getInstance();
+    Image& image = Image::getInstance();
     std::vector<int> imageGrid;
 
     //ensure the hexadecimal color is grayscale
@@ -46,7 +46,7 @@ void Pgm::validateFile() {
 
     //check if file is valid PGM file
 
-    Image image = Image::getInstance();
+    Image& image = Image::getInstance();
 
     if (image.getHeight() < 1 || image.getWidth() < 1) {
         throw std::runtime_error("Error: Invalid height or width.");
@@ -80,7 +80,7 @@ void Pgm::ditherImage() {
 
 void Pgm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) {
 
-    Image image = Image::getInstance();
+    Image& image = Image::getInstance();
 
     //validate crop parameters
     validateCrop(topLeftX, topLeftY, bottomRightX, bottomRightY);
@@ -118,7 +118,7 @@ void Pgm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
 
 void Pgm::resizeImage(int percentage) {
 
-    Image image = Image::getInstance();
+    Image& image = Image::getInstance();
 
     //update width and height to match the percentage
     int newWidth = (image.getWidth() * percentage) / 100;
@@ -130,7 +130,7 @@ void Pgm::resizeImage(int percentage) {
 
 void Pgm::resizeImage(int width, int height) {
 
-    Image image = Image::getInstance();
+    Image& image = Image::getInstance();
 
     //save result into scaledImage
     std::vector<int> scaledImage;
@@ -152,6 +152,6 @@ void Pgm::resizeImage(int width, int height) {
     scaledImage.clear();
 
     //update width and height
-    image.setWidth(newWidth);
-    image.setHeight(newHeight);
+    image.setWidth(width);
+    image.setHeight(height);
 }

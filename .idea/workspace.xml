@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" ENABLED="true" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5ada2eec-64e4-4e5a-8fd1-d560d4732df0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/project.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint-state.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/c_cpp_properties.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/tasks.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/binaryExecutor.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/binaryHandler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/command.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/command.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/dithering.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/dithering.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/fileManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/fileManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/handler.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/handler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/image.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/image.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/pgm.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/pgm.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/ppm.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/ppm.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/textHandler.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/textHandler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/binaryExecutor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/binaryHandler.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/command.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/command.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dithering.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/dithering.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ditheringGrayscale.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ditheringGrayscale.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ditheringRGB.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ditheringRGB.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/executor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/executor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/fileManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/fileManager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/handler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/handler.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/image.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/image.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pbm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/pbm.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pgm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/pgm.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ppm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppm.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/textHandler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/textHandler.cpp" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/fileManager.cpp" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="ProjectId" id="1wOjYEi65DNwMrUtsEYA7YZuJhg" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="cf.first.check.clang-format" value="false" />
+    <property name="cidr.known.project.marker" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.standard" value="" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Uni\OOP\project\src" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5ada2eec-64e4-4e5a-8fd1-d560d4732df0" name="Default Changelist" comment="" />
+      <created>1628336578854</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1628336578854</updated>
+      <workItem from="1628336581959" duration="209000" />
+      <workItem from="1628348455162" duration="1593000" />
+      <workItem from="1628350079407" duration="4235000" />
+      <workItem from="1628511724884" duration="470000" />
+      <workItem from="1628530670166" duration="4873000" />
+      <workItem from="1628586006803" duration="38031000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

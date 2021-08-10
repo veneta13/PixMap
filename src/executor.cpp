@@ -14,7 +14,7 @@ void Executor::execute()
 
 void Executor::commandHandler(std::shared_ptr<Command> command)
 {
-    Handler handler = new Handler();
+    Handler* handler = new Handler();
 
     if (command->tellName().compare("EXIT") == 0){
         if (handler != nullptr){
@@ -24,28 +24,28 @@ void Executor::commandHandler(std::shared_ptr<Command> command)
         return;
     }
     else if (command->tellName().compare("CLOSE") == 0){
-        handler.closeFile();
+        handler->close();
     }
     else if (command->tellName().compare("SAVE") == 0){
-        handler.saveFile();
+        handler->save();
     }
     else if (command->tellName().compare("OPEN") == 0){
-        handler.openFile();
+        handler->open(command->tellArguments());
     }
     else if (command->tellName().compare("SAVEAS") == 0){
-        handler.saveFile();
+        handler->saveAs(command->tellArguments());
     }
     else if (command->tellName().compare("NEW") == 0){
-        handler.newFile();
+        handler->create(command->tellArguments());
     }
     else if (command->tellName().compare("DITHER") == 0){
-        handler.ditherFile();
+        handler->dither();
     }
     else if (command->tellName().compare("CROP") == 0){
-        handler.cropFile();
+        handler->crop(command->tellArguments());
     }
     else if (command->tellName().compare("RESIZE") == 0){
-        handler.resizeFile();
+        handler->resize(command->tellArguments());
     }
     else {
         if (handler != nullptr){
