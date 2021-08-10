@@ -2,33 +2,44 @@
 #define __DITHERING_H__
 
 #include "inc.h"
-#include "netpbm.h"
+#include "image.h"
 
-template<class A>
-class Dithering
-{
+class Dithering {
+
+protected:
     int height;
     int width;
     int max;
-    std::vector<std::vector<int>> newImage;
+    std::vector<int> newImage;
 
-    void floydSteinberg();
-    void falseFloydSteinberg();
-    void jarvisJudiceNinke();
-    void stucki();
-    void atkinson();
-    void burkes();
-    void sierra();
-    void sierraLite();
-    void twoRowSierra();
-    void ordered4x4BayerMatrix();
-    void ordered8x8BayerMatrix();
+    virtual void floydSteinberg() = 0;
 
-    public:
-    Dithering(int width, int height, int max, std::vector<int> imageGrid); //constructor
-    ~Dithering() = default;
-    void dither(int type); //dither
-    std::vector<std::vector<int>> returnImage(); //return image
+    virtual void falseFloydSteinberg() = 0;
+
+    virtual void jarvisJudiceNinke() = 0;
+
+    virtual void stucki() = 0;
+
+    virtual void atkinson() = 0;
+
+    virtual void burkes() = 0;
+
+    virtual void sierra() = 0;
+
+    virtual void sierraLite() = 0;
+
+    virtual void twoRowSierra() = 0;
+
+    virtual void ordered4x4BayerMatrix() = 0;
+
+    virtual void ordered8x8BayerMatrix() = 0;
+
+public:
+
+    Dithering();
+    virtual ~Dithering();
+
+    virtual void dither(int type) = 0;
 };
 
 #endif

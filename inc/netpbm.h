@@ -1,31 +1,30 @@
-/*
-    For the NetPBM class, I used the Template Method design pattern.
-    I put common for all subclasses functions in the NetPBM class, and
-    created virtual functions for all of the other ones.
-*/
-
 #ifndef __NETPBM_H__
 #define __NETPBM_H__
 
 #include "inc.h"
-#include "dithering.h"
+#include "image.h"
+#include "ditheringGrayscale.h"
+#include "ditheringRGB.h"
 
 class NetPBM {
 
-    protected:
+protected:
     int height;
     int width;
     int max;
     std::vector<int> imageGrid;
 
-    int hexToInt (char hex);
-    int ditheringMessage();
-    void validateCrop(int topLeftX, int topLeftY, int& bottomRightX, int& bottomRightY);
-    
-    public:
+    int hexToInt(char hex);
 
-    NetPBM ();
+    int ditheringMessage();
+
+    void validateCrop(int topLeftX, int topLeftY, int &bottomRightX, int &bottomRightY);
+
+public:
+
+    NetPBM();
     virtual ~NetPBM();
+
     std::vector<int> returnImage();
     int returnWidth();
     int returnHeight();
@@ -38,43 +37,5 @@ class NetPBM {
     virtual void resizeImage(int width, int height) = 0;
 };
 
-class Pbm : public NetPBM {
-
-    public:
-    Pbm(int height, int width, std::vector<int>& imageGrid);
-    ~Pbm();
-    void createFile(std::string bgcolor) override; 
-    void validateFile() override;
-    void ditherImage() override;
-    void cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) override;
-    void resizeImage(int percentage) override;
-    void resizeImage(int width, int height) override;
-};
-
-class Pgm : public NetPBM {
-
-    public:
-    Pgm (int height, int width, int max, std::vector<int>& imageGrid);
-    ~Pgm(); 
-    void createFile(std::string bgcolor) override;
-    void validateFile() override;
-    void ditherImage() override;
-    void cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) override;
-    void resizeImage(int percentage) override;
-    void resizeImage(int width, int height) override;
-};
-
-class Ppm : public NetPBM {
-
-    public:
-    Ppm (int height, int width, int max, std::vector <int>& imageGrid);
-    ~Ppm(); 
-    void createFile(std::string bgcolor) override;
-    void validateFile() override;
-    void ditherImage() override;
-    void cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) override;
-    void resizeImage(int percentage) override;
-    void resizeImage(int width, int height) override;
-};
 
 #endif

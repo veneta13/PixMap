@@ -3,7 +3,6 @@
 
 TEST_CASE("Constructor")
 {
-
     std::string exitCommandU = "EXIT";
     std::string exitCommandL = "exit";
     std::string exitCommandR = "eXiT";
