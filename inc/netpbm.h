@@ -1,11 +1,17 @@
-#ifndef __NETPBM_H__
-#define __NETPBM_H__
+#ifndef NETPBM_
+#define NETPBM_
 
 #include "inc.h"
 #include "image.h"
 #include "ditheringGrayscale.h"
 #include "ditheringRGB.h"
 
+/**
+ * @class NetPBM
+ * @brief Base class of PBM, PGM and PPM.
+ *
+ * Handles image manipulation depending on the type of image.
+ */
 class NetPBM {
 
 protected:

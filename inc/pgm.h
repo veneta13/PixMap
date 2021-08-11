@@ -1,8 +1,12 @@
-#ifndef PGMH
-#define PGMH
+#ifndef PGM_
+#define PGM_
 
 #include "netpbm.h"
 
+/**
+ * @class PGM
+ * @brief Handles image manipulation for PGM files.
+ */
 class Pgm : public NetPBM {
 
     public:

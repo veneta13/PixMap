@@ -10,6 +10,8 @@ TextHandler::~TextHandler() {
     myFile = nullptr;
 }
 
+///
+/// @param args - command arguments
 void TextHandler::open(std::vector<std::string> args) {
     Image& image = Image::getInstance();
     FileManager* fileManager = &FileManager::getInstance();
@@ -23,6 +25,8 @@ void TextHandler::save() {
     fileManager->saveTextFile();
 }
 
+///
+/// @param args - command arguments
 void TextHandler::saveAs(std::vector <std::string> args)
 {
     FileManager* fileManager = &FileManager::getInstance();
@@ -30,6 +34,8 @@ void TextHandler::saveAs(std::vector <std::string> args)
     fileManager->saveTextFile();
 }
 
+///
+/// @param args - command arguments
 void TextHandler::create(std::vector<std::string> args) {
     //update file path
     fileManager->newFile(args);
@@ -66,6 +72,8 @@ void TextHandler::create(std::vector<std::string> args) {
     else {throw std::runtime_error("Error: Invalid file choice.");}
 }
 
+///
+/// @param type - type of binary file; 1 - PBM, 2 - PGM , 3 - PPM
 void TextHandler::createInstances(int type) {
     //create instances of the image classes
     if (type == 1 )      { myFile = new Pbm(); }
@@ -77,6 +85,8 @@ void TextHandler::dither() {
     myFile->ditherImage();
 }
 
+///
+/// @param args - command arguments
 void TextHandler::crop(std::vector<std::string> args) {
     //cast arguments to integers
     int temp1 = std::stoi(args.at(0));
@@ -88,6 +98,8 @@ void TextHandler::crop(std::vector<std::string> args) {
     myFile->cropImage(temp1, temp2, temp3, temp4);
 }
 
+///
+/// @param args - command arguments
 void TextHandler::resize(std::vector<std::string> args) {
     //if one argument is provided resize by percentage
     if (args.size() == 1) {

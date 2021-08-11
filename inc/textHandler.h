@@ -1,15 +1,27 @@
-#ifndef TEXTHANDLER
-#define TEXTHANDLER
+#ifndef TEXTHANDLER_
+#define TEXTHANDLER_
 
 #include "baseHandler.h"
 
+/**
+ * @Class TextHandler
+ * @brief Handles test operations.
+ *
+ * Derived class of BaseHandler.
+ */
 class TextHandler : public BaseHandler{
 
+    /**
+     * Keeps pointer to object of the classes, derived of NetPBM.
+     */
     NetPBM* myFile = nullptr;
 
-    void createInstances(int type);
-
+    /**
+     * Keeps pointer to the FileManager object.
+     */
     FileManager* fileManager;
+
+    void createInstances(int type);
 
     public:
     TextHandler();

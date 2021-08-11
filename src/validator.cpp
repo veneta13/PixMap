@@ -2,12 +2,16 @@
 
 Validator::Validator(){}
 
+///
+/// @return get the instance of the Validator class
 Validator& Validator::getInstance()
 {
     static Validator instance;
     return instance;
 }
 
+///
+/// @param name - command name
 void Validator::validateName(std::string& name) {
     //change command name to upper case
     nameToUpper(name);
@@ -20,6 +24,8 @@ void Validator::validateName(std::string& name) {
     throw std::invalid_argument("Error: Command name is invalid. \nHint: Check spelling.");
 }
 
+///
+/// @param name - command name
 void Validator::nameToUpper(std::string& name) {
     // change lowercase letters to uppercase
     for (int i = 0; i < name.length(); i++) {
@@ -29,6 +35,9 @@ void Validator::nameToUpper(std::string& name) {
     }
 }
 
+///
+/// @param name - command name
+/// @param args - command arguments
 void Validator::validateArguments(std::string name, std::vector <std::string> args) {
     //checks if the argument count is correct for this command
 
@@ -54,6 +63,8 @@ void Validator::validateArguments(std::string name, std::vector <std::string> ar
     }
 }
 
+///
+/// @param args - command arguments
 void Validator::validateResize(std::vector <std::string> args) {
     if (args.size() == 1) {
         //if only 1 argument is passed, then it is percentage
@@ -82,6 +93,8 @@ void Validator::validateResize(std::vector <std::string> args) {
     }
 }
 
+///
+/// @param args - command arguments
 void Validator::validateNew(std::vector <std::string> args) {
     //validate width
     for (int i = 0; i < args[0].length(); i++) {
@@ -113,6 +126,8 @@ void Validator::validateNew(std::vector <std::string> args) {
 
 }
 
+///
+/// @param args - command arguments
 void Validator::validateCrop(std::vector <std::string> args) {
     //validate crop rectangle dimensions
     for (int j = 0; j < 4; j++) 

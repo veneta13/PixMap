@@ -8,6 +8,7 @@ DitheringRGB::DitheringRGB()
     this->width = image.getWidth();
     this->max = image.getMax();
 
+    //save Image into newImage
     std::vector<int> line;
     for (int i = 0; i < height; i++)
     {
@@ -25,6 +26,8 @@ DitheringRGB::DitheringRGB()
 
 DitheringRGB::~DitheringRGB() {}
 
+///
+/// @param type - the type of Dithering
 void DitheringRGB::dither(int type) {
     //choose dither type
     if (type == 1)      {floydSteinberg();}
@@ -73,7 +76,8 @@ void DitheringRGB::floydSteinberg()
     newImageToImage();
 }
 
-void DitheringRGB::falseFloydSteinberg() {
+void DitheringRGB::falseFloydSteinberg()
+{
     /*
    Dither according to the False Floyd-Steinberg matrix:
        X   3
@@ -150,7 +154,8 @@ void DitheringRGB::jarvisJudiceNinke()
     newImageToImage();
 }
 
-void DitheringRGB::stucki() {
+void DitheringRGB::stucki()
+{
     /*
    Dither according to the Stucki matrix:
             X   8   4
@@ -195,7 +200,8 @@ void DitheringRGB::stucki() {
     newImageToImage();
 }
 
-void DitheringRGB::atkinson() {
+void DitheringRGB::atkinson()
+{
     /*
    Dither according to the Atkinson matrix:
        X   1   1
@@ -233,7 +239,8 @@ void DitheringRGB::atkinson() {
     newImageToImage();
 }
 
-void DitheringRGB::burkes() {
+void DitheringRGB::burkes()
+{
     /*
     Dither according to the Burkes matrix:
              X   8   4
@@ -270,7 +277,8 @@ void DitheringRGB::burkes() {
     newImageToImage();
 }
 
-void DitheringRGB::sierra() {
+void DitheringRGB::sierra()
+{
     /*
     Dither according to the Sierra matrix:
             X   5   3
@@ -312,7 +320,8 @@ void DitheringRGB::sierra() {
     newImageToImage();
 }
 
-void DitheringRGB::twoRowSierra() {
+void DitheringRGB::twoRowSierra()
+{
     /*
     Dither according to the Two-Row Sierra matrix:
             X   4   3
@@ -349,7 +358,8 @@ void DitheringRGB::twoRowSierra() {
     newImageToImage();
 }
 
-void DitheringRGB::sierraLite() {
+void DitheringRGB::sierraLite()
+{
     /*
     Dither according to the Sierra Lite matrix:
             X   2
@@ -382,7 +392,8 @@ void DitheringRGB::sierraLite() {
     newImageToImage();
 }
 
-void DitheringRGB::ordered4x4BayerMatrix() {
+void DitheringRGB::ordered4x4BayerMatrix()
+{
     //dithering according to the Bayer 4x4 matrix
     unsigned int bayer4x4[4][4] = {{1,  9,  3,  11},
                                    {13, 5,  15, 7},
@@ -415,7 +426,8 @@ void DitheringRGB::ordered4x4BayerMatrix() {
     newImageToImage();
 }
 
-void DitheringRGB::ordered8x8BayerMatrix() {
+void DitheringRGB::ordered8x8BayerMatrix()
+{
     //dither according to the Bayer 8x8 matrix
     unsigned int bayer8x8[8][8] = {{0,  32, 8,  40, 2,  34, 10, 42},
                                    {48, 16, 56, 24, 50, 18, 58, 26},

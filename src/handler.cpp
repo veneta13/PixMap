@@ -9,12 +9,13 @@ Handler::~Handler() {
     delete currentInstance;
 }
 
+///
+/// @param args - command arguments
 void Handler::open(std::vector<std::string> args) {
 
     //ensuring image is clear
     Image& image = Image::getInstance();
     image.clear();
-    unsavedChanges = false;
 
     fileManager->openFile(args);
     if (image.getType() < 4) {currentInstance = new TextHandler();}
@@ -23,7 +24,9 @@ void Handler::open(std::vector<std::string> args) {
     currentInstance->open(args);
 }
 
-void Handler::close()
+///
+/// @param unsavedChanges - boolean flag for unsaved changes
+void Handler::close(bool unsavedChanges)
 {
     Image& image = Image::getInstance();
 
@@ -39,9 +42,10 @@ void Handler::close()
 
     image.clear();
     currentInstance = nullptr;
-    unsavedChanges = false;
 }
 
+///
+/// @param args - command arguments
 void Handler::create(std::vector<std::string> args)
 {
     currentInstance = nullptr;
@@ -59,35 +63,35 @@ void Handler::create(std::vector<std::string> args)
     else {currentInstance = new BinaryHandler();}
 
     currentInstance->create(args);
-    unsavedChanges = true;
 }
 
 void Handler::save()
 {
     currentInstance->save();
-    unsavedChanges = false;
 }
 
+///
+/// @param args - command arguments
 void Handler::saveAs(std::vector <std::string> args)
 {
     currentInstance->saveAs(args);
-    unsavedChanges = false;
 }
 
 void Handler::dither()
 {
     currentInstance->dither();
-    unsavedChanges = true;
 }
 
+///
+/// @param args - command arguments
 void Handler::crop(std::vector<std::string> args)
 {
     currentInstance->crop(args);
-    unsavedChanges = true;
 }
 
+///
+/// @param args - command arguments
 void Handler::resize(std::vector<std::string> args)
 {
     currentInstance->resize(args);
-    unsavedChanges = true;
 }

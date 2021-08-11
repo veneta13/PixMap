@@ -1,8 +1,12 @@
-#ifndef PPMH
-#define PPMH
+#ifndef PPM_
+#define PPM_
 
 #include "netpbm.h"
 
+/**
+ * @class PPM
+ * @brief Handles image manipulation for PPM files.
+ */
 class Ppm : public NetPBM {
 
     public:

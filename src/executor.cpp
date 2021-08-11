@@ -13,6 +13,8 @@ void Executor::execute()
     commandHandler(command);
 }
 
+///
+/// @param command - pointer to the current command
 void Executor::commandHandler(std::shared_ptr<Command> command)
 {
     if (command->tellName().compare("EXIT") == 0){
@@ -23,28 +25,36 @@ void Executor::commandHandler(std::shared_ptr<Command> command)
         return;
     }
     else if (command->tellName().compare("CLOSE") == 0){
-        handler->close();
+        handler->close(unsavedChanges);
+        unsavedChanges = false;
     }
     else if (command->tellName().compare("SAVE") == 0){
         handler->save();
+        unsavedChanges = false;
     }
     else if (command->tellName().compare("OPEN") == 0){
         handler->open(command->tellArguments());
+        unsavedChanges = true;
     }
     else if (command->tellName().compare("SAVEAS") == 0){
         handler->saveAs(command->tellArguments());
+        unsavedChanges = false;
     }
     else if (command->tellName().compare("NEW") == 0){
         handler->create(command->tellArguments());
+        unsavedChanges = true;
     }
     else if (command->tellName().compare("DITHER") == 0){
         handler->dither();
+        unsavedChanges = true;
     }
     else if (command->tellName().compare("CROP") == 0){
         handler->crop(command->tellArguments());
+        unsavedChanges = true;
     }
     else if (command->tellName().compare("RESIZE") == 0){
         handler->resize(command->tellArguments());
+        unsavedChanges = true;
     }
     else {
         if (handler != nullptr){

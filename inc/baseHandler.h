@@ -1,5 +1,5 @@
-#ifndef PROJECT_BASEHANDLER_H
-#define PROJECT_BASEHANDLER_H
+#ifndef BASEHANDLER_
+#define BASEHANDLER_
 
 #include "inc.h"
 #include "fileManager.h"
@@ -7,6 +7,13 @@
 #include "pgm.h"
 #include "ppm.h"
 #include "image.h"
+
+/**
+ * @class BaseHandler
+ * @brief Base class for TextHandler and BinaryHandler.
+ *
+ * Used in Handler to handle pointers objects of derived types.
+ */
 
 class BaseHandler {
 

@@ -1,8 +1,15 @@
-#ifndef COMMANDR
-#define COMMANDR
+#ifndef COMMANDREADER_
+#define COMMANDREADER_
 
 #include "inc.h"
 #include "command.h"
+
+/**
+ * @class CommandReader
+ * @brief Creates commands.
+ *
+ * Implements the Singleton design pattern.
+ */
 
 class CommandReader {
     CommandReader();

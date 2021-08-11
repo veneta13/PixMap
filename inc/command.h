@@ -1,9 +1,13 @@
-#ifndef COMMANDH
-#define COMMANDH
+#ifndef COMMAND_
+#define COMMAND_
 
 #include "inc.h"
 #include "validator.h"
 
+/**
+ * @Class Command
+ * @brief Keeps command name and arguments.
+ */
 class Command {
     
     std::string name;

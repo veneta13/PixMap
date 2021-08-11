@@ -1,8 +1,14 @@
-#ifndef PROJECT_IMAGE_H
-#define PROJECT_IMAGE_H
+#ifndef IMAGE_
+#define IMAGE_
 
 #include "inc.h"
 
+/**
+ * @class Image
+ * @brief Keep the information about the currently loaded image.
+ *
+ * Implements the Singleton design pattern.
+ */
 class Image {
 
     Image();
