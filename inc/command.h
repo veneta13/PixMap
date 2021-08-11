@@ -9,7 +9,6 @@
  * @brief Keeps command name and arguments.
  */
 class Command {
-    
     std::string name;
     std::vector <std::string> args;
     Validator* validator = nullptr;

@@ -42,4 +42,4 @@ public:
     void dither(int type);
 };
 
-#endif //PROJECT_DITHERINGRGB_H
+#endif
