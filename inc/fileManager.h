@@ -17,8 +17,8 @@ public:
     void loadBinaryPBM();
     void loadBinary();
 
-    int headerProcessorText(int headerNumberCount);
-    int headerProcessorBinary(int headerNumberCount);
+    int headerProcessorText(int headerNumberCount, std::vector <std::string>& file);
+    int headerProcessorBinary(int headerNumberCount, std::stringstream& file);
 
     void getBinaryNumbers(std::vector<int> &allPixels, std::int8_t number);
 

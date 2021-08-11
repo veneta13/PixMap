@@ -2,6 +2,7 @@
 
 Executor::Executor() 
 {
+    handler = new Handler();
     commandReader = &CommandReader::getInstance();
 }
 
@@ -14,8 +15,6 @@ void Executor::execute()
 
 void Executor::commandHandler(std::shared_ptr<Command> command)
 {
-    Handler* handler = new Handler();
-
     if (command->tellName().compare("EXIT") == 0){
         if (handler != nullptr){
             delete handler;
@@ -54,6 +53,8 @@ void Executor::commandHandler(std::shared_ptr<Command> command)
         }
         throw std::runtime_error("Error: Could not execute the command.");
     }
+
+    execute();
 }
 
 void Executor::log()

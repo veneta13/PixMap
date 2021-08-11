@@ -1,5 +1,7 @@
 #include "../inc/fileManager.h"
 
+ FileManager::FileManager() {}
+
  FileManager& FileManager::getInstance(){
     static FileManager instance;
     return instance;
@@ -94,11 +96,10 @@ void FileManager::loadText()
     //for PBM file only search for 2 numbers in the header
     int type = image.getType();
     if (type == 1) {
-        //TODO add file in declaration of header processor!!!!!!!!!!!!!!!!!
-        endOfHeader = headerProcessorText(2);
+        endOfHeader = headerProcessorText(2, file);
     }
     else {
-        endOfHeader = headerProcessorText(3);
+        endOfHeader = headerProcessorText(3, file);
     }
 
     std::stringstream lineStream;
@@ -141,7 +142,7 @@ void FileManager::loadBinaryPBM(){
     //read the whole file into the file stringstream
     file << fileStream.rdbuf();
 
-    endOfHeader = headerProcessorBinary(2);
+    endOfHeader = headerProcessorBinary(2, file);
     file.seekg(endOfHeader);
     int pixelCount;
 
@@ -188,7 +189,7 @@ void FileManager::loadBinary()
     file << fileStream.rdbuf();
 
     //find the end of the file header
-    endOfHeader = headerProcessorBinary(3);
+    endOfHeader = headerProcessorBinary(3, file);
 
     //skip the file header
     file.seekg(endOfHeader);
@@ -217,7 +218,7 @@ void FileManager::loadBinary()
     return;
 }
 
-int FileManager::headerProcessorText(int headerNumberCount) {
+int FileManager::headerProcessorText(int headerNumberCount, std::vector<std::string>& file) {
     //find the header of the file via counting the numbers
     //ASCII files implementation
 
@@ -258,7 +259,7 @@ int FileManager::headerProcessorText(int headerNumberCount) {
     return -1;
 }
 
-int FileManager::headerProcessorBinary(int headerNumberCount) {
+int FileManager::headerProcessorBinary(int headerNumberCount, std::stringstream& file) {
     //find the header of the file via counting the numbers
     // binary files implementation
 

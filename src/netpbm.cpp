@@ -109,16 +109,3 @@ void NetPBM::validateCrop(int topLeftX, int topLeftY, int &bottomRightX, int &bo
     }
 
 }
-
-//TODO delete ->
-int NetPBM::returnWidth() {
-    return width;
-}
-
-int NetPBM::returnHeight() {
-    return height;
-}
-
-std::vector<int> NetPBM::returnImage() {
-    return imageGrid;
-}

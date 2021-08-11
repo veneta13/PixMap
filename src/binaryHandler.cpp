@@ -30,6 +30,13 @@ void BinaryHandler::save() {
     fileManager->saveBinaryFile();
 }
 
+void BinaryHandler::saveAs(std::vector <std::string> args)
+{
+    FileManager* fileManager = &FileManager::getInstance();
+    fileManager->openFile(args);
+    fileManager->saveBinaryFile();
+}
+
 void BinaryHandler::create(std::vector<std::string> args) {
     //update file path
     fileManager->newFile(args);

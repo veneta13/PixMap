@@ -23,6 +23,13 @@ void TextHandler::save() {
     fileManager->saveTextFile();
 }
 
+void TextHandler::saveAs(std::vector <std::string> args)
+{
+    FileManager* fileManager = &FileManager::getInstance();
+    fileManager->openFile(args);
+    fileManager->saveTextFile();
+}
+
 void TextHandler::create(std::vector<std::string> args) {
     //update file path
     fileManager->newFile(args);

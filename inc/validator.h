@@ -19,7 +19,7 @@ class Validator{
     static Validator& getInstance();
     Validator(Validator const&) = delete;
     void operator=(Validator const&) = delete;
-    void validateName(std::string name);
+    void validateName(std::string& name);
     void validateArguments(std::string name, std::vector <std::string> args); //check if arguments are valid
 };
 

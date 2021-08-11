@@ -7,6 +7,8 @@
 
 class Executor {
 
+    Handler* handler;
+
     CommandReader* commandReader;
     void log();
     void commandHandler(std::shared_ptr<Command> command);

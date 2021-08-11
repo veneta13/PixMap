@@ -12,7 +12,7 @@
 
 class Handler {
 
-    Handler* currentInstance;
+    BaseHandler* currentInstance;
 
     bool unsavedChanges;
     void getFileType();

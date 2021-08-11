@@ -8,7 +8,7 @@ Validator& Validator::getInstance()
     return instance;
 }
 
-void Validator::validateName(std::string name) {
+void Validator::validateName(std::string& name) {
     //change command name to upper case
     nameToUpper(name);
 

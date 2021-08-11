@@ -5,8 +5,8 @@ Command::Command(){
 }
 
 void Command::setName(std::string name) {
-    this->name = name;
     validator->validateName(name);
+    this->name = name;
 }
 
 void Command::setArguments(std::vector <std::string> args) {
