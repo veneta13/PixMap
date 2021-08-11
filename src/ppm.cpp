@@ -29,7 +29,7 @@ void Ppm::createFile(std::string bgcolor) {
     }
 
     //save  pixels
-    for (int i = 0; i < height * width * 3; i++) {
+    for (int i = 0; i < image.getHeight() * image.getWidth() * 3; i++) {
         if (i % 2 == 0) {
             imageGrid.push_back(rgb[0]);
         } else if (i % 2 == 1) {
@@ -71,12 +71,14 @@ void Ppm::validateFile() {
 
 void Ppm::ditherImage() {
     //create a Dithering object
-    DitheringRGB dithering;
+    dithering = new DitheringRGB();
 
     int temp = ditheringMessage();
     //dither using the object
 
-    dithering.dither(temp);
+    dithering->dither(temp);
+    delete dithering;
+    dithering = nullptr;
 }
 
 void Ppm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) {
@@ -88,19 +90,17 @@ void Ppm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
 
     //save result to croppedImage
     std::vector <std::vector<int>> croppedImage;
-    std::vector<int> line;
 
-    //save imageGrid to croppedImage
+    std::vector<int> line;
     for (int i = 0; i < image.getHeight(); i++)
     {
         for (int j = 0; j < image.getWidth() * 3; j += 3)
         {
             for (int z = 0; z < 3; z++)
             {
-                line.push_back(image.getPixels().at(i * width * 3 + j + z));
+                line.push_back(image.getPixels().at(i * image.getWidth() * 3 + j + z));
             }
         }
-
         croppedImage.push_back(line);
         line.clear();
     }
@@ -108,20 +108,20 @@ void Ppm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
     image.clearPixels();
     std::vector<int> imageGrid;
 
-    //save cropped part to imageGrid
-    for (int i = 0; i < image.getHeight(); i++)
+    for (int i = topLeftY; i < bottomRightY; i++)
     {
-        for (int j = 0; j < image.getWidth() * 3; j += 3)
+        for (int j = topLeftX * 3; j < bottomRightX * 3; j+=3)
         {
-            if (i < topLeftY && i > bottomRightY && j > topLeftX * 3 && j < bottomRightX * 3) {
-                imageGrid.push_back(croppedImage.at(i).at(j));
-                imageGrid.push_back(croppedImage.at(i).at(j + 1));
-                imageGrid.push_back(croppedImage.at(i).at(j + 2));
+            for (int z = 0; z < 3; z++)
+            {
+                imageGrid.push_back(croppedImage.at(i).at(j + z));
             }
         }
     }
 
     image.setPixels(imageGrid);
+    image.setWidth(bottomRightX - topLeftX);
+    image.setHeight(bottomRightY - topLeftY);
     imageGrid.clear();
     croppedImage.clear();
 }
@@ -145,21 +145,21 @@ void Ppm::resizeImage(int width, int height) {
     //save scaledImage into scaledImage
     std::vector<int> scaledImage;
 
+    double scaleW = (double)width/ (double)image.getWidth();
+    double scaleH = (double)height/ (double)image.getHeight();
+
     for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width * 3; x++) {
-            //scale
-            int srcX = int(round(float(x) / float(width * 3) * float(this->width * 3)));
-            int srcY = int(round(float(y) / float(width * 3) * float(this->height * 3)));
-            srcX = std::min(srcX, (this->width) * 3 - 4);
-            srcY = std::min(srcY, (this->height) * 3 - 4);
-            //save new image
-            scaledImage.push_back(image.getPixels().at(this->width * srcY + srcX));
+        for (int x = 0; x < width; x++) {
+            int match = (((int)( y / scaleH ) * (image.getWidth()*3)) + ((int)(x/scaleW)*3));
+
+            scaledImage.push_back(image.getPixels().at(match));
+            scaledImage.push_back(image.getPixels().at(match+1));
+            scaledImage.push_back(image.getPixels().at(match+2));
         }
     }
 
-    imageGrid.clear();
-    //save scaledImage into imageGrid
-    imageGrid = scaledImage;
+    image.clearPixels();
+    image.setPixels(scaledImage);
     scaledImage.clear();
 
     //update width and height

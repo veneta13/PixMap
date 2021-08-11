@@ -4,8 +4,8 @@
 #include "inc.h"
 #include "dithering.h"
 
-class DitheringGrayscale : private Dithering{
-protected:
+class DitheringGrayscale : public Dithering{
+private:
     void floydSteinberg();
 
     void falseFloydSteinberg();

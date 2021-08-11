@@ -48,14 +48,16 @@ void Handler::create(std::vector<std::string> args)
     fileManager->newFile(args);
 
     int choice = -1;
-    while (choice != 1 || choice != 2){
+    do{
         std::cout << "Choose file type:\n1 - Text\n2 - Binary\n";
         std::cin.clear();
         std::cin.ignore(10000000, '\n');
         std::cin >> choice;
-    }
+    } while (choice != 1 && choice != 2);
+
     if (choice == 1){currentInstance = new TextHandler();}
     else {currentInstance = new BinaryHandler();}
+
     currentInstance->create(args);
     unsavedChanges = true;
 }

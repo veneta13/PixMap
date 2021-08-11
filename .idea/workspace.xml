@@ -10,8 +10,61 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5ada2eec-64e4-4e5a-8fd1-d560d4732df0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/images/gerrymander1.pbm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/pgm/lena200by200.pgm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/pgm/lena2RSierra.pgm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/pgm/lena300.pgm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/pgm/lena4x4.pgm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/pgm/lena50%.pgm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/pgm/lena8x8.pgm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/pgm/lenaAtkinson.pgm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/pgm/lenaBurkes.pgm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/pgm/lenaFFS.pgm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/pgm/lenaFS.pgm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/pgm/lenaJJN.pgm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/pgm/lenaSierra.pgm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/pgm/lenaSierraLite.pgm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/pgm/lenaStucki.pgm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/ppm/snail150.ppm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/ppm/snail4x4.ppm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/ppm/snail50%.ppm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/ppm/snail50by50.ppm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/ppm/snail8x8.ppm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/ppm/snailAtkinson.ppm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/ppm/snailBurkes.ppm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/ppm/snailFFS.ppm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/ppm/snailFS.ppm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/ppm/snailJJN.ppm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/ppm/snailSierra.ppm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/ppm/snailSierraLite.ppm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/ppm/snailStucki.ppm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ready/ppm/snailTRSierra.ppm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/snail3.ppm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/asciii2.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/baboon5.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/borabora6.ppm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/feep2.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/house6.ppm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/j1.pbm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/marbles4.pbm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/mire6.ppm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/pepper2.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/rgb3.ppm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/tom4.pbm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/tracks2.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/tulips6.ppm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/ditheringGrayscale.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/ditheringGrayscale.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/ditheringRGB.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/ditheringRGB.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/image.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/image.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/netpbm.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/netpbm.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ditheringGrayscale.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ditheringGrayscale.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ditheringRGB.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ditheringRGB.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/handler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/handler.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/netpbm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/netpbm.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pbm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/pbm.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pgm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/pgm.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ppm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppm.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +120,13 @@
       <recent name="D:\Uni\OOP\project\src" />
     </key>
   </component>
+  <component name="RunManager">
+    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -84,6 +144,7 @@
       <workItem from="1628658351206" duration="3968000" />
       <workItem from="1628665117439" duration="515000" />
       <workItem from="1628666896364" duration="173000" />
+      <workItem from="1628670947784" duration="28634000" />
     </task>
     <servers />
   </component>

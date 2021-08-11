@@ -70,7 +70,7 @@ void DitheringRGB::floydSteinberg()
              }
         }
     }
-
+    newImageToImage();
 }
 
 void DitheringRGB::falseFloydSteinberg() {
@@ -102,6 +102,7 @@ void DitheringRGB::falseFloydSteinberg() {
         }
     }
 
+    newImageToImage();
 }
 
 void DitheringRGB::jarvisJudiceNinke()
@@ -146,7 +147,7 @@ void DitheringRGB::jarvisJudiceNinke()
             }
         }
     }
-
+    newImageToImage();
 }
 
 void DitheringRGB::stucki() {
@@ -191,6 +192,7 @@ void DitheringRGB::stucki() {
         }
     }
 
+    newImageToImage();
 }
 
 void DitheringRGB::atkinson() {
@@ -228,6 +230,7 @@ void DitheringRGB::atkinson() {
         }
     }
 
+    newImageToImage();
 }
 
 void DitheringRGB::burkes() {
@@ -264,6 +267,7 @@ void DitheringRGB::burkes() {
         }
     }
 
+    newImageToImage();
 }
 
 void DitheringRGB::sierra() {
@@ -305,6 +309,7 @@ void DitheringRGB::sierra() {
         }
     }
 
+    newImageToImage();
 }
 
 void DitheringRGB::twoRowSierra() {
@@ -341,6 +346,7 @@ void DitheringRGB::twoRowSierra() {
         }
     }
 
+    newImageToImage();
 }
 
 void DitheringRGB::sierraLite() {
@@ -372,6 +378,8 @@ void DitheringRGB::sierraLite() {
             }
         }
     }
+
+    newImageToImage();
 }
 
 void DitheringRGB::ordered4x4BayerMatrix() {
@@ -381,27 +389,30 @@ void DitheringRGB::ordered4x4BayerMatrix() {
                                    {4,  12, 2,  10},
                                    {16, 8,  14, 6}};
 
-    int pixel; //current pixel
-    int factor = 16;
-    int offset = (16 * (16 / 2) - 0.5) / (16 * 16); //calculate offset
-    int error = max / factor; //error value
+    int channelValues = 2;
+    int offset = (4 * (4 / 2) - 0.5); //calculate offset
+    int error = max / channelValues / 16; //error value
 
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width * 3; x += 3)
         {
             //Red pixel
-            pixel = newImage[y][x];
-            pixel += error * (bayer4x4[x % 16][y % 16] - offset);
+            int& pixel1 = newImage[y][x];
+            pixel1 += (error * (bayer4x4[x % 16][y % 16] - offset));
+            pixel1 = round(channelValues * pixel1 / 255) * (255 / channelValues);
             //Green pixel
-            pixel = newImage[y][x + 1];
-            pixel += error * (bayer4x4[x % 16][y % 16] - offset);
+            int& pixel2 = newImage[y][x + 1];
+            pixel2 += (error * (bayer4x4[x % 16][y % 16] - offset));
+            pixel2 = round(channelValues * pixel2 / 255) * (255 / channelValues);
             //Green pixel
-            pixel = newImage[y][x + 2];
-            pixel += error * (bayer4x4[x % 16][y % 16] - offset);
+            int& pixel3 = newImage[y][x + 2];
+            pixel3 += (error * (bayer4x4[x % 16][y % 16] - offset));
+            pixel3 = round(channelValues * pixel3 / 255) * (255 / channelValues);
         }
     }
 
+    newImageToImage();
 }
 
 void DitheringRGB::ordered8x8BayerMatrix() {
@@ -415,25 +426,29 @@ void DitheringRGB::ordered8x8BayerMatrix() {
                                    {15, 47, 7,  39, 13, 45, 5,  37},
                                    {63, 31, 55, 23, 61, 29, 53, 21}};
 
-    int pixel; //current pixel
-    int factor = 64;
-    int offset = (64 * (64 / 2) - 0.5) / (64 * 64); //calculate offset
-    int error = max / factor; //calculate error
+
+    int channelValues = 2;
+    int offset = (8 * (8 / 2) - 0.5); //calculate offset
+    int error = max / channelValues / 64; //error value
 
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width * 3; x += 3)
         {
             //Red pixel
-            pixel = newImage[y][x];
-            pixel += error * (bayer8x8[x % 64][y % 64] - offset);
+            int& pixel1 = newImage[y][x];
+            pixel1 += (error * (bayer8x8[x % 64][y % 64] - offset));
+            pixel1 = round(channelValues * pixel1 / 255) * (255 / channelValues);
             //Green pixel
-            pixel = newImage[y][x + 1];
-            pixel += error * (bayer8x8[x % 64][y % 64] - offset);
+            int& pixel2 = newImage[y][x + 1];
+            pixel2 += (error * (bayer8x8[x % 64][y % 64] - offset));
+            pixel2 = round(channelValues * pixel2 / 255) * (255 / channelValues);
             //Green pixel
-            pixel = newImage[y][x + 2];
-            pixel += error * (bayer8x8[x % 64][y % 64] - offset);
+            int& pixel3 = newImage[y][x + 2];
+            pixel3 += (error * (bayer8x8[x % 64][y % 64] - offset));
+            pixel3 = round(channelValues * pixel3 / 255) * (255 / channelValues);
         }
     }
+    newImageToImage();
 }
 

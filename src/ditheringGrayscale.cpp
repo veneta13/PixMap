@@ -2,6 +2,7 @@
 
 DitheringGrayscale::DitheringGrayscale()
 {
+    //save a copy in the image in the image matrix
     Image& image = Image::getInstance();
 
     this->height = image.getHeight();
@@ -365,17 +366,18 @@ void DitheringGrayscale::ordered4x4BayerMatrix() {
                                    {4,  12, 2,  10},
                                    {16, 8,  14, 6}};
 
-    int pixel; //current pixel
-    int factor = 16;
-    int offset = (16 * (16 / 2) - 0.5) / (16 * 16); //calculate offset
-    int error = max / factor; //error value
+
+    int channelValues = 2;
+    int offset = (4 * (4 / 2) - 0.5); //calculate offset
+    int error = max / channelValues / 16; //error value
 
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)
         {
-            pixel = newImage[y][x];
+            int& pixel = newImage[y][x];
             pixel += (error * (bayer4x4[x % 16][y % 16] - offset));
+            pixel = round(channelValues * pixel / 255) * (255 / channelValues);
         }
     }
 
@@ -394,17 +396,18 @@ void DitheringGrayscale::ordered8x8BayerMatrix() {
                                    {15, 47, 7,  39, 13, 45, 5,  37},
                                    {63, 31, 55, 23, 61, 29, 53, 21}};
 
-    int pixel; //current pixel
-    int factor = 64;
-    int offset = (64 * (64 / 2) - 0.5) / (64 * 64); //calculate offset
-    int error = max / factor; //calculate error
+
+    int channelValues = 2;
+    int offset = (8 * (8 / 2) - 0.5); //calculate offset
+    int error = max / channelValues / 64; //error value
 
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)
         {
-            pixel = newImage[y][x];
+            int& pixel = newImage[y][x];
             pixel += (error * (bayer8x8[x % 64][y % 64] - offset));
+            pixel = round(channelValues * pixel / 255) * (255 / channelValues);
         }
     }
 

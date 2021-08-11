@@ -9,10 +9,7 @@
 class NetPBM {
 
 protected:
-    int height;
-    int width;
-    int max;
-    std::vector<int> imageGrid;
+    Dithering* dithering;
 
     int hexToInt(char hex);
 

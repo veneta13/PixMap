@@ -69,13 +69,16 @@ void Pgm::validateFile() {
 }
 
 void Pgm::ditherImage() {
+    std::cout << "Loading...";
     //create a Dithering object
-    DitheringGrayscale dithering;
-
+    dithering = new DitheringGrayscale();
     int temp = ditheringMessage();
     //dither using the object
 
-    dithering.dither(temp);
+    dithering->dither(temp);
+
+    delete dithering;
+    dithering = nullptr;
 }
 
 void Pgm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) {
@@ -92,7 +95,7 @@ void Pgm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
     {
         for (int j = 0; j < image.getWidth(); j++)
         {
-            line.push_back(image.getPixels().at(i * width + j));
+            line.push_back(image.getPixels().at(i * image.getWidth() + j));
         }
         croppedImage.push_back(line);
         line.clear();
@@ -101,17 +104,17 @@ void Pgm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
     image.clearPixels();
     std::vector<int> imageGrid;
 
-    for (int i = 0; i < height; i++)
+    for (int i = topLeftY; i < bottomRightY; i++)
     {
-        for (int j = 0; j < width; j++)
+        for (int j = topLeftX; j < bottomRightX; j++)
         {
-            if (i < topLeftY && i > bottomRightY && j > topLeftX && j < bottomRightX) {
-                imageGrid.push_back(croppedImage.at(i).at(j));
-            }
+            imageGrid.push_back(croppedImage.at(i).at(j));
         }
     }
 
     image.setPixels(imageGrid);
+    image.setWidth(bottomRightX - topLeftX);
+    image.setHeight(bottomRightY - topLeftY);
     imageGrid.clear();
     croppedImage.clear();
 }
@@ -138,11 +141,11 @@ void Pgm::resizeImage(int width, int height) {
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             //scale
-            int srcX = int(round(float(x) / float(width) * float(this->width)));
-            int srcY = int(round(float(y) / float(width) * float(this->height)));
-            srcX = std::min(srcX, this->width - 1);
-            srcY = std::min(srcY, this->height - 1);
-            scaledImage.push_back(image.getPixels().at(this->width * srcY + srcX));
+            int srcX = int(round(float(x) / float(width) * float(image.getWidth())));
+            int srcY = int(round(float(y) / float(width) * float(image.getHeight())));
+            srcX = std::min(srcX, image.getWidth() - 1);
+            srcY = std::min(srcY, image.getHeight() - 1);
+            scaledImage.push_back(image.getPixels().at(image.getWidth() * srcY + srcX));
         }
     }
 

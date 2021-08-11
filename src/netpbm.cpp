@@ -54,38 +54,40 @@ int NetPBM::hexToInt(char hex)
     return -1;
 }
 
-void NetPBM::validateCrop(int topLeftX, int topLeftY, int &bottomRightX, int &bottomRightY) {
+void NetPBM::validateCrop(int topLeftX, int topLeftY, int& bottomRightX, int &bottomRightY) {
+
+    Image& image = Image::getInstance();
+
     //if both coordinates are out of bounds the operation is not possible
     if (topLeftX < 1 || topLeftY < 1 || bottomRightX < 1 || bottomRightY < 1) {
         throw std::invalid_argument("Error: Coordinates must be positive.");
     }
 
-    if (width * height == imageGrid.size()) {
-        if ((topLeftX > width && bottomRightX > width) ||
-            (bottomRightY > height && topLeftY > height)) {
+    //if the format is grayscale
+    if (image.getWidth() * image.getWidth() == image.getPixels().size()) {
+
+        if ((topLeftX > image.getWidth() && bottomRightX > image.getWidth()) ||
+            (bottomRightY > image.getHeight() && topLeftY > image.getHeight())){
             throw std::runtime_error(
-                    "Error: Rectangle is out of bounds. Hint: Enter top left and bottom right coordinates.");
-        }
+                    "Error: Rectangle is out of bounds. Hint: Enter top left and bottom right coordinates.");}
 
         if (topLeftX > bottomRightX) {
-            throw std::runtime_error("Error: The X coordinate of top left is greater than bottom right.");
-        }
+            throw std::runtime_error("Error: The X coordinate of top left is greater than bottom right.");}
 
-        if (bottomRightY > topLeftY) {
-            throw std::runtime_error("Error: The Y coordinate of bottom right is greater than top left.");
-        }
+        if (topLeftY > bottomRightY) {
+            throw std::runtime_error("Error: The Y coordinate of top left is greater than bottom right.");}
 
         //if only one coordinate is out of bounds resize to bounds
-        if (bottomRightX > width) {
-            bottomRightX = width;
+        if (bottomRightX > image.getWidth()) {
+            bottomRightX = image.getWidth();
         }
 
-        if (bottomRightY > height) {
-            bottomRightY = height;
+        if (bottomRightY > image.getHeight()) {
+            bottomRightY = image.getHeight();
         }
     } else {
-        if ((topLeftX > width * 3 && bottomRightX > width * 3) ||
-            (bottomRightY > height && topLeftY > height)) {
+        if ((topLeftX > image.getWidth() * 3 && bottomRightX > image.getWidth() * 3) ||
+            (bottomRightY > image.getHeight() && topLeftY > image.getHeight())) {
             throw std::runtime_error(
                     "Error: Rectangle is out of bounds. Hint: Enter top left and bottom right coordinates.");
         }
@@ -94,17 +96,17 @@ void NetPBM::validateCrop(int topLeftX, int topLeftY, int &bottomRightX, int &bo
             throw std::runtime_error("Error: The X coordinate of top left is greater than bottom right.");
         }
 
-        if (bottomRightY > topLeftY) {
-            throw std::runtime_error("Error: The Y coordinate of bottom right is greater than top left.");
+        if (topLeftY > bottomRightY) {
+            throw std::runtime_error("Error: The Y coordinate of top left is greater than bottom right.");
         }
 
         //if only one coordinate is out of bounds resize to bounds
-        if (bottomRightX > width * 3) {
-            bottomRightX = width * 3;
+        if (bottomRightX > image.getWidth() * 3) {
+            bottomRightX = image.getWidth() * 3;
         }
 
-        if (bottomRightY > height) {
-            bottomRightY = height;
+        if (bottomRightY > image.getHeight()) {
+            bottomRightY = image.getHeight();
         }
     }
 

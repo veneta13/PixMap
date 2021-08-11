@@ -8,7 +8,7 @@ class Image {
     Image();
     int width;
     int height;
-    int max;
+    int max = 1;
     int type;
     std::vector <int> pixels;
 
