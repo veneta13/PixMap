@@ -10,23 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5ada2eec-64e4-4e5a-8fd1-d560d4732df0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inc/baseHandler.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/baseHandler.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inc/binaryHandler.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/binaryHandler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inc/executor.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/executor.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inc/fileManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/fileManager.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inc/handler.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/handler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inc/textHandler.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/textHandler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inc/validator.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/validator.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/binaryHandler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/binaryHandler.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/command.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/command.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/executor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/executor.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/fileManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/fileManager.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/handler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/handler.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/textHandler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/textHandler.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/validator.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/validator.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,13 +67,6 @@
       <recent name="D:\Uni\OOP\project\src" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -103,7 +81,9 @@
       <workItem from="1628511724884" duration="470000" />
       <workItem from="1628530670166" duration="4873000" />
       <workItem from="1628586006803" duration="38150000" />
-      <workItem from="1628658351206" duration="3582000" />
+      <workItem from="1628658351206" duration="3968000" />
+      <workItem from="1628665117439" duration="515000" />
+      <workItem from="1628666896364" duration="173000" />
     </task>
     <servers />
   </component>

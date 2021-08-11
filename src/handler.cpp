@@ -21,7 +21,6 @@ void Handler::open(std::vector<std::string> args) {
     else {currentInstance = new BinaryHandler();}
 
     currentInstance->open(args);
-    std::cout<< typeid(*currentInstance).name();
 }
 
 void Handler::close()
@@ -63,7 +62,6 @@ void Handler::create(std::vector<std::string> args)
 
 void Handler::save()
 {
-    std::cout<< typeid(*currentInstance).name();
     currentInstance->save();
     unsavedChanges = false;
 }
