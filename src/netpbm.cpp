@@ -6,6 +6,8 @@ NetPBM::NetPBM() {}
 
 NetPBM::~NetPBM() {}
 
+///
+/// @return the type of dithering to be executed
 int NetPBM::ditheringMessage() {
     //print message and return chosen algorithm
     std::cout << "Choose a dithering algorithm:\n"
@@ -28,6 +30,9 @@ int NetPBM::ditheringMessage() {
     return choice;
 }
 
+///
+/// @param hex - hex value
+/// @return the decimal value
 int NetPBM::hexToInt(char hex)
 {
     //convert hex value to integer
@@ -54,6 +59,11 @@ int NetPBM::hexToInt(char hex)
     return -1;
 }
 
+///
+/// @param topLeftX - top left x coordinates
+/// @param topLeftY - top left y coordinates
+/// @param bottomRightX - bottom right x coordinates
+/// @param bottomRightY - bottom right y coordinates
 void NetPBM::validateCrop(int topLeftX, int topLeftY, int& bottomRightX, int &bottomRightY) {
 
     Image& image = Image::getInstance();

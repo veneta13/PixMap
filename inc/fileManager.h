@@ -1,11 +1,21 @@
-#ifndef FILEMANAGER
-#define FILEMANAGER
+#ifndef FILEMANAGER_
+#define FILEMANAGER_
 
 #include "inc.h"
 #include "image.h"
 
+/**
+ * @class FileManager
+ * @brief handler IO file operations
+ *
+ * Implements the Singleton design pattern.
+ */
 class FileManager {
     FileManager();
+
+    /**
+     * the path the currently opened file
+     */
     std::string currentPath;
 
 public:

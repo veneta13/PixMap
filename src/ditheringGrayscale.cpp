@@ -23,6 +23,8 @@ DitheringGrayscale::DitheringGrayscale()
 
 DitheringGrayscale::~DitheringGrayscale() {}
 
+///
+/// @param type - the type of Dithering
 void DitheringGrayscale::dither(int type) {
     //choose dither type
     if (type == 1)      {floydSteinberg();}
@@ -70,7 +72,8 @@ void DitheringGrayscale::floydSteinberg()
     newImageToImage();
 }
 
-void DitheringGrayscale::falseFloydSteinberg() {
+void DitheringGrayscale::falseFloydSteinberg()
+{
     /*
    Dither according to the False Floyd-Steinberg matrix:
        X   3
@@ -142,7 +145,8 @@ void DitheringGrayscale::jarvisJudiceNinke()
 
 }
 
-void DitheringGrayscale::stucki() {
+void DitheringGrayscale::stucki()
+{
     /*
    Dither according to the Stucki matrix:
             X   8   4
@@ -183,7 +187,8 @@ void DitheringGrayscale::stucki() {
     newImageToImage();
 }
 
-void DitheringGrayscale::atkinson() {
+void DitheringGrayscale::atkinson()
+{
     /*
    Dither according to the Atkinson matrix:
        X   1   1
@@ -219,7 +224,8 @@ void DitheringGrayscale::atkinson() {
 
 }
 
-void DitheringGrayscale::burkes() {
+void DitheringGrayscale::burkes()
+{
     /*
     Dither according to the Burkes matrix:
              X   8   4
@@ -254,7 +260,8 @@ void DitheringGrayscale::burkes() {
 
 }
 
-void DitheringGrayscale::sierra() {
+void DitheringGrayscale::sierra()
+{
     /*
     Dither according to the Sierra matrix:
             X   5   3
@@ -294,7 +301,8 @@ void DitheringGrayscale::sierra() {
 
 }
 
-void DitheringGrayscale::twoRowSierra() {
+void DitheringGrayscale::twoRowSierra()
+{
     /*
     Dither according to the Two-Row Sierra matrix:
             X   4   3
@@ -329,7 +337,8 @@ void DitheringGrayscale::twoRowSierra() {
 
 }
 
-void DitheringGrayscale::sierraLite() {
+void DitheringGrayscale::sierraLite()
+{
     /*
     Dither according to the Sierra Lite matrix:
             X   2
@@ -359,7 +368,8 @@ void DitheringGrayscale::sierraLite() {
     newImageToImage();
 }
 
-void DitheringGrayscale::ordered4x4BayerMatrix() {
+void DitheringGrayscale::ordered4x4BayerMatrix()
+{
     //dithering according to the Bayer 4x4 matrix
     unsigned int bayer4x4[4][4] = {{1,  9,  3,  11},
                                    {13, 5,  15, 7},
@@ -385,7 +395,8 @@ void DitheringGrayscale::ordered4x4BayerMatrix() {
 
 }
 
-void DitheringGrayscale::ordered8x8BayerMatrix() {
+void DitheringGrayscale::ordered8x8BayerMatrix()
+{
     //dither according to the Bayer 8x8 matrix
     unsigned int bayer8x8[8][8] = {{0,  32, 8,  40, 2,  34, 10, 42},
                                    {48, 16, 56, 24, 50, 18, 58, 26},

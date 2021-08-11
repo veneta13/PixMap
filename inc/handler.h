@@ -1,5 +1,5 @@
-#ifndef PROJECT_HANDLER_H
-#define PROJECT_HANDLER_H
+#ifndef HANDLER_
+#define HANDLER_
 
 #include "inc.h"
 #include "fileManager.h"
@@ -10,24 +10,34 @@
 #include "textHandler.h"
 #include "binaryHandler.h"
 
+/**
+ * @class Handler
+ * @brief Handles commands.
+ *
+ * Manages the instances of TextHandler and BinaryHandler depending
+ * on the program input.
+ */
 class Handler {
 
+    /**
+     * pointer to an object of the derived classes of BaseHandler
+     */
     BaseHandler* currentInstance;
-
-    bool unsavedChanges;
-    void getFileType();
 
 protected:
 
+    /**
+     * pointer to FileManager
+     */
     FileManager* fileManager;
 
     public:
 
     Handler();
-    virtual ~Handler();
+    ~Handler();
 
     void open(std::vector<std::string> args);
-    void close();
+    void close(bool unsavedChanges);
     void create(std::vector<std::string> args);
 
     void save();

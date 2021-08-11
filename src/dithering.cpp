@@ -6,6 +6,8 @@ Dithering::~Dithering() {}
 
 void Dithering::newImageToImage()
 {
+    //save the newImage information
+    //into the Image instance
     Image& image = Image::getInstance();
 
     std::vector<int> imageGrid;

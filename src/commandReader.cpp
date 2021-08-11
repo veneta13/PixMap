@@ -2,16 +2,22 @@
 
 CommandReader::CommandReader(){}
 
+///
+/// @return the only instance of the CommandReader class
 CommandReader& CommandReader::getInstance()
 {
     static CommandReader instance;
     return instance;
 }
 
+///
+/// @return pointer to a command object
 std::shared_ptr<Command> CommandReader::newCommand() {
     return createCommand();
 }
 
+///
+/// @param inputLine - console input
 void CommandReader::inputLineHandler(std::string &inputLine) {
     
     //count the number of quotes
@@ -44,6 +50,8 @@ void CommandReader::inputLineHandler(std::string &inputLine) {
     }
 }
 
+///
+/// @return pointer to a command object
 std::shared_ptr<Command> CommandReader::createCommand() {
 
     std::shared_ptr<Command> command = std::shared_ptr<Command>(new Command);

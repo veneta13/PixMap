@@ -1,15 +1,27 @@
-#ifndef BINARYEX
-#define BINARYEX
+#ifndef BINARYHANDLER_
+#define BINARYHANDLER_
 
 #include "baseHandler.h"
 
+/**
+ * @Class BinaryHandler
+ * @brief Handles binary operations.
+ *
+ * Derived class of BaseHandler.
+ */
 class BinaryHandler : public BaseHandler{
 
+    /**
+     * Keeps pointer to object of the classes, derived of NetPBM.
+     */
     NetPBM* myFile = nullptr;
 
-    void createInstances(int type);
-
+    /**
+     * Keeps pointer to the FileManager object.
+     */
     FileManager* fileManager;
+
+    void createInstances(int type);
 
     public:
     BinaryHandler();

@@ -1,7 +1,12 @@
-#ifndef VALIDATOR
-#define VALIDATOR
+#ifndef VALIDATOR_
+#define VALIDATOR_
 
 #include "inc.h"
+
+/**
+ * @class Validator
+ * @brief Validates commands before they are executed.
+ */
 
 class Validator{
     Validator();
@@ -11,16 +16,16 @@ class Validator{
                                                  "DITHER", "CROP",   "RESIZE"};
 
     void nameToUpper(std::string& name);
-    void validateResize(std::vector <std::string> args); //validate arguments for resize
-    void validateNew(std::vector <std::string> args); //validate arguments for new
-    void validateCrop(std::vector <std::string> args); //validate arguments for crop
+    void validateResize(std::vector <std::string> args);
+    void validateNew(std::vector <std::string> args);
+    void validateCrop(std::vector <std::string> args);
 
     public:
     static Validator& getInstance();
     Validator(Validator const&) = delete;
     void operator=(Validator const&) = delete;
     void validateName(std::string& name);
-    void validateArguments(std::string name, std::vector <std::string> args); //check if arguments are valid
+    void validateArguments(std::string name, std::vector <std::string> args);
 };
 
 #endif 

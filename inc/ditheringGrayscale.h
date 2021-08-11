@@ -1,9 +1,15 @@
-#ifndef PROJECT_DITHERINGGRAYSCALE_H
-#define PROJECT_DITHERINGGRAYSCALE_H
+#ifndef DITHERINGGRAYSCALE_
+#define DITHERINGGRAYSCALE_
 
 #include "inc.h"
 #include "dithering.h"
 
+/**
+ * @class DitheringGrayscale
+ * @brief Handles dithering for PBM and PGM files.
+ *
+ * Derived class of Dithering.
+ */
 class DitheringGrayscale : public Dithering{
 private:
     void floydSteinberg();

@@ -7,15 +7,18 @@
     return instance;
 }
 
+///
+/// @param args - command arguments
 void FileManager::openFile(std::vector<std::string> args) {
     currentPath = args.at(0);
 }
 
 void FileManager::getFileType() {
 
+    //read file to find the magic number
+
     Image& image = Image::getInstance();
 
-    //read file to find the magic number
     std::fstream fileStream;
     fileStream.open(currentPath, std::ios::in);
     char c = fileStream.get();
@@ -41,6 +44,8 @@ void FileManager::getFileType() {
 
 void FileManager::load()
 {
+    //load file depending on the magic number
+
     Image& image = Image::getInstance();
 
     int type = image.getType();
@@ -61,6 +66,8 @@ void FileManager::load()
 
 void FileManager::loadText()
 {
+    //load text file
+
     Image& image = Image::getInstance();
     std::vector <int> imageGrid;
 
@@ -127,6 +134,9 @@ void FileManager::loadText()
 }
 
 void FileManager::loadBinaryPBM(){
+
+    //load binary PBM file
+
     Image& image = Image::getInstance();
     std::vector<int> imageGrid;
 
@@ -173,6 +183,9 @@ void FileManager::loadBinaryPBM(){
 
 void FileManager::loadBinary()
 {
+
+    //load binary non-PBM file
+
     Image& image = Image::getInstance();
     std::vector<int> imageGrid;
 
@@ -218,7 +231,12 @@ void FileManager::loadBinary()
     return;
 }
 
+///
+/// @param headerNumberCount - number of the numbers in the header, 2 or 3
+/// @param file - the file as a vector of strings
+/// @return the position of the last symbol of the header
 int FileManager::headerProcessorText(int headerNumberCount, std::vector<std::string>& file) {
+
     //find the header of the file via counting the numbers
     //ASCII files implementation
 
@@ -259,6 +277,10 @@ int FileManager::headerProcessorText(int headerNumberCount, std::vector<std::str
     return -1;
 }
 
+///
+/// @param headerNumberCount - number of the numbers in the header, 2 or 3
+/// @param file - the file as a reference to a stringstream
+/// @return the position of the last symbol of the header
 int FileManager::headerProcessorBinary(int headerNumberCount, std::stringstream& file) {
     //find the header of the file via counting the numbers
     // binary files implementation
@@ -299,6 +321,9 @@ int FileManager::headerProcessorBinary(int headerNumberCount, std::stringstream&
     return endOfHeader;
 }
 
+///
+/// @param allPixels - the file as a vector of integers
+/// @param number - current number
 void FileManager::getBinaryNumbers(std::vector<int> &allPixels, std::int8_t number) {
     if (number / 2 != 0) {
         getBinaryNumbers(allPixels, number / 2);
@@ -307,15 +332,15 @@ void FileManager::getBinaryNumbers(std::vector<int> &allPixels, std::int8_t numb
 }
 
 void FileManager::closeFile() {
-
     //clear file associated values
     currentPath.clear();
     std::cout << "\nSuccessfully closed the file.\n";
-
 }
 
 void FileManager::saveTextFile()
 {
+    //save the text image into a file
+
     Image& image = Image::getInstance();
 
     std::fstream fileStream;
@@ -367,6 +392,8 @@ void FileManager::saveTextFile()
 void FileManager::saveBinaryFile()
 {
 
+    //save the finary image into a file
+
     Image& image = Image::getInstance();
 
     std::fstream fileStream;
@@ -409,6 +436,8 @@ void FileManager::saveBinaryFile()
     std::cout << "\nSuccessfully saved the changes to " << currentPath << ".\n";
 }
 
+///
+/// @param args - command arguments
 void FileManager::newFile(std::vector<std::string> args) {
     currentPath = args.at(2);
 }

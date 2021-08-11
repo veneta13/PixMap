@@ -81,6 +81,11 @@ void Ppm::ditherImage() {
     dithering = nullptr;
 }
 
+///
+/// @param topLeftX - top left x coordinates
+/// @param topLeftY - top left y coordinates
+/// @param bottomRightX - bottom right x coordinates
+/// @param bottomRightY - bottom right y coordinates
 void Ppm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) {
 
     Image& image = Image::getInstance();
@@ -126,6 +131,8 @@ void Ppm::cropImage(int topLeftX, int topLeftY, int bottomRightX, int bottomRigh
     croppedImage.clear();
 }
 
+///
+/// @param percentage - resize percentage
 void Ppm::resizeImage(int percentage) {
 
     Image& image = Image::getInstance();
@@ -138,6 +145,9 @@ void Ppm::resizeImage(int percentage) {
     resizeImage(newWidth, newHeight);
 }
 
+///
+/// @param width - wanted width
+/// @param height - wanted height
 void Ppm::resizeImage(int width, int height) {
 
     Image& image = Image::getInstance();

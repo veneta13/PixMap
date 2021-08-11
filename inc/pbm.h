@@ -1,8 +1,12 @@
-#ifndef PBMH
-#define PBMH
+#ifndef PBM_
+#define PBM_
 
 #include "netpbm.h"
 
+/**
+ * @class PBM
+ * @brief Handles image manipulation for PBM files.
+ */
 class Pbm : public NetPBM {
 
     public:

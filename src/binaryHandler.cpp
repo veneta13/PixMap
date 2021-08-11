@@ -10,6 +10,8 @@ BinaryHandler::~BinaryHandler() {
     myFile = nullptr;
 }
 
+///
+/// @param args - command arguments
 void BinaryHandler::open(std::vector<std::string> args) {
     Image& image = Image::getInstance();
     FileManager* fileManager = &FileManager::getInstance();
@@ -18,6 +20,8 @@ void BinaryHandler::open(std::vector<std::string> args) {
     fileManager->load();
 }
 
+///
+/// @param type - type of binary file; 4 - PBM, 5 - PGM , 6 - PPM
 void BinaryHandler::createInstances(int type) {
     //create instances of the image classes
     if (type == 4 )      { myFile = new Pbm(); }
@@ -30,6 +34,7 @@ void BinaryHandler::save() {
     fileManager->saveBinaryFile();
 }
 
+/// @param args - command arguments
 void BinaryHandler::saveAs(std::vector <std::string> args)
 {
     FileManager* fileManager = &FileManager::getInstance();
@@ -37,6 +42,8 @@ void BinaryHandler::saveAs(std::vector <std::string> args)
     fileManager->saveBinaryFile();
 }
 
+///
+/// @param args - command arguments
 void BinaryHandler::create(std::vector<std::string> args) {
     //update file path
     fileManager->newFile(args);
@@ -77,6 +84,8 @@ void BinaryHandler::dither() {
     myFile->ditherImage();
 }
 
+///
+/// @param args - command arguments
 void BinaryHandler::crop(std::vector<std::string> args) {
     //cast arguments to integers
     int temp1 = std::stoi(args.at(0));
@@ -88,6 +97,8 @@ void BinaryHandler::crop(std::vector<std::string> args) {
     myFile->cropImage(temp1, temp2, temp3, temp4);
 }
 
+///
+/// @param args - command arguments
 void BinaryHandler::resize(std::vector<std::string> args) {
     //if one argument is provided resize by percentage
     if (args.size() == 1) {
